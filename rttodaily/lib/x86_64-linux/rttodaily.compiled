@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/usr/local/bin/fpc" Date="1408709026"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -vewnhibq -Fi/home/leonardo/Desarrollo/mercados/rttodaily/lib/x86_64-linux -Fu/home/leonardo/Desarrollo/mercados/rttodaily/ -FU/home/leonardo/Desarrollo/mercados/rttodaily/lib/x86_64-linux/ -l rttodaily.lpr"/>
+</CONFIG>

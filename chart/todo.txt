@@ -1,0 +1,2 @@
+2014-09-26 - Aparentemente sólo actualiza la ventana asociada al tab activo.
+* 2014-09-26 - El título de las ventanas es NewWindow.

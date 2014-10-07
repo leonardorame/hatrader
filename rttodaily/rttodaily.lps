@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="3">
+      <Unit0>
+        <Filename Value="rttodaily.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="95"/>
+        <CursorPos X="21" Y="99"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="../../fpc/rtl/inc/ustringh.inc"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="14"/>
+        <CursorPos X="10" Y="23"/>
+        <UsageCount Value="10"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="../../fpc/rtl/inc/ustrings.inc"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="1229"/>
+        <CursorPos X="5" Y="1229"/>
+        <UsageCount Value="10"/>
+      </Unit2>
+    </Units>
+    <JumpHistory Count="3" HistoryIndex="2">
+      <Position1>
+        <Filename Value="rttodaily.lpr"/>
+        <Caret Line="108" Column="32" TopLine="91"/>
+      </Position1>
+      <Position2>
+        <Filename Value="rttodaily.lpr"/>
+        <Caret Line="99" Column="55" TopLine="142"/>
+      </Position2>
+      <Position3>
+        <Filename Value="rttodaily.lpr"/>
+        <Caret Line="41" Column="3" TopLine="56"/>
+      </Position3>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>
