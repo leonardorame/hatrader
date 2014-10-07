@@ -71,6 +71,9 @@ implementation
 
 { TChartFrame }
 
+const
+  cGridColor = $111111;
+  cAxisFontColor = $444444;
 
 procedure TChartFrame.Display(AFile: string);
 var
@@ -237,26 +240,26 @@ begin
   FOHLCSeries.ListSource.YCount:= 4;
   with CandleStickChart do
   begin
-    TChartAxis(AxisList.Items[1]).Grid.Color:= $444444;
+    TChartAxis(AxisList.Items[1]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[1]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[1]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= clWhite;
-    TChartAxis(AxisList.Items[0]).Grid.Color:= $444444;
+    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= cAxisFontColor;
+    TChartAxis(AxisList.Items[0]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[0]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[0]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
   with HAChart do
   begin
-    TChartAxis(AxisList.Items[1]).Grid.Color:= $444444;
+    TChartAxis(AxisList.Items[1]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[1]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[1]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= clWhite;
-    TChartAxis(AxisList.Items[0]).Grid.Color:= $444444;
+    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= cAxisFontColor;
+    TChartAxis(AxisList.Items[0]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[0]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[0]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
   FHAChart := TCandleStickChart.Create(nil);
