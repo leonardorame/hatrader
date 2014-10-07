@@ -30,7 +30,6 @@ object HeikinAshiTrader: THeikinAshiTrader
     ColCount = 1
     Columns = <    
       item
-        Alignment = taLeftJustify
         Title.Alignment = taCenter
         Title.Caption = 'File / Symbol'
         Width = 200

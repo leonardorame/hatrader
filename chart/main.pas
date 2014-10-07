@@ -23,6 +23,7 @@ type
     procedure SelectChart(AChart: string);
     procedure AddPage(AFile: string);
     procedure AddSymbol(AFile: string);
+    function FindPage(AFile: string): boolean;
   public
     { public declarations }
   end;
@@ -58,7 +59,8 @@ end;
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
 begin
   if sgSymbols.Row > 0 then
-    AddPage(sgSymbols.Cells[0, sgSymbols.Row]);
+    if not FindPage(sgSymbols.Cells[0, sgSymbols.Row]) then
+      AddPage(sgSymbols.Cells[0, sgSymbols.Row]);
 end;
 
 procedure THeikinAshiTrader.Timer1Timer(Sender: TObject);
@@ -103,6 +105,20 @@ procedure THeikinAshiTrader.AddSymbol(AFile: string);
 begin
   sgSymbols.RowCount := sgSymbols.RowCount + 1;
   sgSymbols.Cells[0, sgSymbols.RowCount - 1] := Afile;
+end;
+
+function THeikinAshiTrader.FindPage(AFile: string): boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 0 to PageControl1.PageCount - 1 do
+    if PageControl1.Pages[I].Caption = AFile then
+    begin
+      Result := True;
+      PageControl1.ActivePage := PageControl1.Pages[I];
+      Break;
+    end;
 end;
 
 end.

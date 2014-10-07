@@ -47,6 +47,7 @@
         <ComponentName Value="ChartFrame"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
+        <UnitName Value="chartframe"/>
       </Unit1>
       <Unit2>
         <Filename Value="candlestickchart.pas"/>
