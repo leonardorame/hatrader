@@ -100,17 +100,8 @@ begin
       lOHLC := TOHLC.Create;
       continue;
     end;
-    try
     if lParsing then
       lParsing := lOHLC.AddString(AString[I]);
-
-    except
-      on E: Exception do
-      begin
-        Write('Error: ' + E.message);
-        Write(Astring[I]);
-      end;
-    end;
   end;
 
   lStr := Copy(AString.Text, Pos('Actualizaci', AString.Text) + 22, 19);

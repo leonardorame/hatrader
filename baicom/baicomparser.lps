@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="1">
+      <Unit0>
+        <Filename Value="baicomparser.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="98"/>
+        <CursorPos X="27" Y="111"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+    </Units>
+    <JumpHistory Count="2" HistoryIndex="1">
+      <Position1>
+        <Filename Value="baicomparser.lpr"/>
+        <Caret Line="48" Column="25" TopLine="46"/>
+      </Position1>
+      <Position2>
+        <Filename Value="baicomparser.lpr"/>
+        <Caret Line="109" Column="29" TopLine="98"/>
+      </Position2>
+    </JumpHistory>
+  </ProjectSession>
+</CONFIG>
