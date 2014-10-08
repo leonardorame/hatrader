@@ -58,19 +58,19 @@ begin
     FSym:= AString
   else
   if FClose = 0 then
-    FClose := StrToFloat(AString)
+    FClose := StrToFloatDef(AString, 0)
   else
   if FVarPct = '' then
     FVarPct:= AString
   else
   if FHigh = 0 then
-    FHigh := StrToFloat(AString)
+    FHigh := StrToFloatDef(AString, 0)
   else
   if FLow = 0 then
-    FLow := StrToFloat(AString)
+    FLow := StrToFloatDef(AString, 0)
   else
   if FOpen = 0 then
-    FOpen := StrToFloat(AString)
+    FOpen := StrToFloatDef(AString, 0)
   else
     Result := False;
 end;
@@ -100,17 +100,8 @@ begin
       lOHLC := TOHLC.Create;
       continue;
     end;
-    try
     if lParsing then
       lParsing := lOHLC.AddString(AString[I]);
-
-    except
-      on E: Exception do
-      begin
-        Write('Error: ' + E.message);
-        Write(Astring[I]);
-      end;
-    end;
   end;
 
   lStr := Copy(AString.Text, Pos('Actualizaci', AString.Text) + 22, 19);
