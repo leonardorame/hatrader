@@ -15,9 +15,32 @@ uses
   contnrs,
   newwindow,
   ohlc,
-  volatility;
+  volatility,
+  fphttpclient;
 
 type
+
+  TOnFeedBack = procedure (AFeedBack: string) of object;
+
+  { TGetDataThread }
+
+  TGetDataThread = class(TThread)
+  private
+    FFile: string;
+    FData: string;
+    FOnFeedBack: TOnFeedBack;
+    FOnGetData: TNotifyEvent;
+    FFeedBackStr: string;
+    procedure OnData;
+    procedure WriteFeedBack;
+  public
+    constructor Create;
+    procedure Execute; override;
+    property OnGetData: TNotifyEvent read FOnGetData write FOnGetData;
+    property Data: string read FData write FData;
+    property InternalFile: string write FFile;
+    property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
+  end;
 
   { TChartFrame }
 
@@ -46,8 +69,9 @@ type
     procedure ChartToolset1DataPointHintTool1HintPosition(
       ATool: TDataPointHintTool; var APoint: TPoint);
   private
-    FWinList: TObjectList;
     FFile: string;
+    FOnFeedBack: TOnFeedBack;
+    FWinList: TObjectList;
     FHint: string;
     FHV10: double;
     FHV20: double;
@@ -58,11 +82,14 @@ type
     FOHLCSeries: TOpenHighLowCloseSeries;
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
-    procedure PrepareArray(AFile: string);
+    procedure PrepareArray(AData: string);
+    procedure Display;
+    procedure GetFileOnData(Sender: TObject);
   public
-    constructor Create(TheOwner: TComponent); override;
+    constructor Create(AFile: string; TheOwner: TComponent);
     destructor destroy; override;
-    procedure Display(AFile: string);
+    procedure GetFile;
+    property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
   end;
 
 implementation
@@ -75,7 +102,46 @@ const
   cGridColor = $111111;
   cAxisFontColor = $444444;
 
-procedure TChartFrame.Display(AFile: string);
+{ TGetDataThread }
+
+procedure TGetDataThread.OnData;
+begin
+  FOnGetData(Self);
+end;
+
+procedure TGetDataThread.WriteFeedBack;
+begin
+  FOnFeedBack(FFeedBackStr);
+end;
+
+constructor TGetDataThread.Create;
+begin
+  inherited Create(True);
+  FreeOnTerminate := True;
+end;
+
+procedure TGetDataThread.Execute;
+begin
+  try
+    //Screen.Cursor:= crHourGlass;
+    FFeedBackStr:= 'Getting ' + FFile;
+    Synchronize(@WriteFeedBack);
+    with TFPHTTPClient.Create(nil) do
+    begin
+      FData := Get('http://www.ceciliastrada.com.ar/quotes/' + FFile);
+      Synchronize(@OnData);
+      FFeedBackStr := FFile + ' loading done.';
+      Synchronize(@WriteFeedBack);
+    end;
+  except
+    FFeedBackStr:= 'Error loading ' + FFile;
+    Synchronize(@WriteFeedBack);
+  end;
+  //Screen.Cursor:= crDefault;
+  Terminate;
+end;
+
+procedure TChartFrame.Display;
 var
   I: Integer;
   lLowest: double;
@@ -86,8 +152,6 @@ var
   lSMA5: double;
 
 begin
-  FFile := AFile;
-  PrepareArray(AFile);
   if FHint = '' then
   begin
     SetHint(FOHLCArray[Length(FOHLCArray) - 1]);
@@ -163,7 +227,7 @@ begin
   HAChart.Extent.UseYMin := True;
 end;
 
-procedure TChartFrame.PrepareArray(AFile: string);
+procedure TChartFrame.PrepareArray(AData: string);
 var
   lCSV: TStringList;
   lLine: TStringList;
@@ -188,7 +252,9 @@ begin
   DefaultFormatSettings.ShortMonthNames[11] := 'Nov';
   DefaultFormatSettings.ShortMonthNames[12] := 'Dec';
   try
-    lCSV.LoadFromFile(AFile);
+    lCSV.Text:= AData;
+    if lCSV.Count = 0 then
+      exit;
     A := 0;
     SetLength(FOHLCArray, 50);
     for I := lCsv.Count - 1 downto 0 do
@@ -215,10 +281,33 @@ begin
   end;
 end;
 
-constructor TChartFrame.Create(TheOwner: TComponent);
+procedure TChartFrame.GetFileOnData(Sender: TObject);
+var
+  lData: string;
+begin
+  if Sender is TGetDataThread then
+  begin
+    lData := TGetDataThread(Sender).Data;
+    PrepareArray(lData);
+    Display;
+  end;
+end;
+
+procedure TChartFrame.GetFile;
+var
+  lThread: TGetDataThread;
+begin
+  lThread := TGetDataThread.Create;
+  lThread.InternalFile := FFile;
+  lThread.OnGetData:= @GetFileOnData;
+  lThread.OnFeedBack := FOnFeedBack;
+  lThread.Execute;
+end;
+
+constructor TChartFrame.Create(AFile: string; TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-
+  FFile := AFile;
   FWinList := TObjectList.Create(True);
 
   FMovingAvg := TLineSeries.Create(nil);
@@ -243,11 +332,11 @@ begin
     TChartAxis(AxisList.Items[1]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[1]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[1]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= cAxisFontColor;
     TChartAxis(AxisList.Items[0]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[0]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[0]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
   with HAChart do
@@ -255,11 +344,11 @@ begin
     TChartAxis(AxisList.Items[1]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[1]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[1]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[1]).Marks.LabelFont.Color:= cAxisFontColor;
     TChartAxis(AxisList.Items[0]).Grid.Color:= cGridColor;
     TChartAxis(AxisList.Items[0]).Grid.Style:= psSolid;
     TChartAxis(AxisList.Items[0]).Grid.Visible:= True;
-    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= clWhite;
+    TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
   FHAChart := TCandleStickChart.Create(nil);
@@ -282,6 +371,9 @@ end;
 procedure TChartFrame.ChartToolset1DataPointHintTool1HintPosition(
   ATool: TDataPointHintTool; var APoint: TPoint);
 begin
+  if Length(FOHLCArray) = 0 then
+    exit;
+
   SetHint(FOHLCArray[ATool.PointIndex]);
   HAChart.Invalidate;
   CandleStickChart.Invalidate;
@@ -323,6 +415,9 @@ var
   lIndex: Integer;
   lChartPos: double;
 begin
+  if Length(FOHLCArray) = 0 then
+    exit;
+
   // OHLC and Date values
   ext := ASender.CurrentExtent;
   lLeft := ASender.XGraphToImage(ext.a.x);
@@ -405,9 +500,10 @@ procedure TChartFrame.actRefreshExecute(Sender: TObject);
 var
   I: Integer;
   lWin: TNewWindow;
+  lFile: string;
 begin
-  SetLength(FOHLCArray, 0);
-  Display(FFile);
+  lFile := FFile;
+  GetFile;
 
   for I := 0 to FWinList.Count - 1 do
   begin
@@ -425,10 +521,11 @@ begin
   lWin.OnClose := @CloseNewWindow;
   lWin.Caption:= FFile;
   FWinList.Add(lWin);
-  lChart := TChartFrame.Create(lWin);
+  lChart := TChartFrame.Create(FFile, lWin);
   lChart.Parent := lWin;
   lChart.Align:= alClient;
-  lChart.Display(FFile);
+  lChart.OnFeedBack:= FOnFeedBack;
+  lChart.GetFile;
   lWin.Show;
 end;
 

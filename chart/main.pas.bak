@@ -15,6 +15,7 @@ type
   THeikinAshiTrader = class(TForm)
     PageControl1: TPageControl;
     sgSymbols: TStringGrid;
+    StatusBar1: TStatusBar;
     Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
@@ -23,6 +24,8 @@ type
     procedure SelectChart(AChart: string);
     procedure AddPage(AFile: string);
     procedure AddSymbol(AFile: string);
+    procedure FeedBack(AString: string);
+    procedure GetFeedBack(AFeedBack: string);
     function FindPage(AFile: string): boolean;
   public
     { public declarations }
@@ -42,6 +45,7 @@ var
   lFiles: TStringList;
   I: Integer;
 begin
+  DoubleBuffered:= True;
   sgSymbols.RowCount:= 1;
   lFiles := TStringList.Create;
   try
@@ -91,11 +95,12 @@ begin
   with lTab do
   begin
     Caption:= AFile;
-    with TChartFrame.Create(lTab) do
+    with TChartFrame.Create(Afile, lTab) do
     begin
+      OnFeedBack := @GetFeedBack;
       Parent := lTab;
       Align := alClient;
-      Display(AFile);
+      GetFile(AFile);
     end;
   end;
   PageControl1.ActivePage := lTab;
@@ -107,6 +112,17 @@ begin
   sgSymbols.Cells[0, sgSymbols.RowCount - 1] := Afile;
 end;
 
+procedure THeikinAshiTrader.FeedBack(AString: string);
+begin
+  StatusBar1.SimpleText:= AString;
+end;
+
+procedure THeikinAshiTrader.GetFeedBack(AFeedBack: string);
+begin
+  FeedBack(AFeedBack);
+  Application.ProcessMessages;
+end;
+
 function THeikinAshiTrader.FindPage(AFile: string): boolean;
 var
   I: Integer;
@@ -116,6 +132,7 @@ begin
     if PageControl1.Pages[I].Caption = AFile then
     begin
       Result := True;
+      PageControl1.ActivePage := PageControl1.Pages[I];
       Break;
     end;
 end;

@@ -23,6 +23,10 @@ type
     FOpen: double;
     FSym: string;
     FVarPct: string;
+    FTime: string;
+    FPrevClose: double;
+    FVol: string;
+    FCant: Integer;
   public
     function AddString(AString: string): boolean;
     property Sym: string read FSym write FSym;
@@ -31,6 +35,10 @@ type
     property High: double read FHigh write FHigh;
     property Low: double read FLow write FLow;
     property Close: double read FClose write FClose;
+    property PrevClose: double read FPrevClose write FPrevClose;
+    property Time: string read FTime write FTime;
+    property Vol: string read FVol write FVol;
+    property Cant: Integer read FCant write FCant;
   end;
 
   TOHLCList = specialize TFPGList<TOHLC>;
@@ -72,6 +80,18 @@ begin
   if FOpen = 0 then
     FOpen := StrToFloatDef(AString, 0)
   else
+  if FPrevClose = 0 then
+    FPrevClose := StrToFloatDef(AString, 0)
+  else
+  if FVol = '' then
+    FVol := Astring
+  else
+  if FCant = 0 then
+    FCant := StrToIntDef(AString, 0)
+  else
+  if FTime = '' then
+    FTime := AString
+  else
     Result := False;
 end;
 
@@ -110,12 +130,13 @@ begin
     if lOHLC.Sym = '' then
       continue
     else
-    Writeln(Format('"%s";%f;%f;%f;%f', [
+    Writeln(Format('"%s";%f;%f;%f;%f;%s', [
       lOHLC.Sym,
       lOHLC.Open,
       lOHLC.High,
       lOHLC.Low,
-      lOHLC.Close]));
+      lOHLC.Close,
+      lOHLC.Time]));
   lList.Free;
 end;
 
