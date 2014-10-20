@@ -1,0 +1,38 @@
+unit ohlc;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes,
+  fgl;
+
+type
+  TOHLCRecord = record
+    open, high, low, close: double;
+    date: string;
+  end;
+
+  TOHLCArray = array of TOHLCRecord;
+
+  { TSymbol }
+
+  TSymbol = class
+  private
+    FFilePath: string;
+    FName: string;
+    FOHLCArray: TOHLCArray;
+  public
+    property Name: string read FName write FName;
+    property FilePath: string read FFilePath write FFilePath;
+    property Data: TOHLCArray read FOHLCArray write FOHLCArray;
+  end;
+
+  TSymbols = specialize TFPGList<TSymbol>;
+
+
+implementation
+
+end.
+

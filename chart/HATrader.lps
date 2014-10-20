@@ -2,14 +2,14 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="9"/>
-    <BuildModes Active="Default"/>
-    <Units Count="35">
+    <BuildModes Active="Linux x86_64"/>
+    <Units Count="39">
       <Unit0>
         <Filename Value="HATrader.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="1"/>
-        <CursorPos X="11" Y="8"/>
+        <CursorPos Y="20"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -23,8 +23,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="501"/>
-        <CursorPos Y="506"/>
+        <TopLine Value="117"/>
+        <CursorPos X="17" Y="129"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -36,7 +36,7 @@
         <WindowIndex Value="1"/>
         <TopLine Value="2"/>
         <CursorPos X="31" Y="8"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="69"/>
       </Unit2>
       <Unit3>
         <Filename Value="main.pas"/>
@@ -47,9 +47,9 @@
         <UnitName Value="main"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="97"/>
-        <CursorPos X="14" Y="103"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="111"/>
+        <CursorPos X="3" Y="116"/>
+        <UsageCount Value="69"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit3>
@@ -63,29 +63,31 @@
         <WindowIndex Value="1"/>
         <TopLine Value="6"/>
         <CursorPos Y="15"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="66"/>
       </Unit4>
       <Unit5>
         <Filename Value="volatility.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="volatility"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="27"/>
-        <CursorPos X="36" Y="41"/>
-        <UsageCount Value="27"/>
+        <TopLine Value="18"/>
+        <CursorPos X="24" Y="25"/>
+        <UsageCount Value="65"/>
       </Unit5>
       <Unit6>
         <Filename Value="ohlc.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
+        <UnitName Value="ohlc"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="4"/>
         <CursorPos X="10" Y="8"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="65"/>
+        <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="../../lazarus/lcl/include/customform.inc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="1"/>
         <TopLine Value="443"/>
         <CursorPos Y="454"/>
@@ -93,14 +95,6 @@
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
-        <Filename Value="../../fpc/rtl/objpas/sysutils/datih.inc"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="129"/>
-        <CursorPos X="10" Y="138"/>
-        <UsageCount Value="2"/>
-      </Unit8>
-      <Unit9>
         <Filename Value="../../lazarus/components/tachart/tacustomsource.pas"/>
         <UnitName Value="TACustomSource"/>
         <WindowIndex Value="1"/>
@@ -108,332 +102,382 @@
         <CursorPos X="34" Y="430"/>
         <UsageCount Value="108"/>
         <Loaded Value="True"/>
-      </Unit9>
-      <Unit10>
+      </Unit8>
+      <Unit9>
         <Filename Value="../../lazarus/components/tachart/tamultiseries.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="40"/>
         <CursorPos X="44" Y="46"/>
-        <UsageCount Value="31"/>
-      </Unit10>
-      <Unit11>
+        <UsageCount Value="28"/>
+      </Unit9>
+      <Unit10>
         <Filename Value="../../lazarus/components/tachart/tacustomseries.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="797"/>
         <CursorPos Y="807"/>
-        <UsageCount Value="108"/>
-      </Unit11>
-      <Unit12>
+        <UsageCount Value="105"/>
+      </Unit10>
+      <Unit11>
         <Filename Value="../../lazarus/components/tachart/tasources.pas"/>
         <UnitName Value="TASources"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <TopLine Value="471"/>
         <CursorPos X="13" Y="484"/>
         <UsageCount Value="108"/>
         <Loaded Value="True"/>
-      </Unit12>
-      <Unit13>
+      </Unit11>
+      <Unit12>
         <Filename Value="../../lazarus/components/tachart/tageometry.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="38"/>
         <CursorPos X="10" Y="47"/>
-        <UsageCount Value="110"/>
-      </Unit13>
-      <Unit14>
+        <UsageCount Value="107"/>
+      </Unit12>
+      <Unit13>
         <Filename Value="../../fpc/rtl/objpas/math.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="131"/>
         <CursorPos X="10" Y="140"/>
-        <UsageCount Value="110"/>
-      </Unit14>
-      <Unit15>
+        <UsageCount Value="107"/>
+      </Unit13>
+      <Unit14>
         <Filename Value="../../lazarus/components/tachart/tamath.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="16"/>
         <CursorPos X="11" Y="25"/>
-        <UsageCount Value="111"/>
-      </Unit15>
-      <Unit16>
+        <UsageCount Value="108"/>
+      </Unit14>
+      <Unit15>
         <Filename Value="../../lazarus/components/tachart/tadrawutils.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="87"/>
         <CursorPos X="29" Y="96"/>
-        <UsageCount Value="110"/>
-      </Unit16>
-      <Unit17>
+        <UsageCount Value="107"/>
+      </Unit15>
+      <Unit16>
         <Filename Value="../../fpc/packages/fcl-image/src/fpcanvas.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="149"/>
         <CursorPos X="3" Y="158"/>
-        <UsageCount Value="109"/>
-      </Unit17>
-      <Unit18>
+        <UsageCount Value="106"/>
+      </Unit16>
+      <Unit17>
         <Filename Value="../../lazarus/lcl/include/control.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="2087"/>
         <CursorPos Y="2096"/>
-        <UsageCount Value="10"/>
-      </Unit18>
-      <Unit19>
+        <UsageCount Value="7"/>
+      </Unit17>
+      <Unit18>
         <Filename Value="../../lazarus/components/tachart/tatools.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1594"/>
         <CursorPos X="21" Y="1611"/>
-        <UsageCount Value="28"/>
-      </Unit19>
-      <Unit20>
+        <UsageCount Value="25"/>
+      </Unit18>
+      <Unit19>
         <Filename Value="../../lazarus/components/tachart/tagraph.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="1650"/>
         <CursorPos X="3" Y="1653"/>
-        <UsageCount Value="30"/>
-      </Unit20>
-      <Unit21>
+        <UsageCount Value="27"/>
+      </Unit19>
+      <Unit20>
         <Filename Value="../../lazarus/components/tachart/tachartaxisutils.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="135"/>
         <CursorPos X="14" Y="145"/>
-        <UsageCount Value="17"/>
-      </Unit21>
-      <Unit22>
+        <UsageCount Value="14"/>
+      </Unit20>
+      <Unit21>
         <Filename Value="../../lazarus/lcl/graphics.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="129"/>
         <CursorPos X="3" Y="140"/>
-        <UsageCount Value="9"/>
-      </Unit22>
-      <Unit23>
+        <UsageCount Value="6"/>
+      </Unit21>
+      <Unit22>
         <Filename Value="../../lazarus/components/tachart/taseries.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="168"/>
         <CursorPos X="3" Y="178"/>
-        <UsageCount Value="13"/>
-      </Unit23>
-      <Unit24>
+        <UsageCount Value="10"/>
+      </Unit22>
+      <Unit23>
         <Filename Value="unit1.lfm"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="9"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit24>
-      <Unit25>
+      </Unit23>
+      <Unit24>
         <Filename Value="../../lazarus/lcl/include/customframe.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="161"/>
         <CursorPos Y="170"/>
-        <UsageCount Value="10"/>
-      </Unit25>
-      <Unit26>
+        <UsageCount Value="7"/>
+      </Unit24>
+      <Unit25>
         <Filename Value="chartframe.lfm"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="6"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit26>
-      <Unit27>
+      </Unit25>
+      <Unit26>
         <Filename Value="../../lazarus/lcl/forms.pp"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="385"/>
         <CursorPos X="85" Y="395"/>
-        <UsageCount Value="10"/>
-      </Unit27>
-      <Unit28>
+        <UsageCount Value="7"/>
+      </Unit26>
+      <Unit27>
         <Filename Value="unit1.pas"/>
         <ComponentName Value="Frame2"/>
         <ResourceBaseClass Value="Frame"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <CursorPos X="44" Y="3"/>
-        <UsageCount Value="20"/>
-      </Unit28>
-      <Unit29>
+        <UsageCount Value="17"/>
+      </Unit27>
+      <Unit28>
         <Filename Value="../../lazarus/lcl/include/customcontrol.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="112"/>
         <CursorPos Y="128"/>
-        <UsageCount Value="10"/>
-      </Unit29>
-      <Unit30>
+        <UsageCount Value="7"/>
+      </Unit28>
+      <Unit29>
         <Filename Value="../../lazarus/lcl/include/wincontrol.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="6321"/>
         <CursorPos Y="6332"/>
         <UsageCount Value="10"/>
-      </Unit30>
-      <Unit31>
+      </Unit29>
+      <Unit30>
         <Filename Value="../../lazarus/lcl/lclmessageglue.pas"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="105"/>
         <CursorPos X="28" Y="107"/>
-        <UsageCount Value="10"/>
-      </Unit31>
-      <Unit32>
+        <UsageCount Value="7"/>
+      </Unit30>
+      <Unit31>
         <Filename Value="../../lazarus/lcl/include/pagecontrol.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="18"/>
-        <CursorPos Y="28"/>
-        <UsageCount Value="10"/>
-      </Unit32>
-      <Unit33>
+        <TopLine Value="155"/>
+        <CursorPos X="3" Y="172"/>
+        <UsageCount Value="11"/>
+      </Unit31>
+      <Unit32>
         <Filename Value="../../lazarus/lcl/include/customaction.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="232"/>
         <CursorPos X="38" Y="243"/>
-        <UsageCount Value="10"/>
-      </Unit33>
-      <Unit34>
+        <UsageCount Value="7"/>
+      </Unit32>
+      <Unit33>
         <Filename Value="../../lazarus/components/tachart/tatypes.pas"/>
         <UnitName Value="TATypes"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
         <TopLine Value="549"/>
         <CursorPos Y="560"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="../../fpc/packages/fcl-base/src/contnrs.pp"/>
+        <UnitName Value="contnrs"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="217"/>
+        <CursorPos X="70" Y="225"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit34>
+      <Unit35>
+        <Filename Value="../../fpc/packages/fcl-web/src/base/fphttpclient.pp"/>
+        <UnitName Value="fphttpclient"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="236"/>
+        <CursorPos X="7" Y="154"/>
+        <UsageCount Value="12"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="../../lazarus/lcl/comctrls.pp"/>
+        <UnitName Value="ComCtrls"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="557"/>
+        <CursorPos X="14" Y="567"/>
+        <UsageCount Value="11"/>
+      </Unit36>
+      <Unit37>
+        <Filename Value="symbols.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="symbols"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="55"/>
+        <CursorPos Y="71"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit37>
+      <Unit38>
+        <Filename Value="../../fpc/rtl/objpas/fgl.pp"/>
+        <UnitName Value="fgl"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="811"/>
+        <CursorPos X="3" Y="814"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit38>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="520" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="70" TopLine="55"/>
       </Position1>
       <Position2>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="521" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="71" TopLine="55"/>
       </Position2>
       <Position3>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="522" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="65" TopLine="55"/>
       </Position3>
       <Position4>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="523" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="67" TopLine="55"/>
       </Position4>
       <Position5>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="524" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="68" TopLine="55"/>
       </Position5>
       <Position6>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="525" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="69" TopLine="55"/>
       </Position6>
       <Position7>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="526" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="70" TopLine="55"/>
       </Position7>
       <Position8>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="527" Column="24" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="71" TopLine="55"/>
       </Position8>
       <Position9>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="521" Column="3" TopLine="514"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="65" TopLine="55"/>
       </Position9>
       <Position10>
-        <Filename Value="chartframe.pas"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="67" TopLine="55"/>
       </Position10>
       <Position11>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="23" Column="35" TopLine="5"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="68" TopLine="55"/>
       </Position11>
       <Position12>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="31" Column="27" TopLine="13"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="69" TopLine="55"/>
       </Position12>
       <Position13>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="33" Column="12" TopLine="15"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="70" TopLine="55"/>
       </Position13>
       <Position14>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="35" Column="26" TopLine="17"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="71" TopLine="55"/>
       </Position14>
       <Position15>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="42" Column="70" TopLine="24"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="65" TopLine="55"/>
       </Position15>
       <Position16>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="73" Column="27" TopLine="56"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="67" TopLine="55"/>
       </Position16>
       <Position17>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="92" Column="70" TopLine="75"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="68" TopLine="55"/>
       </Position17>
       <Position18>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="112" Column="37" TopLine="94"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="69" TopLine="55"/>
       </Position18>
       <Position19>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="114" Column="22" TopLine="96"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="70" TopLine="55"/>
       </Position19>
       <Position20>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="127" Column="12" TopLine="109"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="71" TopLine="55"/>
       </Position20>
       <Position21>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="128" Column="29" TopLine="110"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="65" TopLine="55"/>
       </Position21>
       <Position22>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="133" Column="14" TopLine="115"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="67" TopLine="55"/>
       </Position22>
       <Position23>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="134" Column="31" TopLine="116"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="68" TopLine="55"/>
       </Position23>
       <Position24>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="137" Column="12" TopLine="119"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="69" TopLine="55"/>
       </Position24>
       <Position25>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="138" Column="29" TopLine="120"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="70" TopLine="55"/>
       </Position25>
       <Position26>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="303" Column="34" TopLine="285"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="58" Column="31" TopLine="47"/>
       </Position26>
       <Position27>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="523" Column="56" TopLine="500"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="85" Column="3" TopLine="80"/>
       </Position27>
       <Position28>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="505" TopLine="501"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="116" Column="3" TopLine="111"/>
       </Position28>
       <Position29>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="506" TopLine="501"/>
+        <Caret Line="304" Column="3" TopLine="301"/>
       </Position29>
       <Position30>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="505" TopLine="501"/>
+        <Caret Line="75" Column="5" TopLine="66"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

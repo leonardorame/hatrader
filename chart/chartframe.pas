@@ -5,18 +5,10 @@ unit chartframe;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, TAGraph, TASources,
-  Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls, ActnList, DateUtils,
-  TAMultiSeries,
-  TACustomSeries, TASeries,
-  TAChartAxis, TAChartUtils,
-  TATools, Math, types,
-  candlestickchart,
-  contnrs,
-  newwindow,
-  ohlc,
-  volatility,
-  fphttpclient;
+  Classes, SysUtils, FileUtil, TAGraph, TASources, Forms, Controls, Graphics,
+  Dialogs, ExtCtrls, ComCtrls, ActnList, DateUtils, TAMultiSeries,
+  TACustomSeries, TASeries, TAChartAxis, TAChartUtils, TATools, Math, types,
+  candlestickchart, contnrs, newwindow, ohlc, volatility, fphttpclient;
 
 type
 
@@ -80,6 +72,7 @@ type
     FHAChart: TCandleStickChart;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
+    FThread: TGetDataThread;
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
     procedure PrepareArray(AData: string);
@@ -117,28 +110,40 @@ end;
 constructor TGetDataThread.Create;
 begin
   inherited Create(True);
+  Priority:= tpLower;
   FreeOnTerminate := True;
 end;
 
 procedure TGetDataThread.Execute;
+var
+  lUrl: string;
 begin
-  try
-    //Screen.Cursor:= crHourGlass;
-    FFeedBackStr:= 'Getting ' + FFile;
-    Synchronize(@WriteFeedBack);
-    with TFPHTTPClient.Create(nil) do
-    begin
-      FData := Get('http://www.ceciliastrada.com.ar/quotes/' + FFile);
-      Synchronize(@OnData);
-      FFeedBackStr := FFile + ' loading done.';
+  while not Terminated do
+  begin
+    try
+      //Screen.Cursor:= crHourGlass;
+      FFeedBackStr:= 'Getting ' + FFile;
       Synchronize(@WriteFeedBack);
+      with TFPHTTPClient.Create(nil) do
+      begin
+        lUrl := FFile;
+        FFeedBackStr:= lUrl;
+        Synchronize(@WriteFeedBack);
+        FData := Get(lUrl);
+        Synchronize(@OnData);
+        FFeedBackStr := FFile + ' loading done.';
+        Synchronize(@WriteFeedBack);
+      end;
+    except
+      on E: Exception do
+      begin
+        FFeedBackStr:= 'Error loading ' + FFile;
+        Synchronize(@WriteFeedBack);
+      end;
     end;
-  except
-    FFeedBackStr:= 'Error loading ' + FFile;
-    Synchronize(@WriteFeedBack);
+    Sleep(5000);
   end;
   //Screen.Cursor:= crDefault;
-  Terminate;
 end;
 
 procedure TChartFrame.Display;
@@ -251,6 +256,7 @@ begin
   DefaultFormatSettings.ShortMonthNames[10] := 'Oct';
   DefaultFormatSettings.ShortMonthNames[11] := 'Nov';
   DefaultFormatSettings.ShortMonthNames[12] := 'Dec';
+  DefaultFormatSettings.DecimalSeparator := '.';
   try
     lCSV.Text:= AData;
     if lCSV.Count = 0 then
@@ -294,20 +300,19 @@ begin
 end;
 
 procedure TChartFrame.GetFile;
-var
-  lThread: TGetDataThread;
 begin
-  lThread := TGetDataThread.Create;
-  lThread.InternalFile := FFile;
-  lThread.OnGetData:= @GetFileOnData;
-  lThread.OnFeedBack := FOnFeedBack;
-  lThread.Execute;
+  FThread.OnFeedBack := FOnFeedBack;
+  FThread.start;
 end;
 
 constructor TChartFrame.Create(AFile: string; TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   FFile := AFile;
+  FThread := TGetDataThread.Create;
+  FThread.InternalFile := FFile;
+  FThread.OnGetData:= @GetFileOnData;
+
   FWinList := TObjectList.Create(True);
 
   FMovingAvg := TLineSeries.Create(nil);
@@ -433,15 +438,18 @@ begin
 
   lIndex := Round(ASender.XImageToGraph(lXPos));
 
-  if (lIndex > FMovingAvg.Count - 1) or (lIndex < 0) then
+  if FMovingAvg.Count > 5 then
   begin
-    lIndex := FMovingAvg.Count - 1;
-  end;
+    if (lIndex > FMovingAvg.Count - 1) or (lIndex < 0) then
+    begin
+      lIndex := FMovingAvg.Count - 1;
+    end;
 
-  lStr := Format('SMA 5: %.2f', [FMovingAvg.GetYValue(lIndex)]);
-  lFontHeight := ASender.Canvas.GetTextHeight(lStr);
-  ASender.Canvas.Font.Color:= clBlue;
-  ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + lFontHeight, lStr);
+    lStr := Format('SMA 5: %.2f', [FMovingAvg.GetYValue(lIndex)]);
+    lFontHeight := ASender.Canvas.GetTextHeight(lStr);
+    ASender.Canvas.Font.Color:= clBlue;
+    ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + lFontHeight, lStr);
+  end;
 
   // Historical Volatility
   lStr := Format('HV 40: %.2f, HV 20: %.2f, HV 10: %.2f', [FHV40, FHV20, FHV10]);
@@ -549,6 +557,9 @@ end;
 
 destructor TChartFrame.destroy;
 begin
+  FThread.Terminate;
+  //FThread.WaitFor;
+  //FThread.Free;
   FWinList.Free;
   FMovingAvg.Free;
   FHAChart.Free;

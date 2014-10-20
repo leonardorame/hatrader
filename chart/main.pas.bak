@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, StdCtrls, Grids, chartframe;
+  ExtCtrls, Grids, chartframe,
+  symbols;
 
 type
 
@@ -17,10 +18,14 @@ type
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
     Timer1: TTimer;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
+    FSymbols: TSymbols;
     procedure SelectChart(AChart: string);
     procedure AddPage(AFile: string);
     procedure AddSymbol(AFile: string);
@@ -42,22 +47,40 @@ implementation
 
 procedure THeikinAshiTrader.FormCreate(Sender: TObject);
 var
-  lFiles: TStringList;
+  lSymbol: TSymbol;
   I: Integer;
 begin
-  DoubleBuffered:= True;
+  FSymbols := TSymbols.Create;
+  FSymbols.LoadData;
   sgSymbols.RowCount:= 1;
-  lFiles := TStringList.Create;
-  try
-    lFiles.LoadFromFile('files.list');
-    for I := 0 to lFiles.Count - 1 do
-      AddSymbol(lFiles[I]);
+
+  for lSymbol in FSymbols do
+    AddSymbol(lSymbol.FilePath);
 
     sgSymbols.Row:= 0;
-    AddPage(lFiles[0]);
   finally
     lFiles.Free;
   end;
+end;
+
+procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
+begin
+  FSymbols.Free;
+end;
+
+procedure THeikinAshiTrader.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  timer1.Enabled:= False;
+end;
+
+procedure THeikinAshiTrader.FormShow(Sender: TObject);
+var
+  lFile: string;
+begin
+  lFile := sgSymbols.Cells[0, 0];
+  if lFile <> '' then
+    AddPage(lFile);
 end;
 
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
@@ -69,7 +92,9 @@ end;
 
 procedure THeikinAshiTrader.Timer1Timer(Sender: TObject);
 begin
+  Timer1.Enabled := False;
   (PageControl1.ActivePage.Controls[0] as TChartFrame).actRefresh.Execute;
+  Timer1.Enabled := True;
 end;
 
 procedure THeikinAshiTrader.SelectChart(AChart: string);
@@ -100,7 +125,7 @@ begin
       OnFeedBack := @GetFeedBack;
       Parent := lTab;
       Align := alClient;
-      GetFile(AFile);
+      GetFile;
     end;
   end;
   PageControl1.ActivePage := lTab;
