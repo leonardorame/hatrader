@@ -8,37 +8,15 @@ uses
   Classes, SysUtils, FileUtil, TAGraph, TASources, Forms, Controls, Graphics,
   Dialogs, ExtCtrls, ComCtrls, ActnList, DateUtils, TAMultiSeries,
   TACustomSeries, TASeries, TAChartAxis, TAChartUtils, TATools, Math, types,
-  candlestickchart, contnrs, newwindow, ohlc, volatility, fphttpclient;
+  candlestickchart, contnrs, newwindow, ohlc,
+  symbols, fgl;
 
 type
-
-  TOnFeedBack = procedure (AFeedBack: string) of object;
-
-  { TGetDataThread }
-
-  TGetDataThread = class(TThread)
-  private
-    FFile: string;
-    FData: string;
-    FOnFeedBack: TOnFeedBack;
-    FOnGetData: TNotifyEvent;
-    FFeedBackStr: string;
-    procedure OnData;
-    procedure WriteFeedBack;
-  public
-    constructor Create;
-    procedure Execute; override;
-    property OnGetData: TNotifyEvent read FOnGetData write FOnGetData;
-    property Data: string read FData write FData;
-    property InternalFile: string write FFile;
-    property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
-  end;
 
   { TChartFrame }
 
   TChartFrame = class(TFrame)
     actNewWindow: TAction;
-    actRefresh: TAction;
     ActionList1: TActionList;
     HAChart: TChart;
     CandleStickChart: TChart;
@@ -49,10 +27,8 @@ type
     ListChartSource2: TListChartSource;
     Splitter1: TSplitter;
     ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     procedure actNewWindowExecute(Sender: TObject);
-    procedure actRefreshExecute(Sender: TObject);
     procedure CandleStickChartAfterDrawBackWall(ASender: TChart;
       ACanvas: TCanvas; const ARect: TRect);
     procedure CandleStickChartAfterPaint(ASender: TChart);
@@ -61,29 +37,25 @@ type
     procedure ChartToolset1DataPointHintTool1HintPosition(
       ATool: TDataPointHintTool; var APoint: TPoint);
   private
-    FFile: string;
-    FOnFeedBack: TOnFeedBack;
+    FSymbol: TSymbol;
     FWinList: TObjectList;
     FHint: string;
-    FHV10: double;
-    FHV20: double;
-    FHV40: double;
-    FOHLCArray: TOHLCArray;
     FHAChart: TCandleStickChart;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
-    FThread: TGetDataThread;
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
-    procedure PrepareArray(AData: string);
-    procedure Display;
-    procedure GetFileOnData(Sender: TObject);
   public
-    constructor Create(AFile: string; TheOwner: TComponent);
+    constructor Create(ASymbol: TSymbol; TheOwner: TComponent);
     destructor destroy; override;
-    procedure GetFile;
-    property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
+    procedure Display;
+    property Symbol: TSymbol read FSymbol;
   end;
+
+  TChartList = specialize TFPGList<TChartFrame>;
+
+var
+  gChartList: TChartList;
 
 implementation
 
@@ -94,57 +66,6 @@ implementation
 const
   cGridColor = $111111;
   cAxisFontColor = $444444;
-
-{ TGetDataThread }
-
-procedure TGetDataThread.OnData;
-begin
-  FOnGetData(Self);
-end;
-
-procedure TGetDataThread.WriteFeedBack;
-begin
-  FOnFeedBack(FFeedBackStr);
-end;
-
-constructor TGetDataThread.Create;
-begin
-  inherited Create(True);
-  Priority:= tpLower;
-  FreeOnTerminate := True;
-end;
-
-procedure TGetDataThread.Execute;
-var
-  lUrl: string;
-begin
-  while not Terminated do
-  begin
-    try
-      //Screen.Cursor:= crHourGlass;
-      FFeedBackStr:= 'Getting ' + FFile;
-      Synchronize(@WriteFeedBack);
-      with TFPHTTPClient.Create(nil) do
-      begin
-        lUrl := FFile;
-        FFeedBackStr:= lUrl;
-        Synchronize(@WriteFeedBack);
-        FData := Get(lUrl);
-        Synchronize(@OnData);
-        FFeedBackStr := FFile + ' loading done.';
-        Synchronize(@WriteFeedBack);
-      end;
-    except
-      on E: Exception do
-      begin
-        FFeedBackStr:= 'Error loading ' + FFile;
-        Synchronize(@WriteFeedBack);
-      end;
-    end;
-    Sleep(5000);
-  end;
-  //Screen.Cursor:= crDefault;
-end;
 
 procedure TChartFrame.Display;
 var
@@ -159,20 +80,20 @@ var
 begin
   if FHint = '' then
   begin
-    SetHint(FOHLCArray[Length(FOHLCArray) - 1]);
+    SetHint(FSymbol.Data[Length(FSymbol.Data) - 1]);
   end;
 
   // ------ CandleStick Chart ------
   FOHLCSeries.Clear;
   lLowest := 0;
   lHighest := 0;
-  for I := 0 to Length(FOHLCArray) - 1 do
+  for I := 0 to Length(FSymbol.Data) - 1 do
   begin
-    if (FOHLCArray[I].low < lLowest) or (lLowest = 0) then
-      lLowest := FOHLCArray[I].low;
-    if (FOHLCArray[I].high > lHighest) or (lHighest = 0) then
-      lHighest := FOHLCArray[I].high;
-    lOhlc := FOHLCArray[I];
+    if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
+      lLowest := FSymbol.Data[I].low;
+    if (FSymbol.Data[I].high > lHighest) or (lHighest = 0) then
+      lHighest := FSymbol.Data[I].high;
+    lOhlc := FSymbol.Data[I];
 
     FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.date );
   end;
@@ -184,19 +105,19 @@ begin
   // ------ SMA 5 ----
 
   FMovingAvg.Clear;
-  for I := 0 to Length(FOHLCArray) - 1 do
+  for I := 0 to Length(FSymbol.Data) - 1 do
   begin
     if I > 4 then
     begin
       lSMA5 :=
-        (FOHLCArray[I - 4].close +
-        FOHLCArray[I - 3].close +
-        FOHLCArray[I - 2].close +
-        FOHLCArray[I - 1].close +
-        FOHLCArray[I].close) / 5;
+        (FSymbol.Data[I - 4].close +
+        FSymbol.Data[I - 3].close +
+        FSymbol.Data[I - 2].close +
+        FSymbol.Data[I - 1].close +
+        FSymbol.Data[I].close) / 5;
     end
     else
-      lSMA5 := FOHLCArray[I].close;
+      lSMA5 := FSymbol.Data[I].close;
 
     FMovingAvg.AddXY(I, lSMA5);
   end;
@@ -206,15 +127,15 @@ begin
   lLowest := 0;
   lHighest := 0;
   // default values for HA open and close
-  lHA_1.open := FOHLCArray[0].open;
-  lHA_1.close := FOHLCArray[0].close;
-  for I := 0 to Length(FOHLCArray) - 1 do
+  lHA_1.open := FSymbol.Data[0].open;
+  lHA_1.close := FSymbol.Data[0].close;
+  for I := 0 to Length(FSymbol.Data) - 1 do
   begin
-    if (FOHLCArray[I].low < lLowest) or (lLowest = 0) then
-      lLowest := FOHLCArray[I].low;
-    if (FOHLCArray[I].high > lHighest) or (lHighest = 0) then
-      lHighest := FOHLCArray[I].high;
-    lOhlc := FOHLCArray[I];
+    if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
+      lLowest := FSymbol.Data[I].low;
+    if (FSymbol.Data[I].high > lHighest) or (lHighest = 0) then
+      lHighest := FSymbol.Data[I].high;
+    lOhlc := FSymbol.Data[I];
 
     lHA.open:= (lHA_1.open + lHA_1.close) / 2;
     lHA.close:= (lOhlc.open + lOhlc.high + lOhlc.low + lOhlc.close ) / 4;
@@ -232,87 +153,11 @@ begin
   HAChart.Extent.UseYMin := True;
 end;
 
-procedure TChartFrame.PrepareArray(AData: string);
-var
-  lCSV: TStringList;
-  lLine: TStringList;
-  I: Integer;
-  A: Integer;
-
-begin
-  lCSV := TStringList.Create;
-  lLine := TStringList.Create;
-  DefaultFormatSettings.DateSeparator:='-';
-  DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
-  DefaultFormatSettings.ShortMonthNames[1] := 'Jan';
-  DefaultFormatSettings.ShortMonthNames[2] := 'Feb';
-  DefaultFormatSettings.ShortMonthNames[3] := 'Mar';
-  DefaultFormatSettings.ShortMonthNames[4] := 'Apr';
-  DefaultFormatSettings.ShortMonthNames[5] := 'May';
-  DefaultFormatSettings.ShortMonthNames[6] := 'Jun';
-  DefaultFormatSettings.ShortMonthNames[7] := 'Jul';
-  DefaultFormatSettings.ShortMonthNames[8] := 'Aug';
-  DefaultFormatSettings.ShortMonthNames[9] := 'Sep';
-  DefaultFormatSettings.ShortMonthNames[10] := 'Oct';
-  DefaultFormatSettings.ShortMonthNames[11] := 'Nov';
-  DefaultFormatSettings.ShortMonthNames[12] := 'Dec';
-  DefaultFormatSettings.DecimalSeparator := '.';
-  try
-    lCSV.Text:= AData;
-    if lCSV.Count = 0 then
-      exit;
-    A := 0;
-    SetLength(FOHLCArray, 50);
-    for I := lCsv.Count - 1 downto 0 do
-    begin
-      if I = 0 then
-        continue;
-      if I > Length(FOHLCArray) then
-        continue;
-      lLine.CommaText:= lCSV[I];
-      FOHLCArray[A].open := StrToFloatDef(lLine[1], 0);
-      FOHLCArray[A].high := StrToFloatDef(lLine[2], 0);
-      FOHLCArray[A].low := StrToFloatDef(lLine[3], 0);
-      FOHLCArray[A].close := StrToFloatDef(lLine[4], 0);
-      FOHLCArray[A].date:= lLine[0];
-      Inc(A);
-    end;
-    CandleStickChart.Invalidate;
-    FHV10 := HV(FOHLCArray, 10);
-    FHV20 := HV(FOHLCArray, 20);
-    FHV40 := HV(FOHLCArray, 40);
-  finally
-    lLine.Free;
-    lCSV.Free;
-  end;
-end;
-
-procedure TChartFrame.GetFileOnData(Sender: TObject);
-var
-  lData: string;
-begin
-  if Sender is TGetDataThread then
-  begin
-    lData := TGetDataThread(Sender).Data;
-    PrepareArray(lData);
-    Display;
-  end;
-end;
-
-procedure TChartFrame.GetFile;
-begin
-  FThread.OnFeedBack := FOnFeedBack;
-  FThread.start;
-end;
-
-constructor TChartFrame.Create(AFile: string; TheOwner: TComponent);
+constructor TChartFrame.Create(ASymbol: TSymbol; TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  FFile := AFile;
-  FThread := TGetDataThread.Create;
-  FThread.InternalFile := FFile;
-  FThread.OnGetData:= @GetFileOnData;
-
+  gChartList.Add(Self);
+  FSymbol := ASymbol;
   FWinList := TObjectList.Create(True);
 
   FMovingAvg := TLineSeries.Create(nil);
@@ -376,10 +221,10 @@ end;
 procedure TChartFrame.ChartToolset1DataPointHintTool1HintPosition(
   ATool: TDataPointHintTool; var APoint: TPoint);
 begin
-  if Length(FOHLCArray) = 0 then
+  if Length(FSymbol.Data) = 0 then
     exit;
 
-  SetHint(FOHLCArray[ATool.PointIndex]);
+  SetHint(FSymbol.Data[ATool.PointIndex]);
   HAChart.Invalidate;
   CandleStickChart.Invalidate;
 end;
@@ -420,7 +265,7 @@ var
   lIndex: Integer;
   lChartPos: double;
 begin
-  if Length(FOHLCArray) = 0 then
+  if Length(FSymbol.Data) = 0 then
     exit;
 
   // OHLC and Date values
@@ -452,7 +297,7 @@ begin
   end;
 
   // Historical Volatility
-  lStr := Format('HV 40: %.2f, HV 20: %.2f, HV 10: %.2f', [FHV40, FHV20, FHV10]);
+  lStr := Format('HV 40: %.2f, HV 20: %.2f, HV 10: %.2f', [FSymbol.HV40, FSymbol.HV20, FSymbol.HV10]);
   lFontHeight := ASender.Canvas.GetTextHeight(lStr);
   ASender.Canvas.Font.Color:= clGray;
   ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + (lFontHeight * 2), lStr);
@@ -460,12 +305,12 @@ begin
   // close
   if ASender.Name = 'CandleStickChart' then
   begin
-    lIndex:= Length(FOHLCArray) - 1;
-    lChartPos:= FOHLCArray[lIndex].close;
+    lIndex:= Length(FSymbol.Data) - 1;
+    lChartPos:= FSymbol.Data[lIndex].close;
     lStr := Format('%.2f', [lChartPos]);
     lFontHeight:= ASender.Canvas.Font.GetTextHeight(lStr);
     lTextWidth:= ASender.Canvas.Font.GetTextWidth(lStr);
-    if FOHLCArray[lIndex].close < FOHLCArray[lIndex].open then
+    if FSymbol.Data[lIndex].close < FSymbol.Data[lIndex].open then
       ASender.Canvas.Brush.Color:=clRed
     else
       ASender.Canvas.Brush.Color:=clLime;
@@ -504,22 +349,6 @@ begin
   end;
 end;
 
-procedure TChartFrame.actRefreshExecute(Sender: TObject);
-var
-  I: Integer;
-  lWin: TNewWindow;
-  lFile: string;
-begin
-  lFile := FFile;
-  GetFile;
-
-  for I := 0 to FWinList.Count - 1 do
-  begin
-    lWin := FWinList[I] as TNewWindow;
-    ((lWin.Controls[0]) as TChartFrame).actRefresh.Execute;
-  end;
-end;
-
 procedure TChartFrame.actNewWindowExecute(Sender: TObject);
 var
   lWin: TNewWindow;
@@ -527,13 +356,12 @@ var
 begin
   lWin := TNewWindow.Create(nil);
   lWin.OnClose := @CloseNewWindow;
-  lWin.Caption:= FFile;
+  lWin.Caption:= FSymbol.Name;
   FWinList.Add(lWin);
-  lChart := TChartFrame.Create(FFile, lWin);
+  lChart := TChartFrame.Create(FSymbol, lWin);
   lChart.Parent := lWin;
   lChart.Align:= alClient;
-  lChart.OnFeedBack:= FOnFeedBack;
-  lChart.GetFile;
+  //lChart.GetFile;
   lWin.Show;
 end;
 
@@ -548,24 +376,31 @@ begin
   ACanvas.Font.Size := 32;
   ACanvas.Font.Style:= [fsBold];
   ACanvas.Font.Color:= $303030;
-  lTextWidth := ACanvas.GetTextWidth(FFile);
-  lTextHeight:= ACanvas.GetTextHeight(FFile);
+  lTextWidth := ACanvas.GetTextWidth(FSymbol.Name);
+  lTextHeight:= ACanvas.GetTextHeight(FSymbol.Name);
   lX := Round(((ARect.Right - ARect.Left) / 2) - (lTextWidth / 2));
   lY := Round(((ARect.Bottom - ARect.Top) / 2) - (lTextHeight / 2));
-  ACanvas.TextOut(lX, lY, FFile);
+  ACanvas.TextOut(lX, lY, FSymbol.Name);
 end;
 
 destructor TChartFrame.destroy;
 begin
-  FThread.Terminate;
+  //FThread.Terminate;
   //FThread.WaitFor;
   //FThread.Free;
   FWinList.Free;
   FMovingAvg.Free;
   FHAChart.Free;
   FOHLCSeries.Free;
+  gChartList.Remove(Self);
   inherited;
 end;
+
+initialization
+  gChartList := TChartList.Create;
+
+finalization
+  gChartList.Free;
 
 
 end.

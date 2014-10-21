@@ -94,7 +94,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="9">
       <Unit0>
         <Filename Value="HATrader.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -129,7 +129,6 @@
       <Unit5>
         <Filename Value="volatility.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="volatility"/>
       </Unit5>
       <Unit6>
         <Filename Value="ohlc.pas"/>
@@ -141,6 +140,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="symbols"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="loader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="loader"/>
+      </Unit8>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -135,14 +135,8 @@ object ChartFrame: TChartFrame
     ParentColor = False
     ShowCaptions = True
     TabOrder = 3
-    object ToolButton1: TToolButton
-      Left = 1
-      Top = 0
-      Action = actRefresh
-      AutoSize = True
-    end
     object ToolButton2: TToolButton
-      Left = 53
+      Left = 1
       Top = 0
       Action = actNewWindow
     end
@@ -171,11 +165,6 @@ object ChartFrame: TChartFrame
     Images = ImageList1
     left = 80
     top = 80
-    object actRefresh: TAction
-      Caption = 'Update'
-      ImageIndex = 0
-      OnExecute = actRefreshExecute
-    end
     object actNewWindow: TAction
       Caption = 'New Window'
       ImageIndex = 1

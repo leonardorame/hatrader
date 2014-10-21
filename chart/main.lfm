@@ -59,7 +59,6 @@ object HeikinAshiTrader: THeikinAshiTrader
     Panels = <>
   end
   object Timer1: TTimer
-    Enabled = False
     Interval = 5000
     OnTimer = Timer1Timer
     left = 520
