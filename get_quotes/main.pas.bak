@@ -10,7 +10,9 @@ uses
   SysUtils,
   fgl,
   strutils,
-  fphttpclient;
+  fphttpclient,
+  sqldb,
+  mysql55conn;
 
 type
 
@@ -19,6 +21,7 @@ type
   TOHLC = class
   private
     FClose: double;
+    FDate: string;
     FHigh: double;
     FLow: double;
     FOpen: double;
@@ -37,6 +40,7 @@ type
     property Low: double read FLow write FLow;
     property Close: double read FClose write FClose;
     property PrevClose: double read FPrevClose write FPrevClose;
+    property Date: string read FDate write FDate;
     property Time: string read FTime write FTime;
     property Vol: string read FVol write FVol;
     property Cant: Integer read FCant write FCant;
@@ -51,6 +55,7 @@ type
   private
     procedure Parse(AStr: TStringList);
     procedure AddToDaily(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
+    procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime: string);
     function Procesar(AString: TStringList): string;
   public
     procedure Get; override;
@@ -113,6 +118,7 @@ var
   lHigh: string;
   lLow: string;
   lClose: string;
+  lTime: string;
   I: Integer;
   lLine: TStringList;
 begin
@@ -147,13 +153,15 @@ begin
       lHigh := lLine[2];
       lLow := lLine[3];
       lClose := lLine[4];
+      lDateStr := lLine[5];
+      lTime := lLine[6];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
+      AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime);
     end;
   finally
     lLine.Free;
   end;
 end;
-
 
 procedure TMyAction.AddToDaily(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
 var
@@ -206,7 +214,7 @@ begin
           end
           else
             lStr[lIndex] := lData;
-          lStr.SaveToFile(searchResult.Name);
+          lStr.SaveToFile(cDir + searchResult.Name);
         finally
           lLine.Free;
           lStr.Free;
@@ -219,6 +227,41 @@ begin
   end;
 end;
 
+procedure TMyAction.AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime: string);
+var
+  lMySqlConn: TMySQL55Connection;
+  lTransaction: TSQLTransaction;
+  lQuery: TSQLQuery;
+begin
+  lMySqlConn := TMySQL55Connection.Create(nil);
+  lTransaction := TSQLTransaction.Create(nil);
+  lQuery := TSQLQuery.Create(nil);
+  try
+    lMySqlConn.DatabaseName:= 'cecilia2_quotes';
+    lMySqlConn.UserName:= 'cecilia2';
+    lMySqlConn.Password:= 'qQ5Qo5c0h3';
+    lMySqlConn.HostName:= 'localhost';
+    lMySqlConn.Transaction := lTransaction;
+    lTransaction.StartTransaction;
+    lQuery.DataBase := lMySqlConn;
+    lQuery.SQL.Text:= 'insert into realtime(date, time, symbol, last) ' +
+      'values(:date, :time, :symbol, :last)';
+    lQuery.ParamByName('date').AsString:= ADate;
+    lQuery.ParamByName('time').AsString:= ATime;
+    lQuery.ParamByName('symbol').AsString:= ASym;
+    lQuery.ParamByName('last').AsString:= AClose;
+    try
+      lQuery.ExecSQL;
+    except
+      // no hacer nada!
+    end;
+    lTransaction.Commit;
+  finally
+    lQuery.Free;;
+    lTransaction.Free;;
+    lMySqlConn.Free;
+  end;
+end;
 
 function TMyAction.Procesar(AString: TStringList): string;
 var
@@ -227,6 +270,7 @@ var
   lList: TOHLCList;
   lOHLC: TOHLC;
   lStr: string;
+  lDate: string;
 
 begin
   Result := '';
@@ -253,18 +297,20 @@ begin
 
   lStr := Copy(AString.Text, Pos('Actualizaci', AString.Text) + 22, 19);
   Result := Result + 'Actualizacion:' + lStr + #13#10;
+  lDate := Copy(lStr, 1, 10);
   for lOHLC in lList do
   begin
     try
     if lOHLC.Sym = '' then
       continue
     else
-    Result := Result + Format('"%s";%f;%f;%f;%f;%s', [
+    Result := Result + Format('"%s";%f;%f;%f;%f;%s;%s', [
       lOHLC.Sym,
       lOHLC.Open,
       lOHLC.High,
       lOHLC.Low,
       lOHLC.Close,
+      lDate,
       lOHLC.Time]) + #13#10;
 
     except

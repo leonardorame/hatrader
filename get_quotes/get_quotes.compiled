@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Compiler Value="/usr/local/bin/fpc" Date="1408709026"/>
+  <Compiler Value="/usr/local/lib/fpc/2.7.1/ppcx64" Date="1413576329"/>
   <Params Value=" -MObjFPC -Scghi -O1 -Xs -vewnhibq -Fu/home/leonardo/Desarrollo/brookframework/packages/lib/x86_64-linux -Fu/home/leonardo/Desarrollo/mercados/get_quotes/ -l -oget_quotes.bf get_quotes.lpr"/>
 </CONFIG>
