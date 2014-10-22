@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="/usr/local/lib/fpc/2.7.1/ppcross386" Date="1409315113"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -Twin32 -Px86_64 -Xs -WG -vewnhibq -Fi/home/leonardo/Desarrollo/mercados/chart/lib/x86_64-win32 -Fu/home/leonardo/Desarrollo/lazarus/components/tachart/lib/x86_64-win32/win32 -Fu/home/leonardo/Desarrollo/lazarus/components/ideintf/units/x86_64-win32/win32 -Fu/home/leonardo/Desarrollo/lazarus/components/lazcontrols/lib/x86_64-win32/win32 -Fu/home/leonardo/Desarrollo/lazarus/lcl/units/x86_64-win32/win32 -Fu/home/leonardo/Desarrollo/lazarus/lcl/units/x86_64-win32 -Fu/home/leonardo/Desarrollo/lazarus/components/lazutils/lib/x86_64-win32 -Fu/home/leonardo/Desarrollo/lazarus/packager/units/x86_64-win32 -Fu/home/leonardo/Desarrollo/mercados/chart/ -FU/home/leonardo/Desarrollo/mercados/chart/lib/x86_64-win32/ -l -dLCL -dLCLwin32 HATrader.lpr"/>
-</CONFIG>
