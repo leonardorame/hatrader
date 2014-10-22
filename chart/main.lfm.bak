@@ -3,10 +3,13 @@ object HeikinAshiTrader: THeikinAshiTrader
   Height = 646
   Top = 37
   Width = 970
-  Caption = 'HeikinAshiTrader'
+  Caption = 'HeikinAshiTrader 0.1'
   ClientHeight = 646
   ClientWidth = 970
+  OnClose = FormClose
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '1.3'
   object PageControl1: TPageControl

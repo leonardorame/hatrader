@@ -1,14 +1,14 @@
-ggal.adr.csv
-pbr.adr.csv
-alua.ba.csv
-apbr.ba.csv
-come.ba.csv
-edn.ba.csv
-erar.ba.csv
-ggal.ba.csv
-indu.ba.csv
-merv.ba.csv
-mirg.ba.csv
-pamp.ba.csv
-ts.ba.csv
-ypf.ba.csv
+"GGAL (ADR)";"http://ceciliastrada.com.ar/quotes/ggal.adr.csv"
+"PBR (ADR)";"http://ceciliastrada.com.ar/quotes/pbr.adr.csv"
+"ALUA";"http://ceciliastrada.com.ar/quotes/alua.ba.csv"
+"APBR";"http://ceciliastrada.com.ar/quotes/apbr.ba.csv"
+"COME";"http://ceciliastrada.com.ar/quotes/come.ba.csv"
+"EDN";"http://ceciliastrada.com.ar/quotes/edn.ba.csv"
+"ERAR";"http://ceciliastrada.com.ar/quotes/erar.ba.csv"
+"GGAL";"http://ceciliastrada.com.ar/quotes/ggal.ba.csv"
+"INDU";"http://ceciliastrada.com.ar/quotes/indu.ba.csv"
+"MERV";"http://ceciliastrada.com.ar/quotes/merv.ba.csv"
+"MIRG";"http://ceciliastrada.com.ar/quotes/mirg.ba.csv"
+"PAMP";"http://ceciliastrada.com.ar/quotes/pamp.ba.csv"
+"TS";"http://ceciliastrada.com.ar/quotes/ts.ba.csv"
+"YPF";"http://ceciliastrada.com.ar/quotes/ypf.ba.csv"
