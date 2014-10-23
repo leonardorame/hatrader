@@ -1,9 +1,0 @@
-object NewWindow: TNewWindow
-  Left = 351
-  Height = 421
-  Top = 233
-  Width = 534
-  Caption = 'NewWindow'
-  Position = poMainFormCenter
-  LCLVersion = '1.3'
-end

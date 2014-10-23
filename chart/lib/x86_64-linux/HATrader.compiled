@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="/usr/bin/fpc" Date="1408877003"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -gh -Xs -vewnhibq -Fi/home/martin/devel/mercados/chart/lib/x86_64-linux -Fl/opt/gnome/lib -Fu/home/martin/devel/lazarus/components/tachart/lib/x86_64-linux/gtk2 -Fu/home/martin/devel/lazarus/components/ideintf/units/x86_64-linux/gtk2 -Fu/home/martin/devel/lazarus/components/lazcontrols/lib/x86_64-linux/gtk2 -Fu/home/martin/devel/lazarus/lcl/units/x86_64-linux/gtk2 -Fu/home/martin/devel/lazarus/lcl/units/x86_64-linux -Fu/home/martin/devel/lazarus/components/lazutils/lib/x86_64-linux -Fu/home/martin/devel/lazarus/packager/units/x86_64-linux -Fu/home/martin/devel/mercados/chart/ -FU/home/martin/devel/mercados/chart/lib/x86_64-linux/ -l -dLCL -dLCLgtk2 HATrader.lpr"/>
-</CONFIG>
