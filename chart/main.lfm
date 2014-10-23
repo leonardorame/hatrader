@@ -1,5 +1,5 @@
 object HeikinAshiTrader: THeikinAshiTrader
-  Left = 1557
+  Left = 308
   Height = 646
   Top = 37
   Width = 970

@@ -129,11 +129,11 @@
       <Unit5>
         <Filename Value="volatility.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="volatility"/>
       </Unit5>
       <Unit6>
         <Filename Value="ohlc.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="ohlc"/>
       </Unit6>
       <Unit7>
         <Filename Value="symbols.pas"/>

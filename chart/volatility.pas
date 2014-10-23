@@ -16,7 +16,6 @@ var
   I: Integer;
   A: Integer;
   lPct: array of double;
-  lStr: TStringList;
   lFrom: Integer;
   lTo: Integer;
 begin
@@ -25,7 +24,7 @@ begin
   SetLength(lPct, ADays);
   A := 0;
   // el array comienza en los valores más antiuos
-  lTo := Length(AArr) - 1;
+  lTo := AArr.Count - 1;
   for I := lTo - 1 downto 1 do
   begin
     lPct[A] := (AArr[I].close / AArr[I + 1].close) - 1;
@@ -38,6 +37,7 @@ begin
   // Una vez obtenido el array,
   //lStr.SaveToFile('salida.txt');
   //lStr.Free;
+  lPct := nil;
   Result := stddev(lPct) * sqrt(254) * 100;
 end;
 

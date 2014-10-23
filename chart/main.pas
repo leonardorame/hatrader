@@ -78,6 +78,7 @@ begin
     gThreadList.Remove(lThread);
   end;
   gThreadList.UnlockList;
+
   FSymbols.Free;
 end;
 

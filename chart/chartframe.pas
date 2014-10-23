@@ -80,14 +80,14 @@ var
 begin
   if FHint = '' then
   begin
-    SetHint(FSymbol.Data[Length(FSymbol.Data) - 1]);
+    SetHint(FSymbol.Data[FSymbol.Data.Count - 1]);
   end;
 
   // ------ CandleStick Chart ------
   FOHLCSeries.Clear;
   lLowest := 0;
   lHighest := 0;
-  for I := 0 to Length(FSymbol.Data) - 1 do
+  for I := 0 to FSymbol.Data.Count - 1 do
   begin
     if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
       lLowest := FSymbol.Data[I].low;
@@ -105,7 +105,7 @@ begin
   // ------ SMA 5 ----
 
   FMovingAvg.Clear;
-  for I := 0 to Length(FSymbol.Data) - 1 do
+  for I := 0 to FSymbol.Data.Count - 1 do
   begin
     if I > 4 then
     begin
@@ -129,7 +129,7 @@ begin
   // default values for HA open and close
   lHA_1.open := FSymbol.Data[0].open;
   lHA_1.close := FSymbol.Data[0].close;
-  for I := 0 to Length(FSymbol.Data) - 1 do
+  for I := 0 to FSymbol.Data.Count - 1 do
   begin
     if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
       lLowest := FSymbol.Data[I].low;
@@ -221,7 +221,7 @@ end;
 procedure TChartFrame.ChartToolset1DataPointHintTool1HintPosition(
   ATool: TDataPointHintTool; var APoint: TPoint);
 begin
-  if Length(FSymbol.Data) = 0 then
+  if FSymbol.Data.Count = 0 then
     exit;
 
   SetHint(FSymbol.Data[ATool.PointIndex]);
@@ -265,7 +265,7 @@ var
   lIndex: Integer;
   lChartPos: double;
 begin
-  if Length(FSymbol.Data) = 0 then
+  if FSymbol.Data.Count = 0 then
     exit;
 
   // OHLC and Date values
@@ -305,7 +305,7 @@ begin
   // close
   if ASender.Name = 'CandleStickChart' then
   begin
-    lIndex:= Length(FSymbol.Data) - 1;
+    lIndex:= FSymbol.Data.Count - 1;
     lChartPos:= FSymbol.Data[lIndex].close;
     lStr := Format('%.2f', [lChartPos]);
     lFontHeight:= ASender.Canvas.Font.GetTextHeight(lStr);

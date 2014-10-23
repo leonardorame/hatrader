@@ -21,8 +21,9 @@ type
     FHV20: double;
     FHV40: double;
   public
+    constructor Create;
+    destructor Destroy; override;
     procedure PrepareArray(AData: string);
-    procedure SetDataLength(ALen: Integer);
     property Name: string read FName write FName;
     property FilePath: string read FFilePath write FFilePath;
     property Data: TOHLCArray read FOHLCArray write FOHLCArray;
@@ -47,16 +48,9 @@ implementation
 
 { TSymbol }
 
-procedure TSymbol.PrepareArray(AData: string);
-var
-  lCSV: TStringList;
-  lLine: TStringList;
-  I: Integer;
-  A: Integer;
-
+constructor TSymbol.Create;
 begin
-  lCSV := TStringList.Create;
-  lLine := TStringList.Create;
+  FOHLCArray := TOHLCArray.Create;
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
   DefaultFormatSettings.ShortMonthNames[1] := 'Jan';
@@ -72,24 +66,47 @@ begin
   DefaultFormatSettings.ShortMonthNames[11] := 'Nov';
   DefaultFormatSettings.ShortMonthNames[12] := 'Dec';
   DefaultFormatSettings.DecimalSeparator := '.';
+end;
+
+destructor TSymbol.Destroy;
+begin
+  FOHLCArray.Free;
+  inherited Destroy;
+end;
+
+procedure TSymbol.PrepareArray(AData: string);
+var
+  lCSV: TStringList;
+  lLine: TStringList;
+  I: Integer;
+  A: Integer;
+  lOHLC: TOHLCRecord;
+
+const
+  cMaxSize = 50;
+
+begin
+  lCSV := TStringList.Create;
+  lLine := TStringList.Create;
   try
     lCSV.Text:= AData;
     if lCSV.Count = 0 then
       exit;
     A := 0;
-    SetDataLength(50);
     for I := lCsv.Count - 1 downto 0 do
     begin
       if I = 0 then
         continue;
-      if I > Length(FOHLCArray) then
+      if I > cMaxSize then
         continue;
       lLine.CommaText:= lCSV[I];
-      FOHLCArray[A].open := StrToFloatDef(lLine[1], 0);
-      FOHLCArray[A].high := StrToFloatDef(lLine[2], 0);
-      FOHLCArray[A].low := StrToFloatDef(lLine[3], 0);
-      FOHLCArray[A].close := StrToFloatDef(lLine[4], 0);
-      FOHLCArray[A].date:= lLine[0];
+      lOHLC := TOHLCRecord.Create;
+      lOHLC.open := StrToFloatDef(lLine[1], 0);
+      lOHLC.high := StrToFloatDef(lLine[2], 0);
+      lOHLC.low := StrToFloatDef(lLine[3], 0);
+      lOHLC.close := StrToFloatDef(lLine[4], 0);
+      lOHLC.date:= lLine[0];
+      FOHLCArray.Add(lOHLC);
       Inc(A);
     end;
     //CandleStickChart.Invalidate;
@@ -102,11 +119,6 @@ begin
   end;
 end;
 
-procedure TSymbol.SetDataLength(ALen: Integer);
-begin
-  SetLength(FOHLCArray, ALen);
-end;
-
 { TSymbols }
 
 constructor TGSymbolList.Create;
@@ -115,7 +127,11 @@ begin
 end;
 
 destructor TGSymbolList.Destroy;
+var
+  lSymbol: TSymbol;
 begin
+  for lSymbol in Self do
+    Remove(lSymbol);
   inherited Destroy;
 end;
 
