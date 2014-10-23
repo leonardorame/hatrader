@@ -127,25 +127,32 @@ begin
   lLowest := 0;
   lHighest := 0;
   // default values for HA open and close
-  lHA_1.open := FSymbol.Data[0].open;
-  lHA_1.close := FSymbol.Data[0].close;
-  for I := 0 to FSymbol.Data.Count - 1 do
-  begin
-    if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
-      lLowest := FSymbol.Data[I].low;
-    if (FSymbol.Data[I].high > lHighest) or (lHighest = 0) then
-      lHighest := FSymbol.Data[I].high;
-    lOhlc := FSymbol.Data[I];
+  lHA_1 := TOHLCRecord.Create;
+  lHA := TOHLCRecord.Create;
+  try
+    lHA_1.open := FSymbol.Data[0].open;
+    lHA_1.close := FSymbol.Data[0].close;
+    for I := 0 to FSymbol.Data.Count - 1 do
+    begin
+      if (FSymbol.Data[I].low < lLowest) or (lLowest = 0) then
+        lLowest := FSymbol.Data[I].low;
+      if (FSymbol.Data[I].high > lHighest) or (lHighest = 0) then
+        lHighest := FSymbol.Data[I].high;
+      lOhlc := FSymbol.Data[I];
 
-    lHA.open:= (lHA_1.open + lHA_1.close) / 2;
-    lHA.close:= (lOhlc.open + lOhlc.high + lOhlc.low + lOhlc.close ) / 4;
-    lHA.high:= Max(Max(lOhlc.open, lOhlc.close), lOhlc.high);
-    lHA.low:= Min(Min(lOhlc.open, lOhlc.Close), lOhlc.low);
-    // store last record for use in the next iteration
-    lHA_1.open := lHA.open;
-    lHA_1.close := lHA.close;
+      lHA.open:= (lHA_1.open + lHA_1.close) / 2;
+      lHA.close:= (lOhlc.open + lOhlc.high + lOhlc.low + lOhlc.close ) / 4;
+      lHA.high:= Max(Max(lOhlc.open, lOhlc.close), lOhlc.high);
+      lHA.low:= Min(Min(lOhlc.open, lOhlc.Close), lOhlc.low);
+      // store last record for use in the next iteration
+      lHA_1.open := lHA.open;
+      lHA_1.close := lHA.close;
 
-    FHAChart.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date );
+      FHAChart.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date );
+    end;
+  finally
+    lHA_1.Free;
+    lHA.Free;
   end;
   HAChart.Extent.YMin := lLowest;
   HAChart.Extent.YMax := lHighest;
@@ -160,13 +167,13 @@ begin
   FSymbol := ASymbol;
   FWinList := TObjectList.Create(True);
 
-  FMovingAvg := TLineSeries.Create(nil);
+  FMovingAvg := TLineSeries.Create(Self);
   FMovingAvg.AxisIndexX := 1;
   FMovingAvg.AxisIndexY := 0;
   FMovingAvg.LinePen.Color := clBlue;
   FMovingAvg.LinePen.Width := 2;
 
-  FOHLCSeries := TOpenHighLowCloseSeries.Create(nil);
+  FOHLCSeries := TOpenHighLowCloseSeries.Create(Self);
   FOHLCSeries.AxisIndexX:= 0;
   FOHLCSeries.DownLinePen.Color:= clRed;
   FOHLCSeries.DownLinePen.EndCap:= pecSquare;
@@ -201,7 +208,7 @@ begin
     TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
-  FHAChart := TCandleStickChart.Create(nil);
+  FHAChart := TCandleStickChart.Create(Self);
   FHAChart.AxisIndexX:= 0;
   FHAChart.DownLinePen.Color:= clRed;
   FHAChart.DownLinePen.EndCap:= pecSquare;
@@ -385,13 +392,7 @@ end;
 
 destructor TChartFrame.destroy;
 begin
-  //FThread.Terminate;
-  //FThread.WaitFor;
-  //FThread.Free;
   FWinList.Free;
-  FMovingAvg.Free;
-  FHAChart.Free;
-  FOHLCSeries.Free;
   gChartList.Remove(Self);
   inherited;
 end;

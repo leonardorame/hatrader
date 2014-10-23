@@ -20,12 +20,14 @@ type
     FOnFeedBack: TOnFeedBack;
     FOnGetData: TNotifyEvent;
     FFeedBackStr: string;
+    FData: string;
     procedure OnData;
     procedure WriteFeedBack;
   public
     constructor Create;
     destructor Destroy; override;
     procedure Execute; override;
+    property Data: string read FData;
     property OnGetData: TNotifyEvent read FOnGetData write FOnGetData;
     property Symbol: TSymbol read FSymbol write FSymbol;
     property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
@@ -65,7 +67,6 @@ end;
 procedure TGetDataThread.Execute;
 var
   lUrl: string;
-  lData: string;
 begin
   try
     FFeedBackStr:= 'Getting ' + FSymbol.Name;
@@ -73,10 +74,9 @@ begin
     with TFPHTTPClient.Create(nil) do
     begin
       lUrl := FSymbol.FilePath;
-      lData := Get(lUrl);
+      FData := Get(lUrl);
       FFeedBackStr := FSymbol.Name + ' loading done.';
       Synchronize(@WriteFeedBack);
-      FSymbol.PrepareArray(lData);
       Synchronize(@OnData);
     end;
   except

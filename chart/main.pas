@@ -74,7 +74,8 @@ begin
   begin
     lThread := TGetDataThread(lList[I]);
     lThread.Terminate;
-    lThread.WaitFor;
+    Sleep(100);
+    //lThread.WaitFor;
     gThreadList.Remove(lThread);
   end;
   gThreadList.UnlockList;
@@ -134,12 +135,19 @@ procedure THeikinAshiTrader.OnData(Sender: TObject);
 var
   I: Integer;
   lChartFrame: TChartFrame;
+  lThread: TGetDataThread;
+  lSymbol: TSymbol;
 begin
   if Sender is TGetDataThread then
   begin
+    lThread := (Sender as TGetDataThread);
+    lSymbol := lThread.Symbol;
     for lChartFrame in gChartList do
-      if (Sender as TGetDataThread).Symbol = lChartFrame.Symbol then
+      if lSymbol = lChartFrame.Symbol then
+      begin
+        lSymbol.PrepareArray(lThread.Data);
         lChartFrame.Display;
+      end;
   end;
 end;
 

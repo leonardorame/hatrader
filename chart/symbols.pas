@@ -26,7 +26,7 @@ type
     procedure PrepareArray(AData: string);
     property Name: string read FName write FName;
     property FilePath: string read FFilePath write FFilePath;
-    property Data: TOHLCArray read FOHLCArray write FOHLCArray;
+    property Data: TOHLCArray read FOHLCArray;
     property HV10: double read FHV10 write FHV10;
     property HV20: double read FHV20 write FHV20;
     property HV40: double read FHV40 write FHV40;
@@ -69,7 +69,11 @@ begin
 end;
 
 destructor TSymbol.Destroy;
+var
+  lOHLC: TOHLCRecord;
 begin
+  for lOHLC in FOHLCArray do
+    lOHLC.Free;
   FOHLCArray.Free;
   inherited Destroy;
 end;
@@ -86,6 +90,9 @@ const
   cMaxSize = 50;
 
 begin
+  for lOHLC in FOHLCArray do
+    lOHLC.Free;
+  FOHLCArray.Clear;
   lCSV := TStringList.Create;
   lLine := TStringList.Create;
   try
@@ -131,7 +138,10 @@ var
   lSymbol: TSymbol;
 begin
   for lSymbol in Self do
+  begin
+    lSymbol.Free;
     Remove(lSymbol);
+  end;
   inherited Destroy;
 end;
 
