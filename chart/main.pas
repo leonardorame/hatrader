@@ -17,13 +17,12 @@ type
     PageControl1: TPageControl;
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
-    Timer1: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
+    procedure ChartNeedData(Sender: TObject);
   private
     FSymbols: TSymbols;
     procedure GetFile(ASymbol: TSymbol);
@@ -52,6 +51,7 @@ var
   lSymbol: TSymbol;
   I: Integer;
 begin
+  gThreadList := TThreadList.Create;
   FSymbols := TSymbols.Create;
   FSymbols.LoadData;
   sgSymbols.RowCount:= 1;
@@ -67,33 +67,39 @@ var
   lList: TList;
   lThread: TGetDataThread;
   I: Integer;
+  lSymbol: TSymbol;
 begin
-  Timer1.Enabled := False;
-  lList := gThreadList.LockList;
+  try
+  {lList := gThreadList.LockList;
   for I := lList.Count - 1 downto 0 do
   begin
     lThread := TGetDataThread(lList[I]);
     lThread.Terminate;
     Sleep(100);
     //lThread.WaitFor;
-    gThreadList.Remove(lThread);
+    //gThreadList.Remove(lThread);
   end;
   gThreadList.UnlockList;
-
+  gThreadList.Free;}
   FSymbols.Free;
+
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
 end;
 
 procedure THeikinAshiTrader.FormClose(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  timer1.Enabled:= False;
+  CloseAction:=caFree;
 end;
 
 procedure THeikinAshiTrader.FormShow(Sender: TObject);
 var
   lSymbol: TSymbol;
 begin
-  lSymbol := sgSymbols.Objects[0, 0] as TSymbol;
+  lSymbol := FSymbols[0];
   if lSymbol <> nil then
     AddPage(lSymbol);
 end;
@@ -110,14 +116,15 @@ begin
   end;
 end;
 
-procedure THeikinAshiTrader.Timer1Timer(Sender: TObject);
+procedure THeikinAshiTrader.ChartNeedData(Sender: TObject);
 var
-  lChart: TChartFrame;
+  lChartFrame: TChartFrame;
 begin
-  Timer1.Enabled := False;
-  for lChart in gChartList do
-    GetFile(lChart.Symbol);
-  Timer1.Enabled := True;
+  if (Sender is TChartFrame) then
+  begin
+    lChartFrame := (Sender as TChartFrame);
+    GetFile(lChartFrame.Symbol);
+  end;
 end;
 
 procedure THeikinAshiTrader.GetFile(ASymbol: TSymbol);
@@ -133,8 +140,6 @@ end;
 
 procedure THeikinAshiTrader.OnData(Sender: TObject);
 var
-  I: Integer;
-  lChartFrame: TChartFrame;
   lThread: TGetDataThread;
   lSymbol: TSymbol;
 begin
@@ -142,12 +147,7 @@ begin
   begin
     lThread := (Sender as TGetDataThread);
     lSymbol := lThread.Symbol;
-    for lChartFrame in gChartList do
-      if lSymbol = lChartFrame.Symbol then
-      begin
-        lSymbol.PrepareArray(lThread.Data);
-        lChartFrame.Display;
-      end;
+    lSymbol.PrepareArray(lThread.Data);
   end;
 end;
 
@@ -168,16 +168,19 @@ end;
 procedure THeikinAshiTrader.AddPage(ASymbol: TSymbol);
 var
   lTab: TTabSheet;
+  lChartFrame: TChartFrame;
 begin
   lTab := PageControl1.AddTabSheet;
   with lTab do
   begin
     Caption:= ASymbol.Name;
-    with TChartFrame.Create(ASymbol, lTab) do
+    lChartFrame := TChartFrame.Create(ASymbol, lTab);
+    with lChartFrame do
     begin
       Parent := lTab;
       Align := alClient;
       GetFile(ASymbol);
+      lChartFrame.OnNeedData:= @ChartNeedData;
     end;
   end;
   PageControl1.ActivePage := lTab;

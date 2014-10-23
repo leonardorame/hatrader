@@ -89,11 +89,6 @@ begin
   Terminate;
 end;
 
-initialization
-  gThreadList := TThreadList.Create;
-
-finalization
-  gThreadList.Free;
 
 end.
 

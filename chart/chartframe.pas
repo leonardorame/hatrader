@@ -26,6 +26,7 @@ type
     ListChartSource1: TListChartSource;
     ListChartSource2: TListChartSource;
     Splitter1: TSplitter;
+    Timer1: TTimer;
     ToolBar1: TToolBar;
     ToolButton2: TToolButton;
     procedure actNewWindowExecute(Sender: TObject);
@@ -36,7 +37,9 @@ type
       Y: Integer);
     procedure ChartToolset1DataPointHintTool1HintPosition(
       ATool: TDataPointHintTool; var APoint: TPoint);
+    procedure Timer1Timer(Sender: TObject);
   private
+    FOnNeedData: TNotifyEvent;
     FSymbol: TSymbol;
     FWinList: TObjectList;
     FHint: string;
@@ -45,17 +48,15 @@ type
     FOHLCSeries: TOpenHighLowCloseSeries;
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
+    procedure DataChanged(Sender: TObject);
   public
     constructor Create(ASymbol: TSymbol; TheOwner: TComponent);
     destructor destroy; override;
     procedure Display;
     property Symbol: TSymbol read FSymbol;
+    property OnNeedData: TNotifyEvent read FOnNeedData write FOnNeedData;
+
   end;
-
-  TChartList = specialize TFPGList<TChartFrame>;
-
-var
-  gChartList: TChartList;
 
 implementation
 
@@ -163,8 +164,8 @@ end;
 constructor TChartFrame.Create(ASymbol: TSymbol; TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
-  gChartList.Add(Self);
   FSymbol := ASymbol;
+  FSymbol.OnDataChanged := @DataChanged;
   FWinList := TObjectList.Create(True);
 
   FMovingAvg := TLineSeries.Create(Self);
@@ -236,10 +237,15 @@ begin
   CandleStickChart.Invalidate;
 end;
 
+procedure TChartFrame.Timer1Timer(Sender: TObject);
+begin
+  if Assigned(FOnNeedData) then
+    FOnNeedData(Self);
+end;
+
 procedure TChartFrame.CloseNewWindow(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
-  FWinList.Remove(Sender);
   CloseAction := caFree;
 end;
 
@@ -251,6 +257,11 @@ begin
     AOHLCRecord.low,
     AOHLCRecord.close,
     AOHLCRecord.date]);
+end;
+
+procedure TChartFrame.DataChanged(Sender: TObject);
+begin
+  Display;
 end;
 
 procedure TChartFrame.CandleStickChartMouseMove(Sender: TObject; Shift: TShiftState;
@@ -393,16 +404,8 @@ end;
 destructor TChartFrame.destroy;
 begin
   FWinList.Free;
-  gChartList.Remove(Self);
   inherited;
 end;
-
-initialization
-  gChartList := TChartList.Create;
-
-finalization
-  gChartList.Free;
-
 
 end.
 

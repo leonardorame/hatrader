@@ -20,6 +20,7 @@ type
     FHV10: double;
     FHV20: double;
     FHV40: double;
+    FOnDataChanged: TNotifyEvent;
   public
     constructor Create;
     destructor Destroy; override;
@@ -30,6 +31,7 @@ type
     property HV10: double read FHV10 write FHV10;
     property HV20: double read FHV20 write FHV20;
     property HV40: double read FHV40 write FHV40;
+    property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
   end;
 
   { TGSymbolList }
@@ -120,6 +122,9 @@ begin
     FHV10 := HV(FOHLCArray, 10);
     FHV20 := HV(FOHLCArray, 20);
     FHV40 := HV(FOHLCArray, 40);
+
+    if Assigned(FOnDataChanged) then
+       FOnDataChanged(Self);
   finally
     lLine.Free;
     lCSV.Free;
@@ -140,7 +145,6 @@ begin
   for lSymbol in Self do
   begin
     lSymbol.Free;
-    Remove(lSymbol);
   end;
   inherited Destroy;
 end;
