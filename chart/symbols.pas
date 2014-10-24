@@ -12,6 +12,8 @@ type
 
   { TSymbol }
 
+  TSymbolType = (stDaily, stIntraday);
+
   TSymbol = class
   private
     FFilePath: string;
@@ -21,17 +23,21 @@ type
     FHV20: double;
     FHV40: double;
     FOnDataChanged: TNotifyEvent;
+    FSymbol: string;
+    FSymbolType: TSymbolType;
   public
     constructor Create;
     destructor Destroy; override;
     procedure PrepareArray(AData: string);
     property Name: string read FName write FName;
+    property Symbol: string read FSymbol write FSymbol;
     property FilePath: string read FFilePath write FFilePath;
     property Data: TOHLCArray read FOHLCArray;
     property HV10: double read FHV10 write FHV10;
     property HV20: double read FHV20 write FHV20;
     property HV40: double read FHV40 write FHV40;
     property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
+    property SymbolType: TSymbolType read FSymbolType write FSymbolType;
   end;
 
   { TGSymbolList }
@@ -41,7 +47,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure LoadData;
-    procedure AddSymbol(AName, APath: string);
+    procedure AddSymbol(AName, ASymbol, APath: string);
   end;
 
   TSymbols = specialize TGSymbolList<TSymbol>;
@@ -52,6 +58,7 @@ implementation
 
 constructor TSymbol.Create;
 begin
+  FSymbolType:= stDaily;
   FOHLCArray := TOHLCArray.Create;
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
@@ -115,7 +122,7 @@ begin
       lOHLC.low := StrToFloatDef(lLine[3], 0);
       lOHLC.close := StrToFloatDef(lLine[4], 0);
       lOHLC.date:= lLine[0];
-      if lLine.Count >= 5 then
+      if FSymbolType = stIntraday then
         lOHLC.time:= lLine[5];
       FOHLCArray.Add(lOHLC);
       Inc(A);
@@ -158,6 +165,7 @@ var
   I: Integer;
   lName: string;
   lPath: string;
+  lSymbol: string;
 begin
   lList := TStringList.Create;
   lLine := TStringList.Create;
@@ -170,8 +178,9 @@ begin
       lLine.Delimiter:= ';';
       lLine.DelimitedText := lList[I];
       lName := AnsiReplaceStr(lLine[0], '"', '');
-      lPath := AnsiReplaceStr(lLine[1], '"', '');
-      AddSymbol(lName, lPath);
+      lSymbol := AnsiReplaceStr(lLine[1], '"', '');
+      lPath := AnsiReplaceStr(lLine[2], '"', '');
+      AddSymbol(lName, lSymbol, lPath);
     end;
   finally
     lLine.Free;
@@ -179,13 +188,14 @@ begin
   end;
 end;
 
-procedure TGSymbolList.AddSymbol(AName, APath: string);
+procedure TGSymbolList.AddSymbol(AName, ASymbol, APath: string);
 var
   lSymbol: TSymbol;
 begin
   lSymbol := TSymbol.Create;
   lSymbol.FilePath := APath;
   lSymbol.Name := AName;
+  lSymbol.Symbol:= ASymbol;
   Add(lSymbol);
 end;
 

@@ -40,6 +40,7 @@ type
       ATool: TDataPointHintTool; var APoint: TPoint);
     procedure Timer1Timer(Sender: TObject);
   private
+    FOnFeedBack: TOnFeedBack;
     FOnNeedData: TNotifyEvent;
     FSymbol: TSymbol;
     FHint: string;
@@ -56,7 +57,7 @@ type
     procedure Display;
     property Symbol: TSymbol read FSymbol;
     property OnNeedData: TNotifyEvent read FOnNeedData write FOnNeedData;
-
+    property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
   end;
 
 implementation
@@ -97,7 +98,7 @@ begin
       lHighest := FSymbol.Data[I].high;
     lOhlc := FSymbol.Data[I];
 
-    if lOhlc.Time = '' then
+    if FSymbol.SymbolType = stDaily then
       FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.date )
     else
       FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.Time );
@@ -153,7 +154,7 @@ begin
       lHA_1.open := lHA.open;
       lHA_1.close := lHA.close;
 
-      if lHA.Time = '' then
+      if FSymbol.SymbolType = stDaily then
         FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date )
       else
         FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.Time )
@@ -398,8 +399,9 @@ var
 begin
   lSymbol := TSymbol.Create;
   lSymbol.Name:= FSymbol.Name + ' (30 min)';
-  lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf?sym=' + FSymbol.Name;
+  lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf?sym=' + FSymbol.Symbol;
   lSymbol.OnDataChanged:= @DataChanged;
+  lSymbol.SymbolType:= stIntraday;
 
   lWin := TNewWindow.Create(nil);
   lWin.OnDestroy:= @DestroyNewWindow;
@@ -407,6 +409,7 @@ begin
   lWin.Caption:= lSymbol.Name;
   lChart := TChartFrame.Create(lSymbol, nil);
   lChart.ToolBar1.Visible:= False;
+  lChart.OnFeedBack:= FOnFeedBack;
   lChart.Parent := lWin;
   lChart.Align:= alClient;
   lChart.OnNeedData:= FOnNeedData;

@@ -158,6 +158,7 @@ begin
       Align := alClient;
       GetFile(ASymbol);
       lChartFrame.OnNeedData:= @ChartNeedData;
+      lChartFrame.OnFeedBack:= @FeedBack;
     end;
   end;
   PageControl1.ActivePage := lTab;
