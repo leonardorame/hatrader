@@ -53,6 +53,7 @@ var
   I: Integer;
 begin
   gThreadList := TThreadList.Create;
+  sgSymbols.FocusRectVisible:= False;
   FSymbols := TSymbols.Create;
   FSymbols.LoadData;
   sgSymbols.RowCount:= 1;
@@ -135,6 +136,15 @@ var
   lClose: double;
   lPrev: double;
 begin
+  if gdSelected in aState then
+  begin
+    sgSymbols.Canvas.Brush.Style:= bsSolid;
+    sgSymbols.Canvas.Brush.Color:= $665533;
+    sgSymbols.Canvas.FillRect(aRect);
+    lCanvas.Font.Color := $111111;
+  end
+  else
+    lCanvas.Font.Color := $1F1F1F;
   if ARow > 0 then
   begin
     lCanvas := sgSymbols.Canvas;
@@ -163,7 +173,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
       2: begin
          if lSymbol.Data.Count > 0 then
@@ -171,7 +182,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
       3: begin
          if lSymbol.Data.Count > 0 then
@@ -179,7 +191,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
       4: begin
          lCanvas.Brush.Style:= bsSolid;
@@ -200,7 +213,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
       5: begin
          if lSymbol.Data.Count > 1 then
@@ -208,7 +222,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
       6: begin
          if lPrev < lClose then
@@ -222,7 +237,8 @@ begin
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
       end;
     end;
   end;

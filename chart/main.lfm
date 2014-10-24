@@ -26,9 +26,9 @@ object HeikinAshiTrader: THeikinAshiTrader
     Top = 0
     Width = 416
     Align = alLeft
-    AlternateColor = 5987163
+    AlternateColor = 1118481
     BorderStyle = bsNone
-    Color = 7960953
+    Color = 855309
     ColCount = 7
     Columns = <    
       item
@@ -60,14 +60,15 @@ object HeikinAshiTrader: THeikinAshiTrader
         Title.Caption = '%'
       end>
     ExtendedSelect = False
+    FixedColor = clBtnText
     FixedCols = 0
-    Font.Color = clMenuText
+    Font.Color = 9605778
     GridLineWidth = 0
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRowSelect, goSmoothScroll]
     ParentFont = False
     RowCount = 2
     TabOrder = 1
-    TitleFont.Color = clMenuText
+    TitleFont.Color = 9605778
     OnDblClick = sgSymbolsDblClick
     OnDrawCell = sgSymbolsDrawCell
     ColWidths = (
