@@ -140,6 +140,8 @@ begin
     lCanvas := sgSymbols.Canvas;
     lCellHeigh := aRect.Bottom - aRect.Top;
     lSymbol := FSymbols[ARow - 1];
+    lPrev := 0;
+    lClose := 0;
     if lSymbol.Data.Count > 0 then
     begin
       lOpen := lSymbol.Data[lSymbol.Data.Count - 1].Open;
@@ -180,11 +182,19 @@ begin
          lCanvas.TextOut(aRect.Left + 2, lY, lText);
       end;
       4: begin
+         lCanvas.Brush.Style:= bsSolid;
          if lPrev < lClose then
-           lCanvas.Font.Color:= clGreen
+         begin
+           lCanvas.Brush.Color:= clGreen;
+           lCanvas.FillRect(aRect);
+         end
          else
          if lPrev > lClose then
-           lCanvas.Font.Color:= clRed;
+         begin
+           lCanvas.Brush.Color:= clRed;
+           lCanvas.FillRect(aRect);
+         end;
+
          if lSymbol.Data.Count > 0 then
            lText := Format('%.2f',[lClose])
          else
@@ -195,6 +205,20 @@ begin
       5: begin
          if lSymbol.Data.Count > 1 then
            lText := Format('%.2f',[lPrev])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      6: begin
+         if lPrev < lClose then
+           lCanvas.Font.Color:= clGreen
+         else
+         if lPrev > lClose then
+           lCanvas.Font.Color:= clRed;
+
+         if lSymbol.Data.Count > 1 then
+           lText := Format('%.2f%%',[((lClose / lPrev) - 1) * 100])
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));

@@ -13,10 +13,10 @@ object HeikinAshiTrader: THeikinAshiTrader
   Position = poDesktopCenter
   LCLVersion = '1.3'
   object PageControl1: TPageControl
-    Left = 400
+    Left = 416
     Height = 625
     Top = 0
-    Width = 570
+    Width = 554
     Align = alClient
     TabOrder = 0
   end
@@ -24,12 +24,12 @@ object HeikinAshiTrader: THeikinAshiTrader
     Left = 0
     Height = 625
     Top = 0
-    Width = 400
+    Width = 416
     Align = alLeft
     AlternateColor = 5987163
     BorderStyle = bsNone
     Color = 7960953
-    ColCount = 6
+    ColCount = 7
     Columns = <    
       item
         Title.Alignment = taCenter
@@ -54,7 +54,10 @@ object HeikinAshiTrader: THeikinAshiTrader
       end    
       item
         Title.Caption = 'Prev.'
-        Width = 100
+        Width = 50
+      end    
+      item
+        Title.Caption = '%'
       end>
     ExtendedSelect = False
     FixedCols = 0
@@ -73,7 +76,8 @@ object HeikinAshiTrader: THeikinAshiTrader
       50
       50
       50
-      100
+      50
+      64
     )
   end
   object StatusBar1: TStatusBar
