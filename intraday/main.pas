@@ -79,7 +79,7 @@ begin
       '  rt.symbol = :sym '+
       'group by '+
       '  1,6 '+
-      'order by rt.date desc, rt.time desc';
+      'order by rt.date desc, str_to_date(rt.time, ''%h:%i:%s'') desc';
 
     lQuery.ParamByName('sym').AsString:= lSymbol;
     lQuery.Open;
