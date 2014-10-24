@@ -41,9 +41,8 @@ type
   private
     FOnNeedData: TNotifyEvent;
     FSymbol: TSymbol;
-    FWinList: TObjectList;
     FHint: string;
-    FHAChart: TCandleStickChart;
+    FHAChartSeries: TCandleStickChartSeries;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
@@ -124,7 +123,7 @@ begin
   end;
 
   // ------ Heikin Ashi Chart ------
-  FHAChart.Clear;
+  FHAChartSeries.Clear;
   lLowest := 0;
   lHighest := 0;
   // default values for HA open and close
@@ -149,7 +148,7 @@ begin
       lHA_1.open := lHA.open;
       lHA_1.close := lHA.close;
 
-      FHAChart.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date );
+      FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date );
     end;
   finally
     lHA_1.Free;
@@ -166,7 +165,6 @@ begin
   inherited Create(TheOwner);
   FSymbol := ASymbol;
   FSymbol.OnDataChanged := @DataChanged;
-  FWinList := TObjectList.Create(True);
 
   FMovingAvg := TLineSeries.Create(Self);
   FMovingAvg.AxisIndexX := 1;
@@ -209,21 +207,21 @@ begin
     TChartAxis(AxisList.Items[0]).Marks.LabelFont.Color:= cAxisFontColor;
   end;
 
-  FHAChart := TCandleStickChart.Create(Self);
-  FHAChart.AxisIndexX:= 0;
-  FHAChart.DownLinePen.Color:= clRed;
-  FHAChart.DownLinePen.EndCap:= pecSquare;
-  FHAChart.DownLinePen.Width:= 1;
-  FHAChart.LinePen.Color:= clLime;
-  FHAChart.LinePen.EndCap:= pecSquare;
-  FHAChart.LinePen.Width:= 1;
-  FHAChart.Source := ListChartSource2;
-  FHAChart.TickWidth:= 40;
-  FHAChart.ListSource.YCount:= 4;
+  FHAChartSeries := TCandleStickChartSeries.Create(Self);
+  FHAChartSeries.AxisIndexX:= 0;
+  FHAChartSeries.DownLinePen.Color:= clRed;
+  FHAChartSeries.DownLinePen.EndCap:= pecSquare;
+  FHAChartSeries.DownLinePen.Width:= 1;
+  FHAChartSeries.LinePen.Color:= clLime;
+  FHAChartSeries.LinePen.EndCap:= pecSquare;
+  FHAChartSeries.LinePen.Width:= 1;
+  FHAChartSeries.Source := ListChartSource2;
+  FHAChartSeries.TickWidth:= 40;
+  FHAChartSeries.ListSource.YCount:= 4;
 
   CandleStickChart.AddSeries(FOHLCSeries);
   CandleStickChart.AddSeries(FMovingAvg);
-  HAChart.AddSeries(FHAChart);
+  HAChart.AddSeries(FHAChartSeries);
 end;
 
 procedure TChartFrame.ChartToolset1DataPointHintTool1HintPosition(
@@ -375,7 +373,6 @@ begin
   lWin := TNewWindow.Create(nil);
   lWin.OnClose := @CloseNewWindow;
   lWin.Caption:= FSymbol.Name;
-  FWinList.Add(lWin);
   lChart := TChartFrame.Create(FSymbol, lWin);
   lChart.Parent := lWin;
   lChart.Align:= alClient;
@@ -403,7 +400,6 @@ end;
 
 destructor TChartFrame.destroy;
 begin
-  FWinList.Free;
   inherited;
 end;
 

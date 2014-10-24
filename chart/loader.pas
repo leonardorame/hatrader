@@ -42,12 +42,15 @@ implementation
 
 procedure TGetDataThread.OnData;
 begin
-  FOnGetData(Self);
+  // cargamos los datos dentro
+  // de este Synchronize
+  FSymbol.PrepareArray(FData);
 end;
 
 procedure TGetDataThread.WriteFeedBack;
 begin
-  FOnFeedBack(FFeedBackStr);
+  if Assigned(FOnFeedBack) then
+    FOnFeedBack(FFeedBackStr);
 end;
 
 constructor TGetDataThread.Create;
@@ -78,6 +81,8 @@ begin
       FFeedBackStr := FSymbol.Name + ' loading done.';
       Synchronize(@WriteFeedBack);
       Synchronize(@OnData);
+      // free TFPHTTPCLient
+      Free;
     end;
   except
     on E: Exception do

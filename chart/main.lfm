@@ -1,7 +1,7 @@
 object HeikinAshiTrader: THeikinAshiTrader
-  Left = 1678
+  Left = 308
   Height = 646
-  Top = 24
+  Top = 25
   Width = 970
   Caption = 'HeikinAshiTrader 0.1'
   ClientHeight = 646

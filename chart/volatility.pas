@@ -37,7 +37,6 @@ begin
   // Una vez obtenido el array,
   //lStr.SaveToFile('salida.txt');
   //lStr.Free;
-  lPct := nil;
   Result := stddev(lPct) * sqrt(254) * 100;
 end;
 

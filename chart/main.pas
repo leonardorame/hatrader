@@ -26,7 +26,6 @@ type
   private
     FSymbols: TSymbols;
     procedure GetFile(ASymbol: TSymbol);
-    procedure OnData(Sender: TObject);
     procedure SelectChart(AChart: string);
     procedure AddPage(ASymbol: TSymbol);
     procedure AddSymbol(ASymbol: TSymbol);
@@ -59,7 +58,7 @@ begin
   for lSymbol in FSymbols do
     AddSymbol(lSymbol);
 
-    sgSymbols.Row:= 0;
+  sgSymbols.Row:= 0;
 end;
 
 procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
@@ -69,24 +68,16 @@ var
   I: Integer;
   lSymbol: TSymbol;
 begin
-  try
-  {lList := gThreadList.LockList;
+  lList := gThreadList.LockList;
   for I := lList.Count - 1 downto 0 do
   begin
     lThread := TGetDataThread(lList[I]);
     lThread.Terminate;
     Sleep(100);
-    //lThread.WaitFor;
-    //gThreadList.Remove(lThread);
   end;
   gThreadList.UnlockList;
-  gThreadList.Free;}
+  gThreadList.Free;
   FSymbols.Free;
-
-  except
-    on E: Exception do
-      ShowMessage(E.Message);
-  end;
 end;
 
 procedure THeikinAshiTrader.FormClose(Sender: TObject;
@@ -133,22 +124,8 @@ var
 begin
   lThread := TGetDataThread.Create;
   lThread.Symbol := ASymbol;
-  lThread.OnGetData:= @OnData;
   lThread.OnFeedBack := @GetFeedBack;
   lThread.start;
-end;
-
-procedure THeikinAshiTrader.OnData(Sender: TObject);
-var
-  lThread: TGetDataThread;
-  lSymbol: TSymbol;
-begin
-  if Sender is TGetDataThread then
-  begin
-    lThread := (Sender as TGetDataThread);
-    lSymbol := lThread.Symbol;
-    lSymbol.PrepareArray(lThread.Data);
-  end;
 end;
 
 procedure THeikinAshiTrader.SelectChart(AChart: string);

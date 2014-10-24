@@ -13,7 +13,7 @@ type
 
   { TCandleStickChart }
 
-  TCandleStickChart = class(TOpenHighLowCloseSeries)
+  TCandleStickChartSeries = class(TOpenHighLowCloseSeries)
   public
     procedure Draw(ADrawer: IChartDrawer); override;
   end;
@@ -22,7 +22,7 @@ implementation
 
 { TCandleStickChart }
 
-procedure TCandleStickChart.Draw(ADrawer: IChartDrawer);
+procedure TCandleStickChartSeries.Draw(ADrawer: IChartDrawer);
 
   function MaybeRotate(AX, AY: Double): TPoint;
   begin
