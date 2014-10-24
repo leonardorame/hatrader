@@ -9,7 +9,8 @@ uses
   Dialogs, ExtCtrls, ComCtrls, ActnList, DateUtils, TAMultiSeries,
   TACustomSeries, TASeries, TAChartAxis, TAChartUtils, TATools, Math, types,
   candlestickchart, contnrs, newwindow, ohlc,
-  symbols, fgl;
+  symbols, fgl,
+  loader;
 
 type
 
@@ -45,6 +46,7 @@ type
     FHAChartSeries: TCandleStickChartSeries;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
+    procedure DestroyNewWindow(Sender: TObject);
     procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
     procedure DataChanged(Sender: TObject);
@@ -247,6 +249,20 @@ begin
     FOnNeedData(Self);
 end;
 
+procedure TChartFrame.DestroyNewWindow(Sender: TObject);
+var
+  lWin: TNewWindow;
+  lChartFrame: TChartFrame;
+begin
+  if (Sender is TNewWindow) then
+  begin
+    lWin := (Sender as TNewWindow);
+    lChartFrame := lWin.Controls[0] as TChartFrame;
+    lChartFrame.Symbol.Free;
+    lChartFrame.Free;
+  end;
+end;
+
 procedure TChartFrame.CloseNewWindow(Sender: TObject;
   var CloseAction: TCloseAction);
 begin
@@ -377,34 +393,27 @@ var
   lChart: TChartFrame;
   lSymbol: TSymbol;
   lData: string;
+  lThread: TGetDataThread;
+
 begin
   lSymbol := TSymbol.Create;
-  lSymbol.FilePath:= 'http://ceciliastrada.com.ar/cgi-bin/intraday.bf/sym=' + FSymbol.Name;
+  lSymbol.Name:= FSymbol.Name + ' (30 min)';
+  lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf?sym=' + FSymbol.Name;
+  lSymbol.OnDataChanged:= @DataChanged;
 
-  var
-    lThread: TGetDataThread;
-  begin
-    lThread := TGetDataThread.Create;
-    lThread.Symbol := ASymbol;
-    lThread.OnFeedBack := @GetFeedBack;
-    lThread.start;
-
-
-  with TStringList.Create do
-  begin
-    Add('date;open;high;low;close;time');
-    LoadFromFile('intraday.csv');
-    lData := Text;
-    Free;
-  end;
   lWin := TNewWindow.Create(nil);
+  lWin.OnDestroy:= @DestroyNewWindow;
   lWin.OnClose := @CloseNewWindow;
-  lWin.Caption:= FSymbol.Name;
-  lChart := TChartFrame.Create(lSymbol, lWin);
+  lWin.Caption:= lSymbol.Name;
+  lChart := TChartFrame.Create(lSymbol, nil);
+  lChart.ToolBar1.Visible:= False;
   lChart.Parent := lWin;
   lChart.Align:= alClient;
-  lSymbol.PrepareArray(lData);
+  lChart.OnNeedData:= FOnNeedData;
   lWin.Show;
+
+  if Assigned(FOnNeedData) then
+    FOnNeedData(lChart);
 end;
 
 procedure TChartFrame.CandleStickChartAfterDrawBackWall(ASender: TChart;

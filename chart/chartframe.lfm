@@ -166,7 +166,7 @@ object ChartFrame: TChartFrame
     left = 80
     top = 80
     object actNewWindow: TAction
-      Caption = 'New Window'
+      Caption = 'Intraday'
       ImageIndex = 1
       OnExecute = actNewWindowExecute
     end
