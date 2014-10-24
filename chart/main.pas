@@ -23,6 +23,8 @@ type
     procedure FormShow(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
     procedure ChartNeedData(Sender: TObject);
+    procedure sgSymbolsDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
   private
     FSymbols: TSymbols;
     procedure GetFile(ASymbol: TSymbol);
@@ -118,6 +120,90 @@ begin
   end;
 end;
 
+procedure THeikinAshiTrader.sgSymbolsDrawCell(Sender: TObject; aCol,
+  aRow: Integer; aRect: TRect; aState: TGridDrawState);
+var
+  lSymbol: TSymbol;
+  lX: Integer;
+  lY: Integer;
+  lCellHeigh: Integer;
+  lCanvas: TCanvas;
+  lText: string;
+  lOpen: double;
+  lHigh: double;
+  lLow: double;
+  lClose: double;
+  lPrev: double;
+begin
+  if ARow > 0 then
+  begin
+    lCanvas := sgSymbols.Canvas;
+    lCellHeigh := aRect.Bottom - aRect.Top;
+    lSymbol := FSymbols[ARow - 1];
+    if lSymbol.Data.Count > 0 then
+    begin
+      lOpen := lSymbol.Data[lSymbol.Data.Count - 1].Open;
+      lHigh := lSymbol.Data[lSymbol.Data.Count - 1].High;
+      lLow := lSymbol.Data[lSymbol.Data.Count - 1].Low;
+      lClose := lSymbol.Data[lSymbol.Data.Count - 1].Close;
+      if lSymbol.Data.Count > 1 then
+        lPrev := lSymbol.Data[lSymbol.Data.Count - 2].Close;
+    end;
+    case ACol of
+      0: begin
+         lText := lSymbol.Name;
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      1: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lOpen])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      2: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lHigh])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      3: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lLow])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      4: begin
+         if lPrev < lClose then
+           lCanvas.Font.Color:= clGreen
+         else
+         if lPrev > lClose then
+           lCanvas.Font.Color:= clRed;
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lClose])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+      5: begin
+         if lSymbol.Data.Count > 1 then
+           lText := Format('%.2f',[lPrev])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lCanvas.TextOut(aRect.Left + 2, lY, lText);
+      end;
+    end;
+  end;
+end;
+
 procedure THeikinAshiTrader.GetFile(ASymbol: TSymbol);
 var
   lThread: TGetDataThread;
@@ -168,7 +254,7 @@ procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol);
 begin
   sgSymbols.RowCount := sgSymbols.RowCount + 1;
   sgSymbols.Objects[0, sgSymbols.RowCount - 1] := ASymbol;
-  sgSymbols.Cells[0, sgSymbols.RowCount - 1] := ASymbol.Name;
+  //sgSymbols.Cells[0, sgSymbols.RowCount - 1] := ASymbol.Name;
 end;
 
 procedure THeikinAshiTrader.FeedBack(AString: string);
@@ -179,6 +265,7 @@ end;
 procedure THeikinAshiTrader.GetFeedBack(AFeedBack: string);
 begin
   FeedBack(AFeedBack);
+  sgSymbols.Invalidate;
   Application.ProcessMessages;
 end;
 

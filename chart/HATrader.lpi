@@ -160,7 +160,6 @@
     </SearchPaths>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2"/>
         <StripSymbols Value="True"/>
       </Debugging>
