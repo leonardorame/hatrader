@@ -115,6 +115,8 @@ begin
       lOHLC.low := StrToFloatDef(lLine[3], 0);
       lOHLC.close := StrToFloatDef(lLine[4], 0);
       lOHLC.date:= lLine[0];
+      if lLine.Count >= 5 then
+        lOHLC.time:= lLine[5];
       FOHLCArray.Add(lOHLC);
       Inc(A);
     end;

@@ -95,7 +95,10 @@ begin
       lHighest := FSymbol.Data[I].high;
     lOhlc := FSymbol.Data[I];
 
-    FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.date );
+    if lOhlc.Time = '' then
+      FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.date )
+    else
+      FOHLCSeries.AddXOHLC( I, lOhlc.open, lOhlc.high, lOhlc.low, lOhlc.close, lOhlc.Time );
   end;
   CandleStickChart.Extent.YMin := lLowest;
   CandleStickChart.Extent.YMax := lHighest;
@@ -148,7 +151,10 @@ begin
       lHA_1.open := lHA.open;
       lHA_1.close := lHA.close;
 
-      FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date );
+      if lHA.Time = '' then
+        FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.date )
+      else
+        FHAChartSeries.AddXOHLC( I, lHA.open, lHA.high, lHA.low, lHA.close, lOhlc.Time )
     end;
   finally
     lHA_1.Free;
@@ -369,14 +375,35 @@ procedure TChartFrame.actNewWindowExecute(Sender: TObject);
 var
   lWin: TNewWindow;
   lChart: TChartFrame;
+  lSymbol: TSymbol;
+  lData: string;
 begin
+  lSymbol := TSymbol.Create;
+  lSymbol.FilePath:= 'http://ceciliastrada.com.ar/cgi-bin/intraday.bf/sym=' + FSymbol.Name;
+
+  var
+    lThread: TGetDataThread;
+  begin
+    lThread := TGetDataThread.Create;
+    lThread.Symbol := ASymbol;
+    lThread.OnFeedBack := @GetFeedBack;
+    lThread.start;
+
+
+  with TStringList.Create do
+  begin
+    Add('date;open;high;low;close;time');
+    LoadFromFile('intraday.csv');
+    lData := Text;
+    Free;
+  end;
   lWin := TNewWindow.Create(nil);
   lWin.OnClose := @CloseNewWindow;
   lWin.Caption:= FSymbol.Name;
-  lChart := TChartFrame.Create(FSymbol, lWin);
+  lChart := TChartFrame.Create(lSymbol, lWin);
   lChart.Parent := lWin;
   lChart.Align:= alClient;
-  //lChart.GetFile;
+  lSymbol.PrepareArray(lData);
   lWin.Show;
 end;
 
