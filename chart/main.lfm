@@ -3,7 +3,7 @@ object HeikinAshiTrader: THeikinAshiTrader
   Height = 646
   Top = 25
   Width = 970
-  Caption = 'HeikinAshiTrader 0.1'
+  Caption = 'HeikinAshiTrader 0.2'
   ClientHeight = 646
   ClientWidth = 970
   OnClose = FormClose

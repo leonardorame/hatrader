@@ -111,7 +111,7 @@ begin
     A := 0;
     for I := lCsv.Count - 1 downto 0 do
     begin
-      if I = 0 then
+      if (FSymbolType = stDaily) and (I = 0) then
         continue;
       if I > cMaxSize then
         continue;
