@@ -7,6 +7,7 @@ interface
 uses
   BrookAction,
   sysutils,
+  dateutils,
   sqldb,
   mysql55conn;
 
@@ -86,14 +87,13 @@ begin
     while not lQuery.EOF do
     begin
       Write(Format('%s,%s,%s,%s,%s,%s', [
-        lQuery.Fields[0].AsString,
+        FormatDateTime('YYYY-MM-DD', lQuery.Fields[0].AsDateTime),
         lQuery.Fields[1].AsString,
         lQuery.Fields[2].AsString,
         lQuery.Fields[3].AsString,
         lQuery.Fields[4].AsString,
-        lQuery.Fields[5].AsString,
-        lQuery.Fields[6].AsString
-      ]));
+        FormatDateTime('HH:NN:SS', lQuery.Fields[5].AsDateTime)
+      ]) + #13);
       lQuery.Next;
     end;
   finally

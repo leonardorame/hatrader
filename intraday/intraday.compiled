@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <Compiler Value="/usr/bin/fpc" Date="1408877003"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -vewnhibq -Fu/home/martin/devel/brookframework/packages/lib/x86_64-linux -Fu/home/martin/devel/mercados/intraday/ -l intraday.lpr"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -Xs -vewnhibq -Fu/home/martin/devel/brookframework/packages/lib/x86_64-linux -Fu/home/martin/devel/mercados/intraday/ -l -ointraday.bf intraday.lpr"/>
 </CONFIG>

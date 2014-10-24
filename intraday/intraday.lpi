@@ -51,8 +51,8 @@
         <UnitName Value="main"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="77"/>
-        <CursorPos X="34" Y="94"/>
+        <TopLine Value="28"/>
+        <CursorPos X="8" Y="35"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit1>
@@ -76,7 +76,7 @@
         <Loaded Value="True"/>
       </Unit3>
     </Units>
-    <JumpHistory Count="7" HistoryIndex="6">
+    <JumpHistory Count="10" HistoryIndex="9">
       <Position1>
         <Filename Value="main.pas"/>
         <Caret Line="52" Column="49" TopLine="51"/>
@@ -103,16 +103,35 @@
         <Filename Value="main.pas"/>
         <Caret Line="88" Column="26" TopLine="67"/>
       </Position7>
+      <Position8>
+        <Filename Value="main.pas"/>
+        <Caret Line="94" Column="34" TopLine="77"/>
+      </Position8>
+      <Position9>
+        <Filename Value="main.pas"/>
+        <Caret Line="87" Column="13" TopLine="76"/>
+      </Position9>
+      <Position10>
+        <Filename Value="main.pas"/>
+        <Caret Line="9" Column="12"/>
+      </Position10>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="intraday" ApplyConventions="False"/>
+      <Filename Value="intraday.bf" ApplyConventions="False"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
     </SearchPaths>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <UseLineInfoUnit Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+    </Linking>
   </CompilerOptions>
   <Debugging>
     <Exceptions Count="3">
