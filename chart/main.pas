@@ -139,7 +139,7 @@ begin
   if gdSelected in aState then
   begin
     sgSymbols.Canvas.Brush.Style:= bsSolid;
-    sgSymbols.Canvas.Brush.Color:= $665533;
+    sgSymbols.Canvas.Brush.Color:= $442200;
     sgSymbols.Canvas.FillRect(aRect);
     lCanvas.Font.Color := $111111;
   end
@@ -168,33 +168,6 @@ begin
          lCanvas.TextOut(aRect.Left + 2, lY, lText);
       end;
       1: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lOpen])
-         else
-           lText := 'N/A';
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      2: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lHigh])
-         else
-           lText := 'N/A';
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      3: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lLow])
-         else
-           lText := 'N/A';
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      4: begin
          lCanvas.Brush.Style:= bsSolid;
          if lPrev < lClose then
          begin
@@ -210,6 +183,33 @@ begin
 
          if lSymbol.Data.Count > 0 then
            lText := Format('%.2f',[lClose])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
+      end;
+      2: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lOpen])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
+      end;
+      3: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lHigh])
+         else
+           lText := 'N/A';
+         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
+         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
+         lCanvas.TextOut(lX, lY, lText);
+      end;
+      4: begin
+         if lSymbol.Data.Count > 0 then
+           lText := Format('%.2f',[lLow])
          else
            lText := 'N/A';
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));

@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Linux x86_64"/>
-    <Units Count="43">
+    <Units Count="44">
       <Unit0>
         <Filename Value="HATrader.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -44,9 +44,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
+        <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="159"/>
-        <CursorPos X="44" Y="172"/>
+        <TopLine Value="134"/>
+        <CursorPos X="16" Y="140"/>
         <UsageCount Value="89"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -100,11 +101,10 @@
         <Filename Value="loader.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="loader"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
         <TopLine Value="72"/>
-        <CursorPos Y="80"/>
+        <CursorPos X="29" Y="81"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit8>
@@ -384,6 +384,15 @@
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit42>
+      <Unit43>
+        <Filename Value="main.lfm"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="37"/>
+        <CursorPos X="30" Y="52"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit43>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>

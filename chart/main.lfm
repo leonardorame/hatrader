@@ -28,7 +28,7 @@ object HeikinAshiTrader: THeikinAshiTrader
     Align = alLeft
     AlternateColor = 1118481
     BorderStyle = bsNone
-    Color = 855309
+    Color = 1973790
     ColCount = 7
     Columns = <    
       item
@@ -37,30 +37,40 @@ object HeikinAshiTrader: THeikinAshiTrader
         Width = 100
       end    
       item
+        Alignment = taCenter
+        Title.Alignment = taCenter
+        Title.Caption = 'Last'
+        Width = 50
+      end    
+      item
+        Title.Alignment = taCenter
         Title.Caption = 'Open'
         Width = 50
       end    
       item
+        Title.Alignment = taCenter
         Title.Caption = 'High'
         Width = 50
       end    
       item
+        Alignment = taCenter
+        Title.Alignment = taCenter
         Title.Caption = 'Low'
         Width = 50
       end    
       item
-        Title.Caption = 'Close'
-        Width = 50
-      end    
-      item
+        Alignment = taCenter
+        Title.Alignment = taCenter
         Title.Caption = 'Prev.'
         Width = 50
       end    
       item
+        Alignment = taCenter
+        Title.Alignment = taCenter
         Title.Caption = '%'
       end>
     ExtendedSelect = False
-    FixedColor = clBtnText
+    FixedColor = 3355443
     FixedCols = 0
     Font.Color = 9605778
     GridLineWidth = 0
