@@ -55,6 +55,7 @@ type
   private
     procedure Parse(AStr: TStringList);
     procedure AddToDaily(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
+    procedure AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
     procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime: string);
     function Procesar(AString: TStringList): string;
   public
@@ -156,6 +157,7 @@ begin
       lDateStr := lLine[5];
       lTime := lLine[6];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
+      AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
       AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime);
     end;
   finally
@@ -224,6 +226,48 @@ begin
 
     // Must free up resources used by these successful finds
     FindClose(searchResult);
+  end;
+end;
+
+procedure TMyAction.AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose: string
+  );
+var
+  lMySqlConn: TMySQL55Connection;
+  lTransaction: TSQLTransaction;
+  lQuery: TSQLQuery;
+begin
+  if Trim(ADate) = '' then
+    exit;
+
+  lMySqlConn := TMySQL55Connection.Create(nil);
+  lTransaction := TSQLTransaction.Create(nil);
+  lQuery := TSQLQuery.Create(nil);
+  try
+    lMySqlConn.DatabaseName:= 'cecilia2_quotes';
+    lMySqlConn.UserName:= 'cecilia2';
+    lMySqlConn.Password:= 'qQ5Qo5c0h3';
+    lMySqlConn.HostName:= 'localhost';
+    lMySqlConn.Transaction := lTransaction;
+    lTransaction.StartTransaction;
+    lQuery.DataBase := lMySqlConn;
+    lQuery.SQL.Text:= 'replace into daily(date, symbol, open, high, low, close) ' +
+      'values(:date, :symbol, :open, :high, :low, :close)';
+    lQuery.ParamByName('date').AsString:= ADate;
+    lQuery.ParamByName('symbol').AsString:= ASym;
+    lQuery.ParamByName('open').AsString:= AClose;
+    lQuery.ParamByName('high').AsString:= AClose;
+    lQuery.ParamByName('low').AsString:= AClose;
+    lQuery.ParamByName('close').AsString:= AClose;
+    try
+      lQuery.ExecSQL;
+    except
+      // no hacer nada!
+    end;
+    lTransaction.Commit;
+  finally
+    lQuery.Free;;
+    lTransaction.Free;;
+    lMySqlConn.Free;
   end;
 end;
 

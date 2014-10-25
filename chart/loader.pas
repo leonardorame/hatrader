@@ -72,27 +72,27 @@ var
   lUrl: string;
   lHttpClient: TFPHTTPClient;
 begin
+  FFeedBackStr:= 'Getting ' + FSymbol.Name;
+  Synchronize(@WriteFeedBack);
+  lHttpClient := TFPHTTPClient.Create(nil);
   try
-    FFeedBackStr:= 'Getting ' + FSymbol.Name;
-    Synchronize(@WriteFeedBack);
-    lHttpClient := TFPHTTPClient.Create(nil);
     try
       lUrl := FSymbol.FilePath;
       FData := lHttpClient.Get(lUrl);
       FFeedBackStr := FSymbol.Name + ' loading done.';
       Synchronize(@WriteFeedBack);
       Synchronize(@OnData);
-    finally
-      lHttpClient.Free;
+    except
+      on E: Exception do
+      begin
+        FFeedBackStr:= 'Error loading ' + FSymbol.Name;
+        Synchronize(@WriteFeedBack);
+      end;
     end;
-  except
-    on E: Exception do
-    begin
-      FFeedBackStr:= 'Error loading ' + FSymbol.Name;
-      Synchronize(@WriteFeedBack);
-    end;
+  finally
+    lHttpClient.Free;
+    Terminate;
   end;
-  Terminate;
 end;
 
 
