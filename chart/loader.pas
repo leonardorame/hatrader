@@ -70,19 +70,20 @@ end;
 procedure TGetDataThread.Execute;
 var
   lUrl: string;
+  lHttpClient: TFPHTTPClient;
 begin
   try
     FFeedBackStr:= 'Getting ' + FSymbol.Name;
     Synchronize(@WriteFeedBack);
-    with TFPHTTPClient.Create(nil) do
-    begin
+    lHttpClient := TFPHTTPClient.Create(nil);
+    try
       lUrl := FSymbol.FilePath;
-      FData := Get(lUrl);
+      FData := lHttpClient.Get(lUrl);
       FFeedBackStr := FSymbol.Name + ' loading done.';
       Synchronize(@WriteFeedBack);
       Synchronize(@OnData);
-      // free TFPHTTPCLient
-      Free;
+    finally
+      lHttpClient.Free;
     end;
   except
     on E: Exception do

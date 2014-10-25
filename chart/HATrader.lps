@@ -44,7 +44,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
-        <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
         <TopLine Value="159"/>
         <CursorPos X="44" Y="172"/>
@@ -101,10 +100,11 @@
         <Filename Value="loader.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="loader"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="43"/>
-        <CursorPos Y="47"/>
+        <TopLine Value="72"/>
+        <CursorPos Y="80"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit8>
