@@ -88,6 +88,7 @@ begin
   for lOHLC in FOHLCArray do
     lOHLC.Free;
   FOHLCArray.Free;
+  FLast.Free;
   inherited Destroy;
 end;
 

@@ -22,6 +22,7 @@ type
     FOnGetData: TNotifyEvent;
     FFeedBackStr: string;
     FData: string;
+    FHttpClient: TFPHTTPClient;
     procedure OnData;
     procedure WriteFeedBack;
   public
@@ -42,11 +43,12 @@ type
     FOnGetData: TOnData;
     FFeedBackStr: string;
     FData: string;
+    FHttpClient: TFPHTTPClient;
     procedure OnData;
     procedure WriteFeedBack;
   public
     constructor Create;
-    destructor Destroy;
+    destructor Destroy; override;
     procedure Execute; override;
     property OnGetData: TOnData read FOnGetData write FOnGetData;
     property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
@@ -77,11 +79,13 @@ begin
   gThreadList.Add(Self);
   Priority:= tpLower;
   FreeOnTerminate := True;
+  FHttpClient := TFPHTTPClient.Create(nil);
 end;
 
 destructor TGetAllDataThread.Destroy;
 begin
   gThreadList.Remove(Self);
+  FHttpClient.Free;
   inherited Destroy;
 end;
 
@@ -91,11 +95,10 @@ var
 begin
   FFeedBackStr:= 'Getting all symbols';
   Synchronize(@WriteFeedBack);
-  lHttpClient := TFPHTTPClient.Create(nil);
   try
     try
-      FData := lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
-      if lHttpClient.ResponseStatusCode = 200 then
+      FData := FHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
+      if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := 'All symbols data loading done.';
         Synchronize(@WriteFeedBack);
@@ -111,7 +114,6 @@ begin
       end;
     end;
   finally
-    lHttpClient.Free;
     Terminate;
   end;
 end;
@@ -137,34 +139,35 @@ begin
   gThreadList.Add(Self);
   Priority:= tpLower;
   FreeOnTerminate := True;
+  FHttpClient := TFPHTTPClient.Create(nil);
 end;
 
 destructor TGetDataThread.Destroy;
 begin
   gThreadList.Remove(Self);
+  FHttpClient.Free;
   inherited Destroy;
 end;
 
 procedure TGetDataThread.Execute;
 var
   lUrl: string;
-  lHttpClient: TFPHTTPClient;
+
 begin
   FFeedBackStr:= 'Getting ' + FSymbol.Name;
   Synchronize(@WriteFeedBack);
-  lHttpClient := TFPHTTPClient.Create(nil);
   try
     try
       lUrl := FSymbol.FilePath;
-      FData := lHttpClient.Get(lUrl);
-      if lHttpClient.ResponseStatusCode = 200 then
+      FData := FHttpClient.Get(lUrl);
+      if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := FSymbol.Name + ' loading done.';
         Synchronize(@WriteFeedBack);
         Synchronize(@OnData);
       end
       else
-        raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + lHttpClient.ResponseStatusText + ')');
+        raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')');
     except
       on E: Exception do
       begin
@@ -173,7 +176,6 @@ begin
       end;
     end;
   finally
-    lHttpClient.Free;
     Terminate;
   end;
 end;

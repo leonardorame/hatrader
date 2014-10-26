@@ -61,6 +61,7 @@ begin
   sgSymbols.FocusRectVisible:= False;
   FSymbols := TSymbols.Create;
   FSymbols.LoadInitialData;
+
   sgSymbols.RowCount:= 1;
 
   for lSymbol in FSymbols do
@@ -76,6 +77,7 @@ var
   I: Integer;
   lSymbol: TSymbol;
 begin
+  Timer1.Enabled:= False;
   lList := gThreadList.LockList;
   for I := lList.Count - 1 downto 0 do
   begin
