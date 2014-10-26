@@ -254,9 +254,9 @@ begin
       'values(:date, :symbol, :open, :high, :low, :close)';
     lQuery.ParamByName('date').AsString:= ADate;
     lQuery.ParamByName('symbol').AsString:= ASym;
-    lQuery.ParamByName('open').AsString:= AClose;
-    lQuery.ParamByName('high').AsString:= AClose;
-    lQuery.ParamByName('low').AsString:= AClose;
+    lQuery.ParamByName('open').AsString:= AOpen;
+    lQuery.ParamByName('high').AsString:= AHigh;
+    lQuery.ParamByName('low').AsString:= ALow;
     lQuery.ParamByName('close').AsString:= AClose;
     try
       lQuery.ExecSQL;

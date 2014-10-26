@@ -79,13 +79,18 @@ begin
     try
       lUrl := FSymbol.FilePath;
       FData := lHttpClient.Get(lUrl);
-      FFeedBackStr := FSymbol.Name + ' loading done.';
-      Synchronize(@WriteFeedBack);
-      Synchronize(@OnData);
+      if lHttpClient.ResponseStatusCode = 200 then
+      begin
+        FFeedBackStr := FSymbol.Name + ' loading done.';
+        Synchronize(@WriteFeedBack);
+        Synchronize(@OnData);
+      end
+      else
+        raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + lHttpClient.ResponseStatusText + ')');
     except
       on E: Exception do
       begin
-        FFeedBackStr:= 'Error loading ' + FSymbol.Name;
+        FFeedBackStr:= E.Message;
         Synchronize(@WriteFeedBack);
       end;
     end;
