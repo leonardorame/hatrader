@@ -17,6 +17,7 @@ type
     PageControl1: TPageControl;
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
+    Timer1: TTimer;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -25,6 +26,8 @@ type
     procedure ChartNeedData(Sender: TObject);
     procedure sgSymbolsDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
+    procedure Timer1Timer(Sender: TObject);
+    procedure GetAllData(AData: string);
   private
     FSymbols: TSymbols;
     procedure GetFile(ASymbol: TSymbol);
@@ -219,6 +222,22 @@ begin
       end;
     end;
   end;
+end;
+
+procedure THeikinAshiTrader.Timer1Timer(Sender: TObject);
+var
+  lThread: TGetAllDataThread;
+begin
+  lThread := TGetAllDataThread.Create;
+  lThread.OnFeedBack := @GetFeedBack;
+  lThread.OnGetData:= @GetAllData;
+  lThread.start;
+end;
+
+procedure THeikinAshiTrader.GetAllData(AData: string);
+begin
+  FSymbols.UpdateSymbolData(AData);
+  sgSymbols.Invalidate;
 end;
 
 procedure THeikinAshiTrader.GetFile(ASymbol: TSymbol);

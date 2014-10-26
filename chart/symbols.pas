@@ -50,6 +50,7 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure LoadInitialData;
+    procedure UpdateSymbolData(AData: string);
   end;
 
   TSymbols = specialize TGSymbolList<TSymbol>;
@@ -187,6 +188,41 @@ begin
     lLine.Free;
     lStr.Free;
     lHttpClient.Free;
+  end;
+end;
+
+procedure TGSymbolList.UpdateSymbolData(AData: string);
+var
+  lStr: TStringList;
+  lLine: TStringList;
+  I: Integer;
+  lSymbol: TSymbol;
+begin
+  lStr := TStringList.Create;
+  lLine := TStringList.Create;
+  lLine.Delimiter:= ',';
+  try
+    lStr.Text := AData;
+    for I := 0 to lStr.Count - 1 do
+    begin
+      lLine.DelimitedText:= lStr[I];
+      for lSymbol in Self do
+      begin
+        if lSymbol.Name = lLine[1] then
+        begin
+          lSymbol.Last.Date:= lLine[0];
+          lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
+          lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
+          lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
+          lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
+          lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
+          lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
+        end;
+      end;
+    end;
+  finally
+    lLine.Free;
+    lStr.Free;
   end;
 end;
 

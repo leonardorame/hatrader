@@ -1,7 +1,7 @@
 object HeikinAshiTrader: THeikinAshiTrader
-  Left = 308
+  Left = 164
   Height = 646
-  Top = 25
+  Top = 62
   Width = 970
   Caption = 'HeikinAshiTrader 0.2'
   ClientHeight = 646
@@ -97,5 +97,11 @@ object HeikinAshiTrader: THeikinAshiTrader
     Top = 625
     Width = 970
     Panels = <>
+  end
+  object Timer1: TTimer
+    Interval = 5000
+    OnTimer = Timer1Timer
+    left = 274
+    top = 184
   end
 end
