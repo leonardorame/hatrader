@@ -55,7 +55,7 @@ begin
   gThreadList := TThreadList.Create;
   sgSymbols.FocusRectVisible:= False;
   FSymbols := TSymbols.Create;
-  FSymbols.LoadData;
+  FSymbols.LoadInitialData;
   sgSymbols.RowCount:= 1;
 
   for lSymbol in FSymbols do
@@ -96,6 +96,7 @@ begin
   lSymbol := FSymbols[0];
   if lSymbol <> nil then
     AddPage(lSymbol);
+  sgSymbols.Invalidate;
 end;
 
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
@@ -149,18 +150,12 @@ begin
   begin
     lCanvas := sgSymbols.Canvas;
     lCellHeigh := aRect.Bottom - aRect.Top;
-    lSymbol := FSymbols[ARow - 1];
-    lPrev := 0;
-    lClose := 0;
-    if lSymbol.Data.Count > 0 then
-    begin
-      lOpen := lSymbol.Data[lSymbol.Data.Count - 1].Open;
-      lHigh := lSymbol.Data[lSymbol.Data.Count - 1].High;
-      lLow := lSymbol.Data[lSymbol.Data.Count - 1].Low;
-      lClose := lSymbol.Data[lSymbol.Data.Count - 1].Close;
-      if lSymbol.Data.Count > 1 then
-        lPrev := lSymbol.Data[lSymbol.Data.Count - 2].Close;
-    end;
+    lSymbol := TSymbol(sgSymbols.Objects[0, ARow]);
+    lOpen := lSymbol.Last.Open;
+    lHigh := lSymbol.Last.High;
+    lLow := lSymbol.Last.Low;
+    lClose := lSymbol.Last.Close;
+    lPrev := lSymbol.Last.Prev;
     case ACol of
       0: begin
          lText := lSymbol.Name;
@@ -181,46 +176,31 @@ begin
            lCanvas.FillRect(aRect);
          end;
 
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lClose])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f',[lClose]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
       end;
       2: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lOpen])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f',[lOpen]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
       end;
       3: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lHigh])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f',[lHigh]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
       end;
       4: begin
-         if lSymbol.Data.Count > 0 then
-           lText := Format('%.2f',[lLow])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f',[lLow]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
       end;
       5: begin
-         if lSymbol.Data.Count > 1 then
-           lText := Format('%.2f',[lPrev])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f',[lPrev]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
@@ -232,10 +212,7 @@ begin
          if lPrev > lClose then
            lCanvas.Font.Color:= clRed;
 
-         if lSymbol.Data.Count > 1 then
-           lText := Format('%.2f%%',[((lClose / lPrev) - 1) * 100])
-         else
-           lText := 'N/A';
+         lText := Format('%.2f%%',[((lClose / lPrev) - 1) * 100]);
          lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
          lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
          lCanvas.TextOut(lX, lY, lText);
@@ -305,7 +282,6 @@ end;
 procedure THeikinAshiTrader.GetFeedBack(AFeedBack: string);
 begin
   FeedBack(AFeedBack);
-  sgSymbols.Invalidate;
   Application.ProcessMessages;
 end;
 

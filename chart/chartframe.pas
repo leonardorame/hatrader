@@ -399,7 +399,7 @@ var
 begin
   lSymbol := TSymbol.Create;
   lSymbol.Name:= FSymbol.Name + ' (30 min)';
-  lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf?sym=' + FSymbol.Symbol;
+  lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/intraday?sym=' + FSymbol.Symbol;
   lSymbol.OnDataChanged:= @DataChanged;
   lSymbol.SymbolType:= stIntraday;
 

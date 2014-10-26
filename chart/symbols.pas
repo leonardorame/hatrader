@@ -6,6 +6,7 @@ interface
 
 uses
   Classes, fgl, ohlc, SysUtils, StrUtils,
+  fphttpclient,
   volatility;
 
 type
@@ -25,6 +26,7 @@ type
     FOnDataChanged: TNotifyEvent;
     FSymbol: string;
     FSymbolType: TSymbolType;
+    FLast: TOHLCRecord;
   public
     constructor Create;
     destructor Destroy; override;
@@ -38,6 +40,7 @@ type
     property HV40: double read FHV40 write FHV40;
     property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
     property SymbolType: TSymbolType read FSymbolType write FSymbolType;
+    property Last: TOHLCRecord read FLast write FLast;
   end;
 
   { TGSymbolList }
@@ -46,8 +49,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure LoadData;
-    procedure AddSymbol(AName, ASymbol, APath: string);
+    procedure LoadInitialData;
   end;
 
   TSymbols = specialize TGSymbolList<TSymbol>;
@@ -60,6 +62,7 @@ constructor TSymbol.Create;
 begin
   FSymbolType:= stDaily;
   FOHLCArray := TOHLCArray.Create;
+  FLast := TOHLCRecord.Create;
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
   DefaultFormatSettings.ShortMonthNames[1] := 'Jan';
@@ -92,11 +95,8 @@ var
   lCSV: TStringList;
   lLine: TStringList;
   I: Integer;
-  A: Integer;
   lOHLC: TOHLCRecord;
-
-const
-  cMaxSize = 50;
+  lStr: string;
 
 begin
   for lOHLC in FOHLCArray do
@@ -108,13 +108,8 @@ begin
     lCSV.Text:= AData;
     if lCSV.Count = 0 then
       exit;
-    A := 0;
     for I := lCsv.Count - 1 downto 0 do
     begin
-      if (FSymbolType = stDaily) and (I = 0) then
-        continue;
-      if I > cMaxSize then
-        continue;
       lLine.CommaText:= lCSV[I];
       lOHLC := TOHLCRecord.Create;
       lOHLC.open := StrToFloatDef(lLine[1], 0);
@@ -125,7 +120,6 @@ begin
       if FSymbolType = stIntraday then
         lOHLC.time:= lLine[5];
       FOHLCArray.Add(lOHLC);
-      Inc(A);
     end;
     //CandleStickChart.Invalidate;
     FHV10 := HV(FOHLCArray, 10);
@@ -158,45 +152,42 @@ begin
   inherited Destroy;
 end;
 
-procedure TGSymbolList.LoadData;
+procedure TGSymbolList.LoadInitialData;
 var
-  lList: TStringList;
+  lHttpClient: TFPHTTPClient;
+  lStr: TStringList;
   lLine: TStringList;
   I: Integer;
-  lName: string;
-  lPath: string;
-  lSymbol: string;
+  lSymbol: TSymbol;
 begin
-  lList := TStringList.Create;
+  lHttpClient := TFPHTTPClient.Create(nil);
+  lStr := TStringList.Create;
   lLine := TStringList.Create;
+  lLine.Delimiter:= ',';
   try
-    lList.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'files.list');
-    // Las líneas del archivo tienen el formato:
-    // "SYMBOLO";"PATH"
-    for I := 0 to lList.Count - 1 do
+    lStr.Text := lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
+    for I := 0 to lStr.Count - 1 do
     begin
-      lLine.Delimiter:= ';';
-      lLine.DelimitedText := lList[I];
-      lName := AnsiReplaceStr(lLine[0], '"', '');
-      lSymbol := AnsiReplaceStr(lLine[1], '"', '');
-      lPath := AnsiReplaceStr(lLine[2], '"', '');
-      AddSymbol(lName, lSymbol, lPath);
+      lLine.DelimitedText:= lStr[I];
+      lSymbol := TSymbol.Create;
+      lSymbol.Name := lLine[1];
+      lSymbol.Symbol:= lLine[1];
+      lSymbol.SymbolType:= stDaily;
+      lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/daily?sym=' + lSymbol.Symbol;
+      lSymbol.Last.Date:= lLine[0];
+      lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
+      lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
+      lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
+      lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
+      lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
+      lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
+      Add(lSymbol);
     end;
   finally
     lLine.Free;
-    lList.Free;
+    lStr.Free;
+    lHttpClient.Free;
   end;
-end;
-
-procedure TGSymbolList.AddSymbol(AName, ASymbol, APath: string);
-var
-  lSymbol: TSymbol;
-begin
-  lSymbol := TSymbol.Create;
-  lSymbol.FilePath := APath;
-  lSymbol.Name := AName;
-  lSymbol.Symbol:= ASymbol;
-  Add(lSymbol);
 end;
 
 end.

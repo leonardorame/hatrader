@@ -13,10 +13,10 @@ object HeikinAshiTrader: THeikinAshiTrader
   Position = poDesktopCenter
   LCLVersion = '1.3'
   object PageControl1: TPageControl
-    Left = 416
+    Left = 560
     Height = 625
     Top = 0
-    Width = 554
+    Width = 410
     Align = alClient
     TabOrder = 0
   end
@@ -24,7 +24,7 @@ object HeikinAshiTrader: THeikinAshiTrader
     Left = 0
     Height = 625
     Top = 0
-    Width = 416
+    Width = 560
     Align = alLeft
     AlternateColor = 1118481
     BorderStyle = bsNone
@@ -40,29 +40,29 @@ object HeikinAshiTrader: THeikinAshiTrader
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Last'
-        Width = 50
+        Width = 80
       end    
       item
         Title.Alignment = taCenter
         Title.Caption = 'Open'
-        Width = 50
+        Width = 80
       end    
       item
         Title.Alignment = taCenter
         Title.Caption = 'High'
-        Width = 50
+        Width = 80
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Low'
-        Width = 50
+        Width = 80
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Prev.'
-        Width = 50
+        Width = 80
       end    
       item
         Alignment = taCenter
@@ -83,11 +83,11 @@ object HeikinAshiTrader: THeikinAshiTrader
     OnDrawCell = sgSymbolsDrawCell
     ColWidths = (
       100
-      50
-      50
-      50
-      50
-      50
+      80
+      80
+      80
+      80
+      80
       64
     )
   end

@@ -60,12 +60,16 @@ begin
     try
       lQuery.ExecSQL;
     except
-      // no hacer nada!
+      on E: Exception do
+      begin
+        Write(E.Message);
+        HttpResponse.SendContent;
+      end;
     end;
     lTransaction.Commit;
   finally
     lQuery.Free;;
-    lTransaction.Free;;
+    lTransaction.Free;
     lMySqlConn.Free;
   end;
 end;
@@ -82,7 +86,7 @@ var
   lLine: TStringList;
 begin
   Write('Adding ' + ASymbol + '...');
-  DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
+  DefaultFormatSettings.ShortDateFormat:='d-mmm-y';
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortMonthNames[1] := 'Jan';
   DefaultFormatSettings.ShortMonthNames[2] := 'Feb';
@@ -101,13 +105,20 @@ begin
   try
     for I := 1 to AData.Count - 1 do
     begin
-      lLine.DelimitedText:= AData[I];
-      lDate := ScanDateTime('D-MMM-Y', lLine[0]);
-      lOpen := lLine[1];
-      lHigh := lLine[2];
-      lLow := lLine[3];
-      lClose := lLine[4];
-      lVol := lLine[5];
+      try
+        lLine.DelimitedText:= AData[I];
+        lDate := ScanDateTime('d-mmm-yy', lLine[0]);
+        lOpen := lLine[1];
+        lHigh := lLine[2];
+        lLow := lLine[3];
+        lClose := lLine[4];
+        lVol := lLine[5];
+      except
+        on E: Exception do
+        begin
+          write(E.message + ' ' + lLine.Text);
+        end;
+      end;
       AddToDaily(lDate, ASymbol, lOpen, lHigh, lLow, lClose, lVol);
     end;
   finally

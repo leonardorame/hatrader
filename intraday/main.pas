@@ -104,6 +104,6 @@ begin
 end;
 
 initialization
-  TMyAction.Register('*');
+  TMyAction.Register('/intraday');
 
 end.

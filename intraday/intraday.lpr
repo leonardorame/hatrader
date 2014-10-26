@@ -6,7 +6,7 @@ uses
 {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
 {$ENDIF}{$ENDIF}
-  BrookApplication, Brokers, main;
+  BrookApplication, Brokers, main, dailydata, alldata;
 
 begin
   BrookApp.Run;

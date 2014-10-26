@@ -34,25 +34,22 @@
         <PackageName Value="BrookRT"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="6">
       <Unit0>
         <Filename Value="intraday.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="intraday"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="1"/>
         <UsageCount Value="20"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="main"/>
-        <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="28"/>
-        <CursorPos X="8" Y="35"/>
+        <TopLine Value="69"/>
+        <CursorPos X="6" Y="93"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit1>
@@ -60,23 +57,44 @@
         <Filename Value="brokers.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Brokers"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="../../brookframework/core/brookaction.pas"/>
-        <UnitName Value="BrookAction"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="21"/>
         <CursorPos X="45" Y="31"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit3>
+      <Unit4>
+        <Filename Value="dailydata.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="dailydata"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="23"/>
+        <CursorPos Y="28"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="alldata.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="alldata"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="48"/>
+        <CursorPos X="24" Y="68"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit5>
     </Units>
-    <JumpHistory Count="10" HistoryIndex="9">
+    <JumpHistory Count="12" HistoryIndex="11">
       <Position1>
         <Filename Value="main.pas"/>
         <Caret Line="52" Column="49" TopLine="51"/>
@@ -97,24 +115,33 @@
         <Caret Line="6"/>
       </Position5>
       <Position6>
-        <Filename Value="../../brookframework/core/brookaction.pas"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="88" Column="26" TopLine="67"/>
       </Position6>
       <Position7>
         <Filename Value="main.pas"/>
-        <Caret Line="88" Column="26" TopLine="67"/>
+        <Caret Line="94" Column="34" TopLine="77"/>
       </Position7>
       <Position8>
         <Filename Value="main.pas"/>
-        <Caret Line="94" Column="34" TopLine="77"/>
+        <Caret Line="87" Column="13" TopLine="76"/>
       </Position8>
       <Position9>
         <Filename Value="main.pas"/>
-        <Caret Line="87" Column="13" TopLine="76"/>
+        <Caret Line="9" Column="12"/>
       </Position9>
       <Position10>
-        <Filename Value="main.pas"/>
-        <Caret Line="9" Column="12"/>
+        <Filename Value="dailydata.pas"/>
+        <Caret Line="8" Column="3"/>
       </Position10>
+      <Position11>
+        <Filename Value="dailydata.pas"/>
+        <Caret Line="59" Column="41" TopLine="48"/>
+      </Position11>
+      <Position12>
+        <Filename Value="alldata.pas"/>
+        <Caret Line="48" TopLine="38"/>
+      </Position12>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
