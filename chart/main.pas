@@ -16,7 +16,6 @@ type
   THeikinAshiTrader = class(TForm)
     actNewWindow: TAction;
     ActionList1: TActionList;
-    PageControl1: TPageControl;
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
     Timer1: TTimer;
@@ -37,12 +36,9 @@ type
     procedure GetAllData(AData: string);
     procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
-    procedure SelectChart(AChart: string);
-    procedure AddPage(ASymbol: TSymbol);
     procedure AddSymbol(ASymbol: TSymbol);
     procedure FeedBack(AString: string);
     procedure GetFeedBack(AFeedBack: string);
-    function FindPage(AFile: string): boolean;
   public
     { public declarations }
   end;
@@ -108,22 +104,12 @@ procedure THeikinAshiTrader.FormShow(Sender: TObject);
 var
   lSymbol: TSymbol;
 begin
-  {lSymbol := FSymbols[0];
-  if lSymbol <> nil then
-    AddPage(lSymbol);
-  sgSymbols.Invalidate;}
+  //
 end;
 
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
-var
-  lSymbol: TSymbol;
 begin
-  if sgSymbols.Row > 0 then
-  begin
-    lSymbol := sgSymbols.Objects[0, sgSymbols.Row] as TSymbol;
-    if not FindPage(lSymbol.Name) then
-      AddPage(lSymbol);
-  end;
+  actNewWindow.Execute;
 end;
 
 procedure THeikinAshiTrader.ChartNeedData(Sender: TObject);
@@ -279,8 +265,7 @@ begin
   lWin.OnDestroy:= @lChart.DestroyNewWindow;
   lWin.OnClose := @lChart.CloseNewWindow;
   lWin.Show;
-
-  ChartNeedData(lChart);
+  GetFile(lSymbol);
 end;
 
 procedure THeikinAshiTrader.GetFile(ASymbol: TSymbol);
@@ -293,47 +278,10 @@ begin
   lThread.start;
 end;
 
-procedure THeikinAshiTrader.SelectChart(AChart: string);
-var
-  I: Integer;
-begin
-  for I := 0 to PageControl1.PageCount - 1 do
-  begin
-    if UpperCase(PageControl1.Pages[I].Caption) = UpperCase(AChart) then
-    begin
-      PageControl1.ActivePage := PageControl1.Pages[I];
-      Break;
-    end;
-  end;
-end;
-
-procedure THeikinAshiTrader.AddPage(ASymbol: TSymbol);
-var
-  lTab: TTabSheet;
-  lChartFrame: TChartFrame;
-begin
-  lTab := PageControl1.AddTabSheet;
-  with lTab do
-  begin
-    Caption:= ASymbol.Name;
-    lChartFrame := TChartFrame.Create(ASymbol, lTab);
-    with lChartFrame do
-    begin
-      Parent := lTab;
-      Align := alClient;
-      GetFile(ASymbol);
-      lChartFrame.OnNeedData:= @ChartNeedData;
-      lChartFrame.OnFeedBack:= @FeedBack;
-    end;
-  end;
-  PageControl1.ActivePage := lTab;
-end;
-
 procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol);
 begin
   sgSymbols.RowCount := sgSymbols.RowCount + 1;
   sgSymbols.Objects[0, sgSymbols.RowCount - 1] := ASymbol;
-  //sgSymbols.Cells[0, sgSymbols.RowCount - 1] := ASymbol.Name;
 end;
 
 procedure THeikinAshiTrader.FeedBack(AString: string);
@@ -345,20 +293,6 @@ procedure THeikinAshiTrader.GetFeedBack(AFeedBack: string);
 begin
   FeedBack(AFeedBack);
   Application.ProcessMessages;
-end;
-
-function THeikinAshiTrader.FindPage(AFile: string): boolean;
-var
-  I: Integer;
-begin
-  Result := False;
-  for I := 0 to PageControl1.PageCount - 1 do
-    if PageControl1.Pages[I].Caption = AFile then
-    begin
-      Result := True;
-      PageControl1.ActivePage := PageControl1.Pages[I];
-      Break;
-    end;
 end;
 
 end.
