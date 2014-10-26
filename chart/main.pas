@@ -6,18 +6,23 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, Grids, chartframe,
-  symbols, loader;
+  ExtCtrls, Grids, ActnList, chartframe,
+  symbols, loader, newwindow;
 
 type
 
   { THeikinAshiTrader }
 
   THeikinAshiTrader = class(TForm)
+    actNewWindow: TAction;
+    ActionList1: TActionList;
     PageControl1: TPageControl;
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
     Timer1: TTimer;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    procedure actNewWindowExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -27,9 +32,10 @@ type
     procedure sgSymbolsDrawCell(Sender: TObject; aCol, aRow: Integer;
       aRect: TRect; aState: TGridDrawState);
     procedure Timer1Timer(Sender: TObject);
-    procedure GetAllData(AData: string);
   private
     FSymbols: TSymbols;
+    procedure GetAllData(AData: string);
+    procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
     procedure SelectChart(AChart: string);
     procedure AddPage(ASymbol: TSymbol);
@@ -92,14 +98,20 @@ begin
   CloseAction:=caFree;
 end;
 
+procedure THeikinAshiTrader.actNewWindowExecute(Sender: TObject);
+begin
+  if sgSymbols.Row > 0 then
+    AbrirVentana(TSymbol(sgSymbols.Objects[0, sgSymbols.Row]));
+end;
+
 procedure THeikinAshiTrader.FormShow(Sender: TObject);
 var
   lSymbol: TSymbol;
 begin
-  lSymbol := FSymbols[0];
+  {lSymbol := FSymbols[0];
   if lSymbol <> nil then
     AddPage(lSymbol);
-  sgSymbols.Invalidate;
+  sgSymbols.Invalidate;}
 end;
 
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
@@ -238,6 +250,37 @@ procedure THeikinAshiTrader.GetAllData(AData: string);
 begin
   FSymbols.UpdateSymbolData(AData);
   sgSymbols.Invalidate;
+end;
+
+procedure THeikinAshiTrader.AbrirVentana(ASymbol: TSymbol);
+var
+  lWin: TNewWindow;
+  lChart: TChartFrame;
+  lData: string;
+  lThread: TGetDataThread;
+  lSymbol: TSymbol;
+
+begin
+  lSymbol := TSymbol.Create;
+  lSymbol.Symbol:= ASymbol.Symbol;
+  lSymbol.Name:= ASymbol.Name;
+  lSymbol.FilePath:= ASymbol.FilePath;
+  lSymbol.SymbolType:= stDaily;
+
+  lWin := TNewWindow.Create(nil);
+  lWin.Caption:= lSymbol.Name;
+  lChart := TChartFrame.Create(lSymbol, nil);
+  lChart.ToolBar1.Visible:= True;
+  lChart.OnFeedBack:= @FeedBack;
+  lChart.OnNeedData:= @ChartNeedData;
+  lChart.Parent := lWin;
+  lChart.Align:= alClient;
+  lSymbol.OnDataChanged:= @lChart.DataChanged;
+  lWin.OnDestroy:= @lChart.DestroyNewWindow;
+  lWin.OnClose := @lChart.CloseNewWindow;
+  lWin.Show;
+
+  ChartNeedData(lChart);
 end;
 
 procedure THeikinAshiTrader.GetFile(ASymbol: TSymbol);

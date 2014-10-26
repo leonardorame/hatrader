@@ -14,16 +14,16 @@ object HeikinAshiTrader: THeikinAshiTrader
   LCLVersion = '1.3'
   object PageControl1: TPageControl
     Left = 560
-    Height = 625
-    Top = 0
+    Height = 575
+    Top = 50
     Width = 410
     Align = alClient
     TabOrder = 0
   end
   object sgSymbols: TStringGrid
     Left = 0
-    Height = 625
-    Top = 0
+    Height = 575
+    Top = 50
     Width = 560
     Align = alLeft
     AlternateColor = 1118481
@@ -98,10 +98,34 @@ object HeikinAshiTrader: THeikinAshiTrader
     Width = 970
     Panels = <>
   end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 970
+    ButtonHeight = 48
+    ButtonWidth = 48
+    Caption = 'ToolBar1'
+    ShowCaptions = True
+    TabOrder = 3
+    object ToolButton1: TToolButton
+      Left = 1
+      Top = 2
+      Action = actNewWindow
+    end
+  end
   object Timer1: TTimer
     Interval = 5000
     OnTimer = Timer1Timer
     left = 274
     top = 184
+  end
+  object ActionList1: TActionList
+    left = 379
+    top = 273
+    object actNewWindow: TAction
+      Caption = 'Nueva Ventana'
+      OnExecute = actNewWindowExecute
+    end
   end
 end

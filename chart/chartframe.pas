@@ -47,14 +47,14 @@ type
     FHAChartSeries: TCandleStickChartSeries;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
-    procedure DestroyNewWindow(Sender: TObject);
-    procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     procedure SetHint(AOHLCRecord: TOHLCRecord);
-    procedure DataChanged(Sender: TObject);
   public
     constructor Create(ASymbol: TSymbol; TheOwner: TComponent);
     destructor destroy; override;
     procedure Display;
+    procedure DataChanged(Sender: TObject);
+    procedure DestroyNewWindow(Sender: TObject);
+    procedure CloseNewWindow(Sender: TObject; var CloseAction: TCloseAction);
     property Symbol: TSymbol read FSymbol;
     property OnNeedData: TNotifyEvent read FOnNeedData write FOnNeedData;
     property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
