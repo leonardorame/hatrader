@@ -19,6 +19,7 @@ object HeikinAshiTrader: THeikinAshiTrader
     Width = 589
     Align = alClient
     AlternateColor = 1118481
+    AutoFillColumns = True
     BorderStyle = bsNone
     Color = 1973790
     ColCount = 7
@@ -26,40 +27,41 @@ object HeikinAshiTrader: THeikinAshiTrader
       item
         Title.Alignment = taCenter
         Title.Caption = 'File / Symbol'
-        Width = 100
+        Width = 84
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Last'
-        Width = 80
+        Width = 84
       end    
       item
         Title.Alignment = taCenter
         Title.Caption = 'Open'
-        Width = 80
+        Width = 84
       end    
       item
         Title.Alignment = taCenter
         Title.Caption = 'High'
-        Width = 80
+        Width = 84
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Low'
-        Width = 80
+        Width = 84
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = 'Prev.'
-        Width = 80
+        Width = 84
       end    
       item
         Alignment = taCenter
         Title.Alignment = taCenter
         Title.Caption = '%'
+        Width = 85
       end>
     ExtendedSelect = False
     FixedColor = 3355443
@@ -74,13 +76,13 @@ object HeikinAshiTrader: THeikinAshiTrader
     OnDblClick = sgSymbolsDblClick
     OnDrawCell = sgSymbolsDrawCell
     ColWidths = (
-      100
-      80
-      80
-      80
-      80
-      80
-      64
+      84
+      84
+      84
+      84
+      84
+      84
+      85
     )
   end
   object StatusBar1: TStatusBar
