@@ -16,6 +16,7 @@ type
   THeikinAshiTrader = class(TForm)
     actNewWindow: TAction;
     ActionList1: TActionList;
+    ImageList1: TImageList;
     sgSymbols: TStringGrid;
     StatusBar1: TStatusBar;
     Timer1: TTimer;

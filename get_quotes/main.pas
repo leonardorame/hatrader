@@ -32,6 +32,7 @@ type
     FVol: string;
     FCant: Integer;
   public
+    constructor Create;
     function AddString(AString: string): boolean;
     property Sym: string read FSym write FSym;
     property VarPct: string read FVarPct write FVarPct;
@@ -56,7 +57,7 @@ type
     procedure Parse(AStr: TStringList);
     procedure AddToDaily(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
     procedure AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
-    procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime: string);
+    procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime: string);
     function Procesar(AString: TStringList): string;
   public
     procedure Get; override;
@@ -65,6 +66,11 @@ type
 implementation
 
 { TOHLC }
+
+constructor TOHLC.Create;
+begin
+  FCant := -1;
+end;
 
 function TOHLC.AddString(AString: string): boolean;
 begin
@@ -99,7 +105,7 @@ begin
   if FVol = '' then
     FVol := Astring
   else
-  if FCant = 0 then
+  if FCant = -1 then
     FCant := StrToIntDef(AString, 0)
   else
   if FTime = '' then
@@ -120,6 +126,7 @@ var
   lLow: string;
   lClose: string;
   lTime: string;
+  lFetchTime: string;
   I: Integer;
   lLine: TStringList;
 begin
@@ -128,6 +135,9 @@ begin
   DefaultFormatSettings.ShortDateFormat:='YYYY-MM-DD';
 
   lDate := StrToDate(Copy(AStr[0], 15, 10));
+  lFetchTime := Copy(AStr[0], 26, 8);
+
+  Write('Hora: ' + lFetchTime);
 
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortMonthNames[1] := 'Jan';
@@ -158,7 +168,7 @@ begin
       lTime := lLine[6];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
       AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
-      AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime);
+      AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime, lFetchTime);
     end;
   finally
     lLine.Free;
@@ -193,7 +203,6 @@ begin
 
       if UpperCase(ASym) + lExt = UpperCase(searchResult.Name) then
       begin
-        Write(searchResult.Name);
         lStr := TStringList.Create;
         lLine := TStringList.Create;;
         lLine.Delimiter := ',';
@@ -271,7 +280,7 @@ begin
   end;
 end;
 
-procedure TMyAction.AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime: string);
+procedure TMyAction.AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime: string);
 var
   lMySqlConn: TMySQL55Connection;
   lTransaction: TSQLTransaction;
@@ -281,6 +290,10 @@ begin
     exit;
   if Trim(ADate) = '' then
     exit;
+  // no se carga si la hora es mayor a la hora actual
+  Write(ASym + ': Hora quote: ' + ATime + ' - Hora fetch: ' + AFetchTime);
+  if StrToTime(ATime) > StrToTime(AFetchTime) then
+   exit;
 
   lMySqlConn := TMySQL55Connection.Create(nil);
   lTransaction := TSQLTransaction.Create(nil);
@@ -366,6 +379,7 @@ begin
       //Write('error');
     end;
   end;
+  Write(Result);
   lList.Free;
 end;
 
