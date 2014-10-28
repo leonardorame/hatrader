@@ -44,10 +44,11 @@ type
     FFeedBackStr: string;
     FData: string;
     FHttpClient: TFPHTTPClient;
+    FUrl: string;
     procedure OnData;
     procedure WriteFeedBack;
   public
-    constructor Create;
+    constructor Create(AUrl: string);
     destructor Destroy; override;
     procedure Execute; override;
     property OnGetData: TOnData read FOnGetData write FOnGetData;
@@ -73,12 +74,13 @@ begin
     FOnFeedBack(FFeedBackStr);
 end;
 
-constructor TGetAllDataThread.Create;
+constructor TGetAllDataThread.Create(AUrl: string);
 begin
   inherited Create(True);
   gThreadList.Add(Self);
   Priority:= tpLower;
   FreeOnTerminate := True;
+  FUrl := AUrl;
   FHttpClient := TFPHTTPClient.Create(nil);
 end;
 
@@ -95,7 +97,7 @@ begin
   Synchronize(@WriteFeedBack);
   try
     try
-      FData := FHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
+      FData := FHttpClient.Get(FUrl);
       if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := 'All symbols data loading done.';

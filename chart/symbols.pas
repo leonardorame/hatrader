@@ -207,18 +207,39 @@ begin
     for I := 0 to lStr.Count - 1 do
     begin
       lLine.DelimitedText:= lStr[I];
+      lSymbol := nil;
       for lSymbol in Self do
       begin
-        if lSymbol.Name = lLine[1] then
+        if lSymbol.Symbol = lLine[0] then
         begin
-          lSymbol.Last.Date:= lLine[0];
-          lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
+          lSymbol.Symbol:= lLine[0];
+          lSymbol.Last.Date:= lLine[1];
+          lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
+          if lLine.Count > 3 then
+          begin
+            lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
+            lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
+            lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
+            lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
+            lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
+          end;
+        end;
+      end;
+      if lSymbol = nil then
+      begin
+        lSymbol := TSymbol.Create;
+        lSymbol.Name:= lLine[0];
+        lSymbol.Last.Date:= lLine[1];
+        lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
+        if lLine.Count > 3 then
+        begin
           lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
           lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
           lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
           lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
           lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
         end;
+        Add(lSymbol);
       end;
     end;
   finally

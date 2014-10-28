@@ -33,11 +33,14 @@ type
     procedure Timer1Timer(Sender: TObject);
   private
     FSymbols: TSymbols;
+    FCCL: TSymbols;
     sgSymbols: TSymbolGrid;
+    sgCCL: TSymbolGrid;
     procedure GetAllData(AData: string);
+    procedure GetAllDataCCL(AData: string);
     procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
-    procedure AddSymbol(ASymbol: TSymbol);
+    procedure AddSymbol(ASymbol: TSymbol; AGrid: TSymbolGrid);
     procedure FeedBack(AString: string);
     procedure GetFeedBack(AFeedBack: string);
   public
@@ -59,12 +62,21 @@ var
 begin
   gThreadList := TThreadList.Create;
   FSymbols := TSymbols.Create;
+  FCCL := TSymbols.Create;
   sgSymbols := TSymbolGrid.Create(FSymbols, tsSymbols);
   sgSymbols.Parent := tsSymbols;
   sgSymbols.Align:= alClient;
   sgSymbols.FocusRectVisible:= False;
   sgSymbols.RowCount:= 1;
   sgSymbols.OnDblClick := @sgSymbolsDblClick;
+
+  sgCCL := TSymbolGrid.Create(FCCL, tsCCL);
+  sgCCL.Parent := tsCCL;
+  sgCCL.Align:= alClient;
+  sgCCL.FocusRectVisible:= False;
+  sgCCL.RowCount:= 1;
+  sgCCL.OnDblClick := @sgSymbolsDblClick;
+
 end;
 
 procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
@@ -85,6 +97,8 @@ begin
   gThreadList.UnlockList;
   gThreadList.Free;
   sgSymbols.Free;
+  sgCCL.Free;
+  FCCL.Free;
   FSymbols.Free;
 end;
 
@@ -124,15 +138,13 @@ begin
   if FSymbols.Count = 0 then
   begin
     try
-      // el intervalo inicial es de 500, para que
-      // se ejecute el método LoadInitialData
-      // lo más rápido posible,
-      // luego lo pasamos a 5000.
+      // el intervalo inicial es de 500, para que se ejecute el método LoadInitialData
+      // lo más rápido posible, luego lo pasamos a 5000.
       Timer1.Interval:= 5000;
       FeedBack('Cargando datos iniciales...');
       FSymbols.LoadInitialData;
       for lSymbol in FSymbols do
-        AddSymbol(lSymbol);
+        AddSymbol(lSymbol, sgSymbols);
 
       sgSymbols.Row:= 0;
     except
@@ -144,17 +156,59 @@ begin
   end
   else
   begin
-    lThread := TGetAllDataThread.Create;
+    lThread := TGetAllDataThread.Create('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
     lThread.OnFeedBack := @GetFeedBack;
     lThread.OnGetData:= @GetAllData;
     lThread.start;
   end;
+
+  // CCL
+  {if FCCL.Count = 0 then
+  begin
+    try
+      // el intervalo inicial es de 500, para que se ejecute el método LoadInitialData
+      // lo más rápido posible, luego lo pasamos a 5000.
+      Timer1.Interval:= 5000;
+      FeedBack('Cargando datos iniciales...');
+      //FCCL.LoadInitialData;
+      //for lSymbol in FCCL do
+      //  AddSymbol(lSymbol);
+
+      sgCCL.Row:= 0;
+    except
+      on E: Exception do
+      begin
+        FeedBack('Falló la conexión al servidor.');
+      end;
+    end;
+  end
+  else}
+  begin
+    lThread := TGetAllDataThread.Create('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/ccl');
+    lThread.OnFeedBack := @GetFeedBack;
+    lThread.OnGetData:= @GetAllDataCCL;
+    lThread.start;
+  end;
+
 end;
 
 procedure THeikinAshiTrader.GetAllData(AData: string);
 begin
   FSymbols.UpdateSymbolData(AData);
   sgSymbols.Invalidate;
+end;
+
+procedure THeikinAshiTrader.GetAllDataCCL(AData: string);
+var
+  lSymbol: TSymbol;
+begin
+  FCCL.UpdateSymbolData(AData);
+  if sgCCL.RowCount = 1 then
+  begin
+    for lSymbol in FCCL do
+      AddSymbol(lSymbol, sgCCL);
+  end;
+  sgCCL.Invalidate;
 end;
 
 procedure THeikinAshiTrader.AbrirVentana(ASymbol: TSymbol);
@@ -197,10 +251,10 @@ begin
   lThread.start;
 end;
 
-procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol);
+procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol; AGrid: TSymbolGrid);
 begin
-  sgSymbols.RowCount := sgSymbols.RowCount + 1;
-  sgSymbols.Objects[0, sgSymbols.RowCount - 1] := ASymbol;
+  AGrid.RowCount := AGrid.RowCount + 1;
+  AGrid.Objects[0, AGrid.RowCount - 1] := ASymbol;
 end;
 
 procedure THeikinAshiTrader.FeedBack(AString: string);
