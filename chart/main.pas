@@ -26,7 +26,6 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
     procedure ChartNeedData(Sender: TObject);
     procedure sgSymbolsDrawCell(Sender: TObject; aCol, aRow: Integer;
@@ -55,20 +54,13 @@ implementation
 
 procedure THeikinAshiTrader.FormCreate(Sender: TObject);
 var
-  lSymbol: TSymbol;
   I: Integer;
 begin
   gThreadList := TThreadList.Create;
   sgSymbols.FocusRectVisible:= False;
-  FSymbols := TSymbols.Create;
-  FSymbols.LoadInitialData;
-
   sgSymbols.RowCount:= 1;
 
-  for lSymbol in FSymbols do
-    AddSymbol(lSymbol);
-
-  sgSymbols.Row:= 0;
+  FSymbols := TSymbols.Create;
 end;
 
 procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
@@ -101,13 +93,6 @@ procedure THeikinAshiTrader.actNewWindowExecute(Sender: TObject);
 begin
   if sgSymbols.Row > 0 then
     AbrirVentana(TSymbol(sgSymbols.Objects[0, sgSymbols.Row]));
-end;
-
-procedure THeikinAshiTrader.FormShow(Sender: TObject);
-var
-  lSymbol: TSymbol;
-begin
-  //
 end;
 
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
@@ -227,12 +212,37 @@ end;
 
 procedure THeikinAshiTrader.Timer1Timer(Sender: TObject);
 var
+  lSymbol: TSymbol;
   lThread: TGetAllDataThread;
 begin
-  lThread := TGetAllDataThread.Create;
-  lThread.OnFeedBack := @GetFeedBack;
-  lThread.OnGetData:= @GetAllData;
-  lThread.start;
+  if FSymbols.Count = 0 then
+  begin
+    try
+      // el intervalo inicial es de 500, para que
+      // se ejecute el método LoadInitialData
+      // lo más rápido posible,
+      // luego lo pasamos a 5000.
+      Timer1.Interval:= 5000;
+      FeedBack('Cargando datos iniciales...');
+      FSymbols.LoadInitialData;
+      for lSymbol in FSymbols do
+        AddSymbol(lSymbol);
+
+      sgSymbols.Row:= 0;
+    except
+      on E: Exception do
+      begin
+        FeedBack('Falló la conexión al servidor.');
+      end;
+    end;
+  end
+  else
+  begin
+    lThread := TGetAllDataThread.Create;
+    lThread.OnFeedBack := @GetFeedBack;
+    lThread.OnGetData:= @GetAllData;
+    lThread.start;
+  end;
 end;
 
 procedure THeikinAshiTrader.GetAllData(AData: string);
@@ -290,6 +300,7 @@ end;
 procedure THeikinAshiTrader.FeedBack(AString: string);
 begin
   StatusBar1.SimpleText:= AString;
+  StatusBar1.Invalidate;
 end;
 
 procedure THeikinAshiTrader.GetFeedBack(AFeedBack: string);

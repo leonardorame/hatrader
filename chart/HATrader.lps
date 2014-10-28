@@ -7,10 +7,11 @@
       <Unit0>
         <Filename Value="HATrader.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
         <CursorPos Y="20"/>
         <UsageCount Value="216"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="chartframe.pas"/>
@@ -19,7 +20,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="chartframe"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="1"/>
         <TopLine Value="388"/>
         <CursorPos X="35" Y="401"/>
@@ -30,11 +31,11 @@
         <Filename Value="candlestickchart.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="candlestickchart"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
         <TopLine Value="14"/>
         <CursorPos X="34" Y="25"/>
-        <UsageCount Value="101"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -44,11 +45,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="main"/>
-        <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="24"/>
-        <CursorPos X="21" Y="34"/>
-        <UsageCount Value="101"/>
+        <TopLine Value="216"/>
+        <CursorPos X="12" Y="221"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit3>
@@ -62,58 +62,59 @@
         <WindowIndex Value="1"/>
         <TopLine Value="6"/>
         <CursorPos Y="15"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="99"/>
       </Unit4>
       <Unit5>
         <Filename Value="volatility.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="volatility"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="1"/>
         <TopLine Value="13"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="97"/>
+        <UsageCount Value="98"/>
         <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="ohlc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ohlc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
         <TopLine Value="20"/>
         <CursorPos X="48" Y="42"/>
-        <UsageCount Value="97"/>
+        <UsageCount Value="98"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="symbols.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="symbols"/>
-        <EditorIndex Value="4"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="84"/>
-        <CursorPos X="16" Y="91"/>
-        <UsageCount Value="53"/>
+        <TopLine Value="161"/>
+        <CursorPos X="7" Y="172"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="loader.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="loader"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="144"/>
-        <CursorPos X="3" Y="180"/>
-        <UsageCount Value="52"/>
+        <TopLine Value="40"/>
+        <CursorPos X="15" Y="52"/>
+        <UsageCount Value="53"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="../../lazarus/lcl/include/customform.inc"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="201"/>
-        <CursorPos X="44" Y="212"/>
+        <TopLine Value="939"/>
+        <CursorPos Y="951"/>
         <UsageCount Value="106"/>
       </Unit9>
       <Unit10>
@@ -336,10 +337,11 @@
       </Unit36>
       <Unit37>
         <Filename Value="../../fpc/packages/fcl-web/src/base/fphttpclient.pp"/>
+        <UnitName Value="fphttpclient"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="258"/>
-        <CursorPos X="14" Y="267"/>
+        <TopLine Value="1024"/>
+        <CursorPos X="3" Y="1025"/>
         <UsageCount Value="10"/>
       </Unit37>
       <Unit38>
@@ -395,123 +397,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="main.pas"/>
-        <Caret Line="238" TopLine="224"/>
+        <Caret Line="163" Column="3" TopLine="153"/>
       </Position1>
       <Position2>
         <Filename Value="main.pas"/>
-        <Caret Line="63" Column="6" TopLine="53"/>
+        <Caret Line="118" Column="3" TopLine="115"/>
       </Position2>
       <Position3>
         <Filename Value="main.pas"/>
-        <Caret Line="79" TopLine="66"/>
+        <Caret Line="71" Column="25" TopLine="55"/>
       </Position3>
       <Position4>
         <Filename Value="main.pas"/>
-        <Caret Line="80" TopLine="66"/>
+        <Caret Line="101" TopLine="84"/>
       </Position4>
       <Position5>
         <Filename Value="main.pas"/>
-        <Caret Line="86" TopLine="67"/>
+        <Caret Line="102" TopLine="84"/>
       </Position5>
       <Position6>
         <Filename Value="main.pas"/>
-        <Caret Line="87" TopLine="68"/>
+        <Caret Line="35" Column="5" TopLine="25"/>
       </Position6>
       <Position7>
         <Filename Value="main.pas"/>
-        <Caret Line="88" TopLine="69"/>
+        <Caret Line="62" TopLine="54"/>
       </Position7>
       <Position8>
         <Filename Value="main.pas"/>
-        <Caret Line="63" Column="16" TopLine="59"/>
+        <Caret Line="63" TopLine="54"/>
       </Position8>
       <Position9>
         <Filename Value="main.pas"/>
-        <Caret Line="64" Column="3" TopLine="55"/>
+        <Caret Line="64" TopLine="54"/>
       </Position9>
       <Position10>
-        <Filename Value="symbols.pas"/>
-        <Caret Line="162" Column="3" TopLine="151"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="67" Column="15" TopLine="58"/>
       </Position10>
       <Position11>
-        <Filename Value="main.pas"/>
-        <Caret Line="238" Column="3" TopLine="235"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="150" TopLine="146"/>
       </Position11>
       <Position12>
-        <Filename Value="main.pas"/>
-        <Caret Line="36" Column="25" TopLine="26"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="154" TopLine="146"/>
       </Position12>
       <Position13>
-        <Filename Value="main.pas"/>
-        <Caret Line="232" Column="23" TopLine="212"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="155" TopLine="146"/>
       </Position13>
       <Position14>
-        <Filename Value="loader.pas"/>
-        <Caret Line="114" TopLine="104"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="51" Column="16" TopLine="40"/>
       </Position14>
       <Position15>
-        <Filename Value="loader.pas"/>
-        <Caret Line="49" Column="34" TopLine="38"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="100" Column="21" TopLine="90"/>
       </Position15>
       <Position16>
-        <Filename Value="loader.pas"/>
-        <Caret Line="182" TopLine="161"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="150" TopLine="139"/>
       </Position16>
       <Position17>
-        <Filename Value="main.pas"/>
-        <Caret Line="232" Column="23" TopLine="212"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="154" TopLine="139"/>
       </Position17>
       <Position18>
-        <Filename Value="main.pas"/>
-        <Caret Line="238" Column="3" TopLine="235"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="155" TopLine="139"/>
       </Position18>
       <Position19>
-        <Filename Value="symbols.pas"/>
-        <Caret Line="202" Column="3" TopLine="195"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="101" TopLine="90"/>
       </Position19>
       <Position20>
-        <Filename Value="loader.pas"/>
-        <Caret Line="29" Column="6" TopLine="20"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="93" TopLine="83"/>
       </Position20>
       <Position21>
-        <Filename Value="loader.pas"/>
-        <Caret Line="26" Column="5" TopLine="13"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="99" TopLine="83"/>
       </Position21>
       <Position22>
-        <Filename Value="loader.pas"/>
-        <Caret Line="29" Column="5" TopLine="15"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="100" TopLine="83"/>
       </Position22>
       <Position23>
-        <Filename Value="loader.pas"/>
-        <Caret Line="157" Column="3" TopLine="150"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="101" TopLine="83"/>
       </Position23>
       <Position24>
         <Filename Value="main.pas"/>
-        <Caret Line="85" TopLine="69"/>
+        <Caret Line="235" Column="3" TopLine="231"/>
       </Position24>
       <Position25>
         <Filename Value="main.pas"/>
-        <Caret Line="312" Column="3" TopLine="301"/>
+        <Caret Line="226" TopLine="214"/>
       </Position25>
       <Position26>
         <Filename Value="main.pas"/>
-        <Caret Line="231" Column="51" TopLine="219"/>
+        <Caret Line="223" Column="7" TopLine="215"/>
       </Position26>
       <Position27>
-        <Filename Value="main.pas"/>
-        <Caret Line="307" TopLine="286"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="174" Column="29" TopLine="162"/>
       </Position27>
       <Position28>
         <Filename Value="main.pas"/>
-        <Caret Line="35" TopLine="25"/>
+        <Caret Line="228" Column="3" TopLine="215"/>
       </Position28>
       <Position29>
         <Filename Value="main.pas"/>
-        <Caret Line="228" TopLine="219"/>
+        <Caret Line="221" Column="12" TopLine="216"/>
       </Position29>
       <Position30>
-        <Filename Value="main.pas"/>
-        <Caret Line="36" Column="46" TopLine="23"/>
+        <Filename Value="loader.pas"/>
+        <Caret Line="51" Column="16" TopLine="40"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

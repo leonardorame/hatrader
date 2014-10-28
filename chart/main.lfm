@@ -9,7 +9,6 @@ object HeikinAshiTrader: THeikinAshiTrader
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '1.3'
   object sgSymbols: TStringGrid
@@ -112,7 +111,7 @@ object HeikinAshiTrader: THeikinAshiTrader
     end
   end
   object Timer1: TTimer
-    Interval = 5000
+    Interval = 500
     OnTimer = Timer1Timer
     left = 274
     top = 184

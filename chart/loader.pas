@@ -90,8 +90,6 @@ begin
 end;
 
 procedure TGetAllDataThread.Execute;
-var
-  lHttpClient: TFPHTTPClient;
 begin
   FFeedBackStr:= 'Getting all symbols';
   Synchronize(@WriteFeedBack);
@@ -105,7 +103,7 @@ begin
         Synchronize(@OnData);
       end
       else
-        raise Exception.Create('Error loading all symbols data (' + lHttpClient.ResponseStatusText + ')');
+        raise Exception.Create('Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')');
     except
       on E: Exception do
       begin

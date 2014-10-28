@@ -156,11 +156,11 @@ end;
 
 procedure TGSymbolList.LoadInitialData;
 var
-  lHttpClient: TFPHTTPClient;
   lStr: TStringList;
   lLine: TStringList;
   I: Integer;
   lSymbol: TSymbol;
+  lHttpClient: TFPHTTPClient;
 begin
   lHttpClient := TFPHTTPClient.Create(nil);
   lStr := TStringList.Create;
