@@ -11,78 +11,6 @@ object HeikinAshiTrader: THeikinAshiTrader
   OnDestroy = FormDestroy
   Position = poDesktopCenter
   LCLVersion = '1.3'
-  object sgSymbols: TStringGrid
-    Left = 0
-    Height = 506
-    Top = 60
-    Width = 589
-    Align = alClient
-    AlternateColor = 1118481
-    AutoFillColumns = True
-    Color = 1973790
-    ColCount = 7
-    Columns = <    
-      item
-        Title.Alignment = taCenter
-        Title.Caption = 'File / Symbol'
-        Width = 83
-      end    
-      item
-        Alignment = taCenter
-        Title.Alignment = taCenter
-        Title.Caption = 'Last'
-        Width = 83
-      end    
-      item
-        Title.Alignment = taCenter
-        Title.Caption = 'Open'
-        Width = 83
-      end    
-      item
-        Title.Alignment = taCenter
-        Title.Caption = 'High'
-        Width = 83
-      end    
-      item
-        Alignment = taCenter
-        Title.Alignment = taCenter
-        Title.Caption = 'Low'
-        Width = 83
-      end    
-      item
-        Alignment = taCenter
-        Title.Alignment = taCenter
-        Title.Caption = 'Prev.'
-        Width = 83
-      end    
-      item
-        Alignment = taCenter
-        Title.Alignment = taCenter
-        Title.Caption = '%'
-        Width = 89
-      end>
-    ExtendedSelect = False
-    FixedColor = 3355443
-    FixedCols = 0
-    Font.Color = 9605778
-    GridLineWidth = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goRowSelect, goThumbTracking, goSmoothScroll]
-    ParentFont = False
-    RowCount = 2
-    TabOrder = 0
-    TitleFont.Color = 9605778
-    OnDblClick = sgSymbolsDblClick
-    OnDrawCell = sgSymbolsDrawCell
-    ColWidths = (
-      83
-      83
-      83
-      83
-      83
-      83
-      89
-    )
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 21
@@ -103,11 +31,27 @@ object HeikinAshiTrader: THeikinAshiTrader
     Images = ImageList1
     ParentColor = False
     ShowCaptions = True
-    TabOrder = 2
+    TabOrder = 1
     object ToolButton1: TToolButton
       Left = 1
       Top = 0
       Action = actNewWindow
+    end
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Height = 506
+    Top = 60
+    Width = 589
+    ActivePage = tsSymbols
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 2
+    object tsSymbols: TTabSheet
+      Caption = 'Symbols'
+    end
+    object tsCCL: TTabSheet
+      Caption = 'CCL'
     end
   end
   object Timer1: TTimer

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, Grids, ActnList, chartframe,
+  ExtCtrls, symbolgrid, ActnList, chartframe,
   symbols, loader, newwindow;
 
 type
@@ -17,8 +17,10 @@ type
     actNewWindow: TAction;
     ActionList1: TActionList;
     ImageList1: TImageList;
-    sgSymbols: TStringGrid;
+    PageControl1: TPageControl;
     StatusBar1: TStatusBar;
+    tsSymbols: TTabSheet;
+    tsCCL: TTabSheet;
     Timer1: TTimer;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
@@ -28,11 +30,10 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure sgSymbolsDblClick(Sender: TObject);
     procedure ChartNeedData(Sender: TObject);
-    procedure sgSymbolsDrawCell(Sender: TObject; aCol, aRow: Integer;
-      aRect: TRect; aState: TGridDrawState);
     procedure Timer1Timer(Sender: TObject);
   private
     FSymbols: TSymbols;
+    sgSymbols: TSymbolGrid;
     procedure GetAllData(AData: string);
     procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
@@ -57,10 +58,13 @@ var
   I: Integer;
 begin
   gThreadList := TThreadList.Create;
+  FSymbols := TSymbols.Create;
+  sgSymbols := TSymbolGrid.Create(FSymbols, tsSymbols);
+  sgSymbols.Parent := tsSymbols;
+  sgSymbols.Align:= alClient;
   sgSymbols.FocusRectVisible:= False;
   sgSymbols.RowCount:= 1;
-
-  FSymbols := TSymbols.Create;
+  sgSymbols.OnDblClick := @sgSymbolsDblClick;
 end;
 
 procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
@@ -80,6 +84,7 @@ begin
   end;
   gThreadList.UnlockList;
   gThreadList.Free;
+  sgSymbols.Free;
   FSymbols.Free;
 end;
 
@@ -108,105 +113,6 @@ begin
   begin
     lChartFrame := (Sender as TChartFrame);
     GetFile(lChartFrame.Symbol);
-  end;
-end;
-
-procedure THeikinAshiTrader.sgSymbolsDrawCell(Sender: TObject; aCol,
-  aRow: Integer; aRect: TRect; aState: TGridDrawState);
-var
-  lSymbol: TSymbol;
-  lX: Integer;
-  lY: Integer;
-  lCellHeigh: Integer;
-  lCanvas: TCanvas;
-  lText: string;
-  lOpen: double;
-  lHigh: double;
-  lLow: double;
-  lClose: double;
-  lPrev: double;
-begin
-  if gdSelected in aState then
-  begin
-    sgSymbols.Canvas.Brush.Style:= bsSolid;
-    sgSymbols.Canvas.Brush.Color:= $442200;
-    sgSymbols.Canvas.FillRect(aRect);
-    lCanvas.Font.Color := $111111;
-  end
-  else
-    lCanvas.Font.Color := $1F1F1F;
-  if ARow > 0 then
-  begin
-    lCanvas := sgSymbols.Canvas;
-    lCellHeigh := aRect.Bottom - aRect.Top;
-    lSymbol := TSymbol(sgSymbols.Objects[0, ARow]);
-    lOpen := lSymbol.Last.Open;
-    lHigh := lSymbol.Last.High;
-    lLow := lSymbol.Last.Low;
-    lClose := lSymbol.Last.Close;
-    lPrev := lSymbol.Last.Prev;
-    case ACol of
-      0: begin
-         lText := lSymbol.Name;
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lCanvas.TextOut(aRect.Left + 2, lY, lText);
-      end;
-      1: begin
-         lCanvas.Brush.Style:= bsSolid;
-         if lPrev < lClose then
-         begin
-           lCanvas.Brush.Color:= clGreen;
-           lCanvas.FillRect(aRect);
-         end
-         else
-         if lPrev > lClose then
-         begin
-           lCanvas.Brush.Color:= clRed;
-           lCanvas.FillRect(aRect);
-         end;
-
-         lText := Format('%.2f',[lClose]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      2: begin
-         lText := Format('%.2f',[lOpen]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      3: begin
-         lText := Format('%.2f',[lHigh]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      4: begin
-         lText := Format('%.2f',[lLow]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      5: begin
-         lText := Format('%.2f',[lPrev]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-      6: begin
-         if lPrev < lClose then
-           lCanvas.Font.Color:= clGreen
-         else
-         if lPrev > lClose then
-           lCanvas.Font.Color:= clRed;
-
-         lText := Format('%.2f%%',[((lClose / lPrev) - 1) * 100]);
-         lY := aRect.Top + Round((lCellHeigh / 2) - (lCanvas.TextHeight(lText) / 2));
-         lX := aRect.Left + ((aRect.Right - aRect.Left) - (lCanvas.TextWidth(lText) + 4));
-         lCanvas.TextOut(lX, lY, lText);
-      end;
-    end;
   end;
 end;
 

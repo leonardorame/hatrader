@@ -8,7 +8,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, chartframe, tachartlazaruspkg, candlestickchart, main, newwindow,
-  volatility, ohlc, symbols, loader;
+  volatility, ohlc, symbols, loader, symbolgrid;
 
 {$R *.res}
 
