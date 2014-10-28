@@ -24,6 +24,7 @@ type
     Timer1: TTimer;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
+    procedure ActionList1Update(AAction: TBasicAction; var Handled: Boolean);
     procedure actNewWindowExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -33,11 +34,12 @@ type
     procedure Timer1Timer(Sender: TObject);
   private
     FSymbols: TSymbols;
-    FCCL: TSymbols;
+    FCCL: TCCLSymbols;
     sgSymbols: TSymbolGrid;
     sgCCL: TSymbolGrid;
+    procedure CreateCalculatedSyms;
+    procedure UpdateCalculatedSyms;
     procedure GetAllData(AData: string);
-    procedure GetAllDataCCL(AData: string);
     procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
     procedure AddSymbol(ASymbol: TSymbol; AGrid: TSymbolGrid);
@@ -62,7 +64,7 @@ var
 begin
   gThreadList := TThreadList.Create;
   FSymbols := TSymbols.Create;
-  FCCL := TSymbols.Create;
+  FCCL := TCCLSymbols.Create;
   sgSymbols := TSymbolGrid.Create(FSymbols, tsSymbols);
   sgSymbols.Parent := tsSymbols;
   sgSymbols.Align:= alClient;
@@ -70,13 +72,11 @@ begin
   sgSymbols.RowCount:= 1;
   sgSymbols.OnDblClick := @sgSymbolsDblClick;
 
-  sgCCL := TSymbolGrid.Create(FCCL, tsCCL);
+  sgCCL := TSymbolGrid.Create(TSymbols(FCCL), tsCCL);
   sgCCL.Parent := tsCCL;
   sgCCL.Align:= alClient;
   sgCCL.FocusRectVisible:= False;
   sgCCL.RowCount:= 1;
-  sgCCL.OnDblClick := @sgSymbolsDblClick;
-
 end;
 
 procedure THeikinAshiTrader.FormDestroy(Sender: TObject);
@@ -114,6 +114,12 @@ begin
     AbrirVentana(TSymbol(sgSymbols.Objects[0, sgSymbols.Row]));
 end;
 
+procedure THeikinAshiTrader.ActionList1Update(AAction: TBasicAction;
+  var Handled: Boolean);
+begin
+  actNewWindow.Enabled:= (PageControl1.ActivePage = tsSymbols);
+end;
+
 procedure THeikinAshiTrader.sgSymbolsDblClick(Sender: TObject);
 begin
   actNewWindow.Execute;
@@ -145,8 +151,15 @@ begin
       FSymbols.LoadInitialData;
       for lSymbol in FSymbols do
         AddSymbol(lSymbol, sgSymbols);
-
       sgSymbols.Row:= 0;
+
+      // Una ves creados los símbolos iniciales
+      // se generan los calculados
+      CreateCalculatedSyms;
+      for lSymbol in FCCL do
+        AddSymbol(lSymbol, sgCCL);
+      sgCCL.Row:= 0;
+
     except
       on E: Exception do
       begin
@@ -161,53 +174,132 @@ begin
     lThread.OnGetData:= @GetAllData;
     lThread.start;
   end;
+end;
 
-  // CCL
-  {if FCCL.Count = 0 then
+procedure THeikinAshiTrader.CreateCalculatedSyms;
+var
+  lSym: TCCLSymbol;
+  lLocal: TSymbol;
+  lUsa: TSymbol;
+
+begin
+  // APBR.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'APBR.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 2;
+  lLocal := FSymbols.Find('APBR');
+  lUsa := FSymbols.Find('PBR.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+
+  // BMA.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'BMA.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 10;
+  lLocal := FSymbols.Find('BMA');
+  lUsa := FSymbols.Find('BMA.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+
+  // END.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'EDN.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 20;
+  lLocal := FSymbols.Find('EDN');
+  lUsa := FSymbols.Find('EDN.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // FRAN.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'FRAN.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 3;
+  lLocal := FSymbols.Find('FRAN');
+  lUsa := FSymbols.Find('BFR.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // GGAL.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'GGAL.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 10;
+  lLocal := FSymbols.Find('GGAL');
+  lUsa := FSymbols.Find('GGAL.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // TECO2.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'TECO2.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 5;
+  lLocal := FSymbols.Find('TECO2');
+  lUsa := FSymbols.Find('TEO.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // TS.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'TS.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 2;
+  lLocal := FSymbols.Find('TS');
+  lUsa := FSymbols.Find('TS.ADR');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // AA17.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'AA17.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 1;
+  lLocal := FSymbols.Find('AA17');
+  lUsa := FSymbols.Find('AA17D');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  // AY24.CCL
+  lSym := TCCLSymbol.Create;
+  lSym.Name:= 'AY24.CCL';
+  lSym.Symbol:= lSym.Name;
+  lSym.Factor:= 1;
+  lLocal := FSymbols.Find('AY24');
+  lUsa := FSymbols.Find('AY24D');
+  lSym.Local := lLocal;
+  lSym.Usa := lUsa;
+  FCCL.Add(lSym);
+  UpdateCalculatedSyms;
+end;
+
+procedure THeikinAshiTrader.UpdateCalculatedSyms;
+var
+  lSym: TCCLSymbol;
+
+begin
+  for lSym in FCCL do
   begin
-    try
-      // el intervalo inicial es de 500, para que se ejecute el método LoadInitialData
-      // lo más rápido posible, luego lo pasamos a 5000.
-      Timer1.Interval:= 5000;
-      FeedBack('Cargando datos iniciales...');
-      //FCCL.LoadInitialData;
-      //for lSymbol in FCCL do
-      //  AddSymbol(lSymbol);
-
-      sgCCL.Row:= 0;
-    except
-      on E: Exception do
-      begin
-        FeedBack('Falló la conexión al servidor.');
-      end;
+    if (lSym.Local <> nil) and (lSym.Usa <> nil) then
+    begin
+      lSym.Last.Open:= lSym.Local.Last.Open / lSym.Usa.Last.Open * lSym.Factor;
+      lSym.Last.High:= lSym.Local.Last.High / lSym.Usa.Last.High * lSym.Factor;
+      lSym.Last.Low:= lSym.Local.Last.Low / lSym.Usa.Last.Low * lSym.Factor;
+      lSym.Last.Close:= lSym.Local.Last.Close / lSym.Usa.Last.Close * lSym.Factor;
     end;
-  end
-  else}
-  begin
-    lThread := TGetAllDataThread.Create('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/ccl');
-    lThread.OnFeedBack := @GetFeedBack;
-    lThread.OnGetData:= @GetAllDataCCL;
-    lThread.start;
   end;
-
 end;
 
 procedure THeikinAshiTrader.GetAllData(AData: string);
 begin
   FSymbols.UpdateSymbolData(AData);
   sgSymbols.Invalidate;
-end;
-
-procedure THeikinAshiTrader.GetAllDataCCL(AData: string);
-var
-  lSymbol: TSymbol;
-begin
-  FCCL.UpdateSymbolData(AData);
-  if sgCCL.RowCount = 1 then
-  begin
-    for lSymbol in FCCL do
-      AddSymbol(lSymbol, sgCCL);
-  end;
+  UpdateCalculatedSyms;
   sgCCL.Invalidate;
 end;
 

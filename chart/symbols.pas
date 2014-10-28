@@ -43,17 +43,32 @@ type
     property Last: TOHLCRecord read FLast write FLast;
   end;
 
+  { TCCLSymbol }
+
+  TCCLSymbol = class(TSymbol)
+  private
+    FFactor: integer;
+    FLocal: TSymbol;
+    FUsa: TSymbol;
+  public
+    property Factor: integer read FFactor write FFactor;
+    property Local: TSymbol read FLocal write FLocal;
+    property Usa: TSymbol read FUsa write FUsa;
+  end;
+
   { TGSymbolList }
 
   generic TGSymbolList<T> = class(specialize TFPGList<T>)
   public
     constructor Create;
     destructor Destroy; override;
+    function Find(ASymbol: string): TSymbol;
     procedure LoadInitialData;
     procedure UpdateSymbolData(AData: string);
   end;
 
   TSymbols = specialize TGSymbolList<TSymbol>;
+  TCCLSymbols = specialize TGSymbolList<TCCLSymbol>;
 
 implementation
 
@@ -154,12 +169,26 @@ begin
   inherited Destroy;
 end;
 
+function TGSymbolList.Find(ASymbol: string): TSymbol;
+var
+  lSymbol: TSymbol;
+begin
+  Result := nil;
+  for lSymbol in Self do
+  begin
+    if lSymbol.Symbol = ASymbol then
+    begin
+      Result := lSymbol;
+    end;
+  end;
+end;
+
 procedure TGSymbolList.LoadInitialData;
 var
   lStr: TStringList;
   lLine: TStringList;
   I: Integer;
-  lSymbol: TSymbol;
+  lSymbol: T;
   lHttpClient: TFPHTTPClient;
 begin
   lHttpClient := TFPHTTPClient.Create(nil);
@@ -171,7 +200,7 @@ begin
     for I := 0 to lStr.Count - 1 do
     begin
       lLine.DelimitedText:= lStr[I];
-      lSymbol := TSymbol.Create;
+      lSymbol := T.Create;
       lSymbol.Name := lLine[1];
       lSymbol.Symbol:= lLine[1];
       lSymbol.SymbolType:= stDaily;
@@ -215,31 +244,12 @@ begin
           lSymbol.Symbol:= lLine[0];
           lSymbol.Last.Date:= lLine[1];
           lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
-          if lLine.Count > 3 then
-          begin
-            lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
-            lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
-            lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
-            lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
-            lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
-          end;
-        end;
-      end;
-      if lSymbol = nil then
-      begin
-        lSymbol := TSymbol.Create;
-        lSymbol.Name:= lLine[0];
-        lSymbol.Last.Date:= lLine[1];
-        lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
-        if lLine.Count > 3 then
-        begin
           lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
           lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
           lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
           lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
           lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
         end;
-        Add(lSymbol);
       end;
     end;
   finally

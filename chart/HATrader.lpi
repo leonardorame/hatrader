@@ -110,7 +110,6 @@
       <Unit2>
         <Filename Value="candlestickchart.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="candlestickchart"/>
       </Unit2>
       <Unit3>
         <Filename Value="main.pas"/>

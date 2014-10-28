@@ -62,6 +62,7 @@ object HeikinAshiTrader: THeikinAshiTrader
   end
   object ActionList1: TActionList
     Images = ImageList1
+    OnUpdate = ActionList1Update
     left = 379
     top = 273
     object actNewWindow: TAction
