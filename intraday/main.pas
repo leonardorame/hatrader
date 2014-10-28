@@ -56,7 +56,7 @@ begin
       '      hour(rt2.time) = hour(rt.time) and '+
       '      minute(rt2.time) >= CASE WHEN MINUTE(rt.time) < 30 THEN ''00'' ELSE ''30'' END and '+
       '      minute(rt2.time) < CASE WHEN MINUTE(rt.time) < 30 THEN ''30'' ELSE ''59'' END '+
-      '	order by rt2.time '+
+      '	order by rt2.id '+
       '    limit 1 '+
       '  ) as "Open", '+
       '  max(rt.last) as High, '+
@@ -70,7 +70,7 @@ begin
       '      hour(rt3.time) = hour(rt.time) and '+
       '      minute(rt3.time) >= CASE WHEN MINUTE(rt.time) < 30 THEN ''00'' ELSE ''30'' END and '+
       '      minute(rt3.time) < CASE WHEN MINUTE(rt.time) < 30 THEN ''30'' ELSE ''59'' END '+
-      '	order by rt3.time desc '+
+      '	order by rt3.id desc '+
       '    limit 1 '+
       '  )as "Close", '+
       '  CONCAT(CAST(HOUR(rt.time) AS CHAR(2)), '':'', (CASE WHEN MINUTE(rt.time) < 30 THEN ''00'' ELSE ''30'' END)) as Time '+
