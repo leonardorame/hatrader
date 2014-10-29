@@ -227,6 +227,7 @@ var
   lLine: TStringList;
   I: Integer;
   lSymbol: TSymbol;
+  lSym: string;
 begin
   lStr := TStringList.Create;
   lLine := TStringList.Create;
@@ -239,10 +240,11 @@ begin
       lSymbol := nil;
       for lSymbol in Self do
       begin
-        if lSymbol.Symbol = lLine[0] then
+        lSym := lLine[1];
+        if lSymbol.Symbol = lLine[1] then
         begin
-          lSymbol.Symbol:= lLine[0];
-          lSymbol.Last.Date:= lLine[1];
+          lSymbol.Symbol:= lLine[1];
+          lSymbol.Last.Date:= lLine[0];
           lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
           lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
           lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
