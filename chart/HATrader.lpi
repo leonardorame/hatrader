@@ -147,9 +147,9 @@
         <UnitName Value="loader"/>
       </Unit8>
       <Unit9>
-        <Filename Value="symbolgrid.pas"/>
+        <Filename Value="cclgrid.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="symbolgrid"/>
+        <UnitName Value="cclgrid"/>
       </Unit9>
     </Units>
   </ProjectOptions>

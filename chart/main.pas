@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
-  ExtCtrls, symbolgrid, ActnList, chartframe,
-  symbols, loader, newwindow;
+  ExtCtrls, symbolgrid, cclgrid, ActnList, chartframe,
+  symbols, loader, newwindow, grids;
 
 type
 
@@ -36,13 +36,13 @@ type
     FSymbols: TSymbols;
     FCCL: TCCLSymbols;
     sgSymbols: TSymbolGrid;
-    sgCCL: TSymbolGrid;
+    sgCCL: TCCLGrid;
     procedure CreateCalculatedSyms;
     procedure UpdateCalculatedSyms;
     procedure GetAllData(AData: string);
     procedure AbrirVentana(ASymbol: TSymbol);
     procedure GetFile(ASymbol: TSymbol);
-    procedure AddSymbol(ASymbol: TSymbol; AGrid: TSymbolGrid);
+    procedure AddSymbol(ASymbol: TSymbol; AGrid: TStringGrid);
     procedure FeedBack(AString: string);
     procedure GetFeedBack(AFeedBack: string);
   public
@@ -72,7 +72,7 @@ begin
   sgSymbols.RowCount:= 1;
   sgSymbols.OnDblClick := @sgSymbolsDblClick;
 
-  sgCCL := TSymbolGrid.Create(TSymbols(FCCL), tsCCL);
+  sgCCL := TCCLGrid.Create(FCCL, tsCCL);
   sgCCL.Parent := tsCCL;
   sgCCL.Align:= alClient;
   sgCCL.FocusRectVisible:= False;
@@ -343,7 +343,7 @@ begin
   lThread.start;
 end;
 
-procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol; AGrid: TSymbolGrid);
+procedure THeikinAshiTrader.AddSymbol(ASymbol: TSymbol; AGrid: TStringGrid);
 begin
   AGrid.RowCount := AGrid.RowCount + 1;
   AGrid.Objects[0, AGrid.RowCount - 1] := ASymbol;
