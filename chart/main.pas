@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ComCtrls,
   ExtCtrls, symbolgrid, cclgrid, ActnList, chartframe,
-  symbols, loader, newwindow, grids;
+  symbols, loader, newwindow, grids,
+  LCLProc;
 
 type
 

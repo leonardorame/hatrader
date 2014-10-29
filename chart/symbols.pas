@@ -196,7 +196,11 @@ begin
   lLine := TStringList.Create;
   lLine.Delimiter:= ',';
   try
+    try
     lStr.Text := lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
+    except
+      // nada
+    end;
     for I := 0 to lStr.Count - 1 do
     begin
       lLine.DelimitedText:= lStr[I];
@@ -227,7 +231,6 @@ var
   lLine: TStringList;
   I: Integer;
   lSymbol: TSymbol;
-  lSym: string;
 begin
   lStr := TStringList.Create;
   lLine := TStringList.Create;
@@ -240,7 +243,6 @@ begin
       lSymbol := nil;
       for lSymbol in Self do
       begin
-        lSym := lLine[1];
         if lSymbol.Symbol = lLine[1] then
         begin
           lSymbol.Symbol:= lLine[1];

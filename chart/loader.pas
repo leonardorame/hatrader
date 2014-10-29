@@ -105,7 +105,11 @@ begin
         Synchronize(@OnData);
       end
       else
-        raise Exception.Create('Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')');
+      begin
+        FFeedBackStr:= 'Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')';
+        Synchronize(@WriteFeedBack);
+        //raise Exception.Create('Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')');
+      end;
     except
       on E: Exception do
       begin
@@ -167,11 +171,15 @@ begin
         Synchronize(@OnData);
       end
       else
-        raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')');
+      begin
+        FFeedBackStr := 'Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')';
+        Synchronize(@WriteFeedBack);
+        //raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')');
+      end;
     except
       on E: Exception do
       begin
-        FFeedBackStr:= E.Message;
+        FFeedBackStr:= 'Exception in TGetDataThread.Execute';
         Synchronize(@WriteFeedBack);
       end;
     end;
