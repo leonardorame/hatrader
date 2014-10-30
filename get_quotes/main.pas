@@ -126,6 +126,7 @@ var
   lLow: string;
   lClose: string;
   lTime: string;
+  lHora: Integer;
   lFetchTime: string;
   I: Integer;
   lLine: TStringList;
@@ -165,7 +166,16 @@ begin
       lLow := lLine[3];
       lClose := lLine[4];
       lDateStr := lLine[5];
-      lTime := lLine[6];
+      // los ADRs están en formato am/pm
+      if Pos('.ADR', lSym) > 0 then
+      begin
+        lHora := StrToInt(Copy(lLine[6], 1, Pos(':', lLine[6]) - 1));
+        if lHora < 9 then
+          lHora := lHora + 12;
+        lTime := Format('%.*d', [2, lHora]) + Copy(lLine[6], Pos(':', lLine[6]), Length(lLine[0]));
+      end
+      else
+        lTime := lLine[6];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
       AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
       AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime, lFetchTime);
