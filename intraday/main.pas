@@ -73,7 +73,7 @@ begin
       '	order by rt3.id desc '+
       '    limit 1 '+
       '  )as "Close", '+
-      '  CONCAT(CAST(HOUR(rt.time) AS CHAR(2)), '':'', (CASE WHEN MINUTE(rt.time) < 30 THEN ''00'' ELSE ''30'' END)) as Time '+
+      '  TIME(CONCAT(CAST(HOUR(rt.time) AS CHAR(2)), '':'', (CASE WHEN MINUTE(rt.time) < 30 THEN ''00'' ELSE ''30'' END))) as Time '+
       'from realtime rt '+
       'where '+
       '  rt.symbol = :sym '+

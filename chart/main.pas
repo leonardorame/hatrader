@@ -309,7 +309,6 @@ var
   lWin: TNewWindow;
   lChart: TChartFrame;
   lData: string;
-  lThread: TGetDataThread;
   lSymbol: TSymbol;
 
 begin

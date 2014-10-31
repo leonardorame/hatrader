@@ -197,26 +197,26 @@ begin
   lLine.Delimiter:= ',';
   try
     try
-    lStr.Text := lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all');
+      lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all', lStr);
+      for I := 0 to lStr.Count - 1 do
+      begin
+        lLine.DelimitedText:= lStr[I];
+        lSymbol := T.Create;
+        lSymbol.Name := lLine[1];
+        lSymbol.Symbol:= lLine[1];
+        lSymbol.SymbolType:= stDaily;
+        lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/daily?sym=' + lSymbol.Symbol;
+        lSymbol.Last.Date:= lLine[0];
+        lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
+        lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
+        lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
+        lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
+        lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
+        lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
+        Add(lSymbol);
+      end;
     except
-      // nada
-    end;
-    for I := 0 to lStr.Count - 1 do
-    begin
-      lLine.DelimitedText:= lStr[I];
-      lSymbol := T.Create;
-      lSymbol.Name := lLine[1];
-      lSymbol.Symbol:= lLine[1];
-      lSymbol.SymbolType:= stDaily;
-      lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/daily?sym=' + lSymbol.Symbol;
-      lSymbol.Last.Date:= lLine[0];
-      lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
-      lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
-      lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
-      lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
-      lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
-      lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
-      Add(lSymbol);
+      Writeln('Exception...');
     end;
   finally
     lLine.Free;

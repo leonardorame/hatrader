@@ -21,7 +21,7 @@ type
     FOnFeedBack: TOnFeedBack;
     FOnGetData: TNotifyEvent;
     FFeedBackStr: string;
-    FData: string;
+    FData: TStringList;
     FHttpClient: TFPHTTPClient;
     procedure OnData;
     procedure WriteFeedBack;
@@ -29,7 +29,6 @@ type
     constructor Create;
     destructor Destroy; override;
     procedure Execute; override;
-    property Data: string read FData;
     property Symbol: TSymbol read FSymbol write FSymbol;
     property OnGetData: TNotifyEvent read FOnGetData write FOnGetData;
     property OnFeedBack: TOnFeedBack read FOnFeedBack write FOnFeedBack;
@@ -42,7 +41,7 @@ type
     FOnFeedBack: TOnFeedBack;
     FOnGetData: TOnData;
     FFeedBackStr: string;
-    FData: string;
+    FData: TStringList;
     FHttpClient: TFPHTTPClient;
     FUrl: string;
     procedure OnData;
@@ -65,7 +64,7 @@ implementation
 procedure TGetAllDataThread.OnData;
 begin
   if Assigned(FOnGetData) then
-    FOnGetData(FData);
+    FOnGetData(FData.Text);
 end;
 
 procedure TGetAllDataThread.WriteFeedBack;
@@ -82,12 +81,14 @@ begin
   FreeOnTerminate := True;
   FUrl := AUrl;
   FHttpClient := TFPHTTPClient.Create(nil);
+  FData := TStringList.Create;
 end;
 
 destructor TGetAllDataThread.Destroy;
 begin
   gThreadList.Remove(Self);
   FHttpClient.Free;
+  FData.Free;
   inherited Destroy;
 end;
 
@@ -97,7 +98,7 @@ begin
   Synchronize(@WriteFeedBack);
   try
     try
-      FData := FHttpClient.Get(FUrl);
+      FHttpClient.Get(FUrl, FData);
       if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := 'All symbols data loading done.';
@@ -128,7 +129,7 @@ procedure TGetDataThread.OnData;
 begin
   // cargamos los datos dentro
   // de este Synchronize
-  FSymbol.PrepareArray(FData);
+  FSymbol.PrepareArray(FData.Text);
 end;
 
 procedure TGetDataThread.WriteFeedBack;
@@ -144,11 +145,13 @@ begin
   Priority:= tpLower;
   FreeOnTerminate := True;
   FHttpClient := TFPHTTPClient.Create(nil);
+  FData := TStringList.Create;
 end;
 
 destructor TGetDataThread.Destroy;
 begin
   gThreadList.Remove(Self);
+  FData.Free;
   FHttpClient.Free;
   inherited Destroy;
 end;
@@ -163,7 +166,7 @@ begin
   try
     try
       lUrl := FSymbol.FilePath;
-      FData := FHttpClient.Get(lUrl);
+      FHttpClient.Get(lUrl, FData);
       if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := FSymbol.Name + ' loading done.';

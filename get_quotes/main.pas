@@ -169,10 +169,12 @@ begin
       // los ADRs están en formato am/pm
       if Pos('.ADR', lSym) > 0 then
       begin
+        write('-------> ADR <-------');
         lHora := StrToInt(Copy(lLine[6], 1, Pos(':', lLine[6]) - 1));
         if lHora < 9 then
           lHora := lHora + 12;
         lTime := Format('%.*d', [2, lHora]) + Copy(lLine[6], Pos(':', lLine[6]), Length(lLine[0]));
+        write('----->' + lTime);
       end
       else
         lTime := lLine[6];
