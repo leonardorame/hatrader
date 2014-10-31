@@ -252,7 +252,7 @@ begin
         begin
           lSymbol.Symbol:= lLine[1];
           lSymbol.Last.Date:= lLine[0];
-          lSymbol.Last.Close:= StrToFloatDef(lLine[2], 0);
+          lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
           lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
           lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
           lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
