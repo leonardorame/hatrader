@@ -391,7 +391,8 @@ begin
       lOHLC.Time]) + #13#10;
 
     except
-      //Write('error');
+      on E: exception do
+        Write(E.message);
     end;
   end;
   Write(Result);
