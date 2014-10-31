@@ -109,19 +109,23 @@ begin
     // 2.08M
     // 0.0
     AString := AnsiReplaceStr(AString, '.', DefaultFormatSettings.DecimalSeparator);
-    if (Pos('K', AString)) > 0 then
-    begin
-      AString := Copy(AString, 1, Length(AString) - 1);
-      FVol := IntToStr(Round(StrToFloat(AString) * 1000));
-    end
-    else
-    if (Pos('M', AString)) > 0 then
-    begin
-      AString := Copy(AString, 1, Length(AString) - 1);
-      FVol := IntToStr(Round(StrToFloat(AString) * 1000000));
-    end
-    else
-      FVol := IntToStr(StrToIntDef(AString, 0));
+    try
+      if (Pos('K', AString)) > 0 then
+      begin
+        AString := Copy(AString, 1, Length(AString) - 1);
+        FVol := IntToStr(Round(StrToFloat(AString) * 1000));
+      end
+      else
+      if (Pos('M', AString)) > 0 then
+      begin
+        AString := Copy(AString, 1, Length(AString) - 1);
+        FVol := IntToStr(Round(StrToFloat(AString) * 1000000));
+      end
+      else
+        FVol := IntToStr(StrToIntDef(AString, 0));
+    except
+      raise Exception.Create('Error: -->' + AString);
+    end;
   end
   else
   if FCant = -1 then
@@ -190,12 +194,16 @@ begin
       // los ADRs están en formato am/pm
       if Pos('.ADR', lSym) > 0 then
       begin
+        try
         write('-------> ADR <-------');
         lHora := StrToInt(Copy(lLine[7], 1, Pos(':', lLine[7]) - 1));
         if lHora < 9 then
           lHora := lHora + 12;
         lTime := Format('%.*d', [2, lHora]) + Copy(lLine[7], Pos(':', lLine[7]), Length(lLine[0]));
-        write('----->' + lTime);
+        except
+          write('----->' + lLine.text);
+          continue;
+        end;
       end
       else
         lTime := lLine[7];
@@ -340,17 +348,17 @@ begin
     lMySqlConn.Transaction := lTransaction;
     lTransaction.StartTransaction;
     lQuery.DataBase := lMySqlConn;
-    lQuery.SQL.Text:= 'insert into realtime(date, time, symbol, last, volume) ' +
-      'values(:date, :time, :symbol, :last, :volume)';
+    lQuery.SQL.Text:= 'insert into realtime(date, time, symbol, last) ' +
+      'values(:date, :time, :symbol, :last)';
     lQuery.ParamByName('date').AsString:= ADate;
     lQuery.ParamByName('time').AsString:= ATime;
     lQuery.ParamByName('symbol').AsString:= ASym;
     lQuery.ParamByName('last').AsString:= AClose;
-    lQuery.ParamByName('volume').AsString:= AVol;
     try
       lQuery.ExecSQL;
     except
-      // no hacer nada!
+      on E: exception do
+        Write(E.message);
     end;
     lTransaction.Commit;
   finally
@@ -413,7 +421,7 @@ begin
 
     except
       on E: exception do
-        Write(E.message);
+        Write('---->' + E.message);
     end;
   end;
   Write(Result);
