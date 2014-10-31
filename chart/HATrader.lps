@@ -91,7 +91,7 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="122"/>
+        <TopLine Value="105"/>
         <CursorPos X="43" Y="142"/>
         <UsageCount Value="67"/>
         <Loaded Value="True"/>
@@ -552,7 +552,7 @@
     </JumpHistory>
   </ProjectSession>
   <Debugging>
-    <BreakPoints Count="1">
+    <BreakPoints Count="2">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsLocal"/>
@@ -560,6 +560,13 @@
         <Source Value="loader.pas"/>
         <Line Value="109"/>
       </Item1>
+      <Item2>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="symbols.pas"/>
+        <Line Value="131"/>
+      </Item2>
     </BreakPoints>
   </Debugging>
 </CONFIG>

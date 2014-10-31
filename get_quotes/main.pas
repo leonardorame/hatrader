@@ -56,8 +56,8 @@ type
   private
     procedure Parse(AStr: TStringList);
     procedure AddToDaily(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
-    procedure AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose: string);
-    procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime: string);
+    procedure AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose, AVol: string);
+    procedure AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime, AVol: string);
     function Procesar(AString: TStringList): string;
   public
     procedure Get; override;
@@ -125,6 +125,7 @@ var
   lHigh: string;
   lLow: string;
   lClose: string;
+  lVolume: string;
   lTime: string;
   lHora: Integer;
   lFetchTime: string;
@@ -165,20 +166,21 @@ begin
       lHigh := lLine[2];
       lLow := lLine[3];
       lClose := lLine[4];
-      lDateStr := lLine[5];
+      lVolume := lLine[5];
+      lDateStr := lLine[6];
       // los ADRs están en formato am/pm
       if Pos('.ADR', lSym) > 0 then
       begin
-        lHora := StrToInt(Copy(lLine[6], 1, Pos(':', lLine[6]) - 1));
+        lHora := StrToInt(Copy(lLine[7], 1, Pos(':', lLine[7]) - 1));
         if lHora < 9 then
           lHora := lHora + 12;
-        lTime := Format('%.*d', [2, lHora]) + Copy(lLine[6], Pos(':', lLine[6]), Length(lLine[0]));
+        lTime := Format('%.*d', [2, lHora]) + Copy(lLine[7], Pos(':', lLine[7]), Length(lLine[0]));
       end
       else
         lTime := lLine[6];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
-      AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
-      AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime, lFetchTime);
+      AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lVolume);
+      AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime, lFetchTime, lVolume);
     end;
   finally
     lLine.Free;
@@ -248,7 +250,7 @@ begin
   end;
 end;
 
-procedure TMyAction.AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose: string
+procedure TMyAction.AddToDailyDb(ADate, ASym, AOpen, AHigh, ALow, AClose, AVol: string
   );
 var
   lMySqlConn: TMySQL55Connection;
@@ -269,7 +271,7 @@ begin
     lMySqlConn.Transaction := lTransaction;
     lTransaction.StartTransaction;
     lQuery.DataBase := lMySqlConn;
-    lQuery.SQL.Text:= 'replace into daily(date, symbol, open, high, low, close) ' +
+    lQuery.SQL.Text:= 'replace into daily(date, symbol, open, high, low, close, volume) ' +
       'values(:date, :symbol, :open, :high, :low, :close)';
     lQuery.ParamByName('date').AsString:= ADate;
     lQuery.ParamByName('symbol').AsString:= ASym;
@@ -277,6 +279,7 @@ begin
     lQuery.ParamByName('high').AsString:= AHigh;
     lQuery.ParamByName('low').AsString:= ALow;
     lQuery.ParamByName('close').AsString:= AClose;
+    lQuery.ParamByName('volume').AsString:= AVol;
     try
       lQuery.ExecSQL;
     except
@@ -290,7 +293,7 @@ begin
   end;
 end;
 
-procedure TMyAction.AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime: string);
+procedure TMyAction.AddToRT(ADate, ASym, AOpen, AHigh, ALow, AClose, ATime, AFetchTime, AVol: string);
 var
   lMySqlConn: TMySQL55Connection;
   lTransaction: TSQLTransaction;
@@ -316,12 +319,13 @@ begin
     lMySqlConn.Transaction := lTransaction;
     lTransaction.StartTransaction;
     lQuery.DataBase := lMySqlConn;
-    lQuery.SQL.Text:= 'insert into realtime(date, time, symbol, last) ' +
-      'values(:date, :time, :symbol, :last)';
+    lQuery.SQL.Text:= 'insert into realtime(date, time, symbol, last, volume) ' +
+      'values(:date, :time, :symbol, :last, :volume)';
     lQuery.ParamByName('date').AsString:= ADate;
     lQuery.ParamByName('time').AsString:= ATime;
     lQuery.ParamByName('symbol').AsString:= ASym;
     lQuery.ParamByName('last').AsString:= AClose;
+    lQuery.ParamByName('volume').AsString:= AVol;
     try
       lQuery.ExecSQL;
     except
@@ -376,12 +380,13 @@ begin
     if lOHLC.Sym = '' then
       continue
     else
-    Result := Result + Format('"%s";%f;%f;%f;%f;%s;%s', [
+    Result := Result + Format('"%s";%f;%f;%f;%f;%d;%s;%s', [
       lOHLC.Sym,
       lOHLC.Open,
       lOHLC.High,
       lOHLC.Low,
       lOHLC.Close,
+      lOHLC.Vol,
       lDate,
       lOHLC.Time]) + #13#10;
 

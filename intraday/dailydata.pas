@@ -49,7 +49,7 @@ begin
       'from daily d ' +
       'where ' +
       '  d.symbol = :sym ' +
-      'order by 1 desc ' +
+      'order by date(d.date) desc ' +
       'limit 50';
 
     lQuery.ParamByName('sym').AsString:= lSymbol;
