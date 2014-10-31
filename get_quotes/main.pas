@@ -103,7 +103,26 @@ begin
     FPrevClose := StrToFloatDef(AString, 0)
   else
   if FVol = '' then
-    FVol := Astring
+  begin
+    // el volumen puede venir de la siguiente forma:
+    // 354.09K
+    // 2.08M
+    // 0.0
+    AString := AnsiReplaceStr(AString, '.', DefaultFormatSettings.DecimalSeparator);
+    if (Pos('K', AString)) > 0 then
+    begin
+      AString := Copy(AString, 1, Length(AString) - 1);
+      FVol := IntToStr(Round(StrToFloat(AString) * 1000));
+    end
+    else
+    if (Pos('M', AString)) > 0 then
+    begin
+      AString := Copy(AString, 1, Length(AString) - 1);
+      FVol := IntToStr(Round(StrToFloat(AString) * 1000000));
+    end
+    else
+      FVol := IntToStr(StrToIntDef(AString, 0));
+  end
   else
   if FCant = -1 then
     FCant := StrToIntDef(AString, 0)
@@ -172,14 +191,14 @@ begin
       if Pos('.ADR', lSym) > 0 then
       begin
         write('-------> ADR <-------');
-        lHora := StrToInt(Copy(lLine[6], 1, Pos(':', lLine[6]) - 1));
+        lHora := StrToInt(Copy(lLine[7], 1, Pos(':', lLine[7]) - 1));
         if lHora < 9 then
           lHora := lHora + 12;
-        lTime := Format('%.*d', [2, lHora]) + Copy(lLine[6], Pos(':', lLine[6]), Length(lLine[0]));
+        lTime := Format('%.*d', [2, lHora]) + Copy(lLine[7], Pos(':', lLine[7]), Length(lLine[0]));
         write('----->' + lTime);
       end
       else
-        lTime := lLine[6];
+        lTime := lLine[7];
       AddToDaily(lDateStr, lSym, lOpen, lHigh, lLow, lClose);
       AddToDailyDb(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lVolume);
       AddToRT(lDateStr, lSym, lOpen, lHigh, lLow, lClose, lTime, lFetchTime, lVolume);
@@ -274,7 +293,7 @@ begin
     lTransaction.StartTransaction;
     lQuery.DataBase := lMySqlConn;
     lQuery.SQL.Text:= 'replace into daily(date, symbol, open, high, low, close, volume) ' +
-      'values(:date, :symbol, :open, :high, :low, :close)';
+      'values(:date, :symbol, :open, :high, :low, :close, :volume)';
     lQuery.ParamByName('date').AsString:= ADate;
     lQuery.ParamByName('symbol').AsString:= ASym;
     lQuery.ParamByName('open').AsString:= AOpen;
@@ -382,7 +401,7 @@ begin
     if lOHLC.Sym = '' then
       continue
     else
-    Result := Result + Format('"%s";%f;%f;%f;%f;%d;%s;%s', [
+    Result := Result + Format('"%s";%f;%f;%f;%f;%s;%s;%s', [
       lOHLC.Sym,
       lOHLC.Open,
       lOHLC.High,
