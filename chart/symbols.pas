@@ -135,7 +135,12 @@ begin
       lOHLC.close := StrToFloatDef(lLine[4], 0);
       lOHLC.date:= lLine[0];
       if FSymbolType = stIntraday then
+      begin
         lOHLC.time:= lLine[5];
+      end
+      else
+        lOHLC.Volume:= StrToIntDef(lLine[5], 0);
+
       FOHLCArray.Add(lOHLC);
     end;
     //CandleStickChart.Invalidate;

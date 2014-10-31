@@ -272,12 +272,13 @@ end;
 
 procedure TChartFrame.SetHint(AOHLCRecord: TOHLCRecord);
 begin
-  FHint := Format('O: %f, H: %f, L: %f, C: %f, %s',
+  FHint := Format('O: %f, H: %f, L: %f, C: %f, %s, Vol: %d',
     [AOHLCRecord.open,
     AOHLCRecord.high,
     AOHLCRecord.low,
     AOHLCRecord.close,
-    AOHLCRecord.date]);
+    AOHLCRecord.date,
+    AOHLCRecord.Volume]);
 end;
 
 procedure TChartFrame.DataChanged(Sender: TObject);
@@ -308,14 +309,17 @@ begin
     exit;
 
   // OHLC and Date values
-  ext := ASender.CurrentExtent;
-  lLeft := ASender.XGraphToImage(ext.a.x);
-  lTop := ASender.YGraphToImage(ext.b.y);
-  lBottom := ASender.YGraphToImage(ext.a.y);
-  lRight := ASender.XGraphToImage(ext.b.x);
-  ASender.Canvas.Brush.Style:= bsClear;
-  ASender.Canvas.Font.Color:= clWhite;
-  ASender.Canvas.TextOut(lLeft + 2, lTop, FHint);
+  if ASender = CandleStickChart then
+  begin
+    ext := ASender.CurrentExtent;
+    lLeft := ASender.XGraphToImage(ext.a.x);
+    lTop := ASender.YGraphToImage(ext.b.y);
+    lBottom := ASender.YGraphToImage(ext.a.y);
+    lRight := ASender.XGraphToImage(ext.b.x);
+    ASender.Canvas.Brush.Style:= bsClear;
+    ASender.Canvas.Font.Color:= clWhite;
+    ASender.Canvas.TextOut(lLeft + 2, lTop, FHint);
+  end;
 
   // Moving Average values
   lXPos := ASender.ScreenToClient(Mouse.CursorPos).X;
