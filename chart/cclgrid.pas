@@ -65,6 +65,7 @@ end;
 
 destructor TCCLGrid.Destroy;
 begin
+  RowCount:= 0;
   inherited Destroy;
 end;
 
@@ -84,10 +85,10 @@ begin
     Canvas.Brush.Style:= bsSolid;
     Canvas.Brush.Color:= $442200;
     Canvas.FillRect(aRect);
-    lCanvas.Font.Color := $111111;
+    Canvas.Font.Color := $AFAFAF;
   end
   else
-    lCanvas.Font.Color := $1F1F1F;
+    Canvas.Font.Color := $AFAFAF;
   if ARow > 0 then
   begin
     lCanvas := Canvas;

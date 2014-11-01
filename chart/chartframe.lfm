@@ -128,7 +128,7 @@ object ChartFrame: TChartFrame
     AutoSize = True
     ButtonHeight = 48
     Caption = 'ToolBar1'
-    Color = 10987431
+    Color = 7566195
     EdgeInner = esNone
     EdgeOuter = esNone
     Images = ImageList1
