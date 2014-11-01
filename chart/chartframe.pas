@@ -308,45 +308,46 @@ begin
   if FSymbol.Data.Count = 0 then
     exit;
 
+  ext := ASender.CurrentExtent;
+  lLeft := ASender.XGraphToImage(ext.a.x);
+  lTop := ASender.YGraphToImage(ext.b.y);
+  lBottom := ASender.YGraphToImage(ext.a.y);
+  lRight := ASender.XGraphToImage(ext.b.x);
+  lXPos := ASender.ScreenToClient(Mouse.CursorPos).X;
+  lIndex := Round(ASender.XImageToGraph(lXPos));
+
   // OHLC and Date values
   if ASender = CandleStickChart then
   begin
-    ext := ASender.CurrentExtent;
-    lLeft := ASender.XGraphToImage(ext.a.x);
-    lTop := ASender.YGraphToImage(ext.b.y);
-    lBottom := ASender.YGraphToImage(ext.a.y);
-    lRight := ASender.XGraphToImage(ext.b.x);
     ASender.Canvas.Brush.Style:= bsClear;
     ASender.Canvas.Font.Color:= clWhite;
     ASender.Canvas.TextOut(lLeft + 2, lTop, FHint);
   end;
 
   // Moving Average values
-  lXPos := ASender.ScreenToClient(Mouse.CursorPos).X;
-
-  lIndex := Round(ASender.XImageToGraph(lXPos));
-
-  if FMovingAvg.Count > 5 then
+  if ASender.Name = 'CandleStickChart' then
   begin
-    if (lIndex > FMovingAvg.Count - 1) or (lIndex < 0) then
+    if FMovingAvg.Count > 5 then
     begin
-      lIndex := FMovingAvg.Count - 1;
+      if (lIndex > FMovingAvg.Count - 1) or (lIndex < 0) then
+      begin
+        lIndex := FMovingAvg.Count - 1;
+      end;
+
+      lStr := Format('SMA 5: %.2f', [FMovingAvg.GetYValue(lIndex)]);
+      lFontHeight := ASender.Canvas.GetTextHeight(lStr);
+      ASender.Canvas.Font.Color:= clBlue;
+      ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + lFontHeight, lStr);
     end;
 
-    lStr := Format('SMA 5: %.2f', [FMovingAvg.GetYValue(lIndex)]);
+    // Historical Volatility
+    lStr := Format('HV 40: %.2f, HV 20: %.2f, HV 10: %.2f', [FSymbol.HV40, FSymbol.HV20, FSymbol.HV10]);
     lFontHeight := ASender.Canvas.GetTextHeight(lStr);
-    ASender.Canvas.Font.Color:= clBlue;
-    ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + lFontHeight, lStr);
+    ASender.Canvas.Font.Color:= clGray;
+    ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + (lFontHeight * 2), lStr);
   end;
 
-  // Historical Volatility
-  lStr := Format('HV 40: %.2f, HV 20: %.2f, HV 10: %.2f', [FSymbol.HV40, FSymbol.HV20, FSymbol.HV10]);
-  lFontHeight := ASender.Canvas.GetTextHeight(lStr);
-  ASender.Canvas.Font.Color:= clGray;
-  ASender.Canvas.TextOut(lLeft + 2, lTop + 2 + (lFontHeight * 2), lStr);
-
   // close
-  if ASender.Name = 'CandleStickChart' then
   begin
     lIndex:= FSymbol.Data.Count - 1;
     lChartPos:= FSymbol.Data[lIndex].close;
@@ -369,12 +370,12 @@ begin
     ASender.Canvas.Font.Color:= clBlack;
     ASender.Canvas.Font.Style:= [fsBold];
     ASender.Canvas.TextOut(
-      lRight + 6,
+      lRight + 4,
       Round(ASender.YGraphToImage(lChartPos) - (lFontHeight / 2)),
       lStr);
   end;
 
-  // cursor line
+  // cursor line Y
   lYPos := ASender.ScreenToClient(Mouse.CursorPos).Y;
   if (lYPos >= lTop) and (lYPos <= lBottom) then
   begin
@@ -389,6 +390,13 @@ begin
     ASender.Canvas.Font.Color:= clYellow;
     ASender.Canvas.Font.Style:= [fsBold];
     ASender.Canvas.TextOut(lRight + 4, lYPos - (lFontHeight div 2), lStr);
+  end;
+
+  // cursor line X
+  if (lXPos > 0) and (lXPos < lRight) then
+  begin
+    ASender.Canvas.Pen.Color:= clGray;
+    ASender.Canvas.Line(lXPos, lTop, lXPos, lBottom);
   end;
 end;
 

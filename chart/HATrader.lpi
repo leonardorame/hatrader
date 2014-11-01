@@ -37,9 +37,8 @@
           </CodeGeneration>
           <Linking>
             <Debugging>
-              <GenerateDebugInfo Value="False"/>
               <DebugInfoType Value="dsDwarf2"/>
-              <UseLineInfoUnit Value="False"/>
+              <UseHeaptrc Value="True"/>
               <StripSymbols Value="True"/>
             </Debugging>
             <Options>
