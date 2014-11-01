@@ -272,13 +272,28 @@ end;
 
 procedure TChartFrame.SetHint(AOHLCRecord: TOHLCRecord);
 begin
-  FHint := Format('O: %f, H: %f, L: %f, C: %f, %s, Vol: %d',
-    [AOHLCRecord.open,
-    AOHLCRecord.high,
-    AOHLCRecord.low,
-    AOHLCRecord.close,
-    AOHLCRecord.date,
-    AOHLCRecord.Volume]);
+  if Self.Symbol.SymbolType = stDaily then
+  begin
+    FHint := Format('O: %f, H: %f, L: %f, C: %f, %s, Vol: %d',
+      [AOHLCRecord.open,
+      AOHLCRecord.high,
+      AOHLCRecord.low,
+      AOHLCRecord.close,
+      AOHLCRecord.date,
+      AOHLCRecord.Volume])
+  end
+  else
+  if Self.Symbol.SymbolType = stIntraday then
+  begin
+    FHint := Format('O: %f, H: %f, L: %f, C: %f, %s %s, Vol: %d',
+      [AOHLCRecord.open,
+      AOHLCRecord.high,
+      AOHLCRecord.low,
+      AOHLCRecord.close,
+      AOHLCRecord.date,
+      AOHLCRecord.Time,
+      AOHLCRecord.Volume])
+  end;
 end;
 
 procedure TChartFrame.DataChanged(Sender: TObject);
