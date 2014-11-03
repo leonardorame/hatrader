@@ -79,7 +79,7 @@ begin
       '  rt.symbol = :sym '+
       'group by '+
       '  1,6 '+
-      'order by 1 desc, 6 desc' +
+      'order by 1 desc, 6 desc ' +
       'limit 50';
 
     lQuery.ParamByName('sym').AsString:= lSymbol;
