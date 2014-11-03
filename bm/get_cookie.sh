@@ -1,7 +1,7 @@
 curl -c cookies.txt \
   'http://www.bolsar.com/VistasDL/PaginaPrincipal.aspx' \
   -H 'Host: www.bolsar.com' \
-  -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:33.0) Gecko/20100101 Firefox/33.0' \
+  -H 'User-Agent: Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)' \
   -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Accept-Encoding: gzip, deflate' \
