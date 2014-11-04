@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="9"/>
-    <BuildModes Active="Windows"/>
+    <BuildModes Active="Linux x86_64"/>
     <Units Count="48">
       <Unit0>
         <Filename Value="HATrader.lpr"/>
@@ -425,9 +425,6 @@
         <UsageCount Value="10"/>
       </Unit47>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="1"/>
-    </General>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="symbols.pas"/>
