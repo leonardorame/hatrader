@@ -1,0 +1,44 @@
+<html>
+
+
+<body>
+    _CALLBACKPARAM: <div id="usr"></div><br>
+    <script>
+    function CrB64(o) {
+        var k, l, m, d, g, h, i, j, n = [],
+            f = "",
+            a, b, c, e = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        b = o;
+        a = b.length % 3;
+        if (a > 0)
+            while (a++ < 3) {
+                f += "=";
+                b += "\0"
+            }
+        for (a = 0; a < b.length; a += 3) {
+            k = b.charCodeAt(a);
+            l = b.charCodeAt(a + 1);
+            m = b.charCodeAt(a + 2);
+            d = k << 16 | l << 8 | m;
+            g = d >> 18 & 63;
+            h = d >> 12 & 63;
+            i = d >> 6 & 63;
+            j = d & 63;
+            n[a / 3] = e.charAt(g) + e.charAt(h) + e.charAt(i) + e.charAt(j)
+        }
+        c = n.join("");
+        c = c.slice(0, c.length - f.length) + f;
+        return c
+    }
+
+    var usr = CrB64("martinrame");
+    var pass = CrB64("leonardo13");
+
+    document.getElementById("usr").innerHTML = usr+'#'+pass;
+
+
+    </script>
+
+</body>
+
+</html>
