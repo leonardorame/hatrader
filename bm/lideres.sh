@@ -8,8 +8,6 @@ curl -b cookies.txt \
   -H 'Accept-Encoding: gzip, deflate' \
   -H 'Content-Type: application/json; charset=utf-8' \
   -H 'Referer: http://www.bolsar.com/VistasDL/PaginaLideres.aspx' \
-  -H 'Content-Length: 385' \
-  -H 'Cookie: __utma=133838749.498664200.1413974479.1413974479.1414966658.2; __utmz=133838749.1413974479.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); ASP.NET_SessionId=m1eyfe45dfubxqztpxhz4y55; ckLng=ESP; __utmb=133838749.7.9.1414966696539; __utmc=133838749; ckAA=1; __utmt=1' \
   -H 'Connection: keep-alive' \
   -H 'Pragma: no-cache' \
   -H 'Cache-Control: no-cache' > lideres.txt
