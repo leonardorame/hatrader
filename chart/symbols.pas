@@ -18,6 +18,7 @@ type
 
   TSymbol = class
   private
+    FDaily: TSymbol;
     FFilePath: string;
     FName: string;
     FOHLCArray: TOHLCArray;
@@ -42,6 +43,7 @@ type
     property OnDataChanged: TNotifyEvent read FOnDataChanged write FOnDataChanged;
     property SymbolType: TSymbolType read FSymbolType write FSymbolType;
     property Last: TOHLCRecord read FLast write FLast;
+    property Daily: TSymbol read FDaily write FDaily;
   end;
 
   { TCCLSymbol }
@@ -80,6 +82,7 @@ begin
   FSymbolType:= stDaily;
   FOHLCArray := TOHLCArray.Create;
   FLast := TOHLCRecord.Create;
+  FDaily := nil;
   DefaultFormatSettings.DateSeparator:='-';
   DefaultFormatSettings.ShortDateFormat:='D-MMM-Y';
   DefaultFormatSettings.ShortMonthNames[1] := 'Jan';

@@ -314,11 +314,12 @@ var
   lSymbol: TSymbol;
 
 begin
-  lSymbol := TSymbol.Create;
+  {lSymbol := TSymbol.Create;
   lSymbol.Symbol:= ASymbol.Symbol;
   lSymbol.Name:= ASymbol.Name;
   lSymbol.FilePath:= ASymbol.FilePath;
-  lSymbol.SymbolType:= stDaily;
+  lSymbol.SymbolType:= stDaily;}
+  lSymbol := ASymbol;
 
   lWin := TNewWindow.Create(nil);
   lWin.Caption:= lSymbol.Name;

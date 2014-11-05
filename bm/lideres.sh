@@ -1,4 +1,4 @@
-curl -b cookies.txt \
+curl -c cookies.txt -b cookies.txt \
   --data '{"aEstadoTabla":[{"TablaNombre":"tbAcciones","FiltroVto":"72","FiltroEspecies":"","FilasxPagina":-1,"MensajeNro":0,"HashCode":0},{"TablaNombre":"tbMontos","FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0,"HashCode":0},{"TablaNombre":"tbIndices","FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0,"HashCode":0}]}' \
   'http://www.bolsar.com/VistasTR/PaginaLideres.aspx/GetDataPack' \
   -H 'Host: www.bolsar.com' \
@@ -7,7 +7,8 @@ curl -b cookies.txt \
   -H 'Accept-Language: en-US,en;q=0.5' \
   -H 'Accept-Encoding: gzip, deflate' \
   -H 'Content-Type: application/json; charset=utf-8' \
-  -H 'Referer: http://www.bolsar.com/VistasDL/PaginaLideres.aspx' \
+  -H 'Referer: http://www.bolsar.com/VistasTR/PaginaLideres.aspx' \
   -H 'Connection: keep-alive' \
   -H 'Pragma: no-cache' \
   -H 'Cache-Control: no-cache' > lideres.txt
+

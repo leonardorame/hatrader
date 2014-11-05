@@ -40,6 +40,7 @@ type
       ATool: TDataPointHintTool; var APoint: TPoint);
     procedure Timer1Timer(Sender: TObject);
   private
+    FFirstBarOfToday: double;
     FOnFeedBack: TOnFeedBack;
     FOnNeedData: TNotifyEvent;
     FSymbol: TSymbol;
@@ -167,6 +168,17 @@ begin
   HAChart.Extent.YMax := lHighest;
   HAChart.Extent.UseYMax := True;
   HAChart.Extent.UseYMin := True;
+
+  if Symbol.SymbolType = stIntraday then
+  begin
+    for I:= FSymbol.Data.Count - 1 downto 0 do
+    begin
+      if FSymbol.Data[I].Date = FSymbol.Daily.Last.Date then
+        FFirstBarOfToday := I
+      else
+        break;
+    end;
+  end;
 end;
 
 constructor TChartFrame.Create(ASymbol: TSymbol; TheOwner: TComponent);
@@ -174,6 +186,10 @@ begin
   inherited Create(TheOwner);
   FSymbol := ASymbol;
   FSymbol.OnDataChanged := @DataChanged;
+
+  // in intraday chart define 1st bar
+  // with date equal to FSymbol.Daily.Last.Date
+  FFirstBarOfToday := 0;
 
   FMovingAvg := TLineSeries.Create(Self);
   FMovingAvg.AxisIndexX := 1;
@@ -259,6 +275,7 @@ begin
   begin
     lWin := (Sender as TNewWindow);
     lChartFrame := lWin.Controls[0] as TChartFrame;
+    lChartFrame.Symbol.Daily := nil;
     lChartFrame.Symbol.Free;
     lChartFrame.Free;
   end;
@@ -408,6 +425,7 @@ begin
   end;
 
   // cursor line X
+  lXPos := ASender.ScreenToClient(Mouse.CursorPos).X;
   if (lXPos > 0) and (lXPos < lRight) then
   begin
     ASender.Canvas.Pen.Color:= clGray;
@@ -429,6 +447,8 @@ begin
   lSymbol.FilePath:= 'http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/intraday?sym=' + FSymbol.Symbol;
   lSymbol.OnDataChanged:= @DataChanged;
   lSymbol.SymbolType:= stIntraday;
+  lSymbol.Daily := FSymbol;
+
 
   lWin := TNewWindow.Create(nil);
   lWin.OnDestroy:= @DestroyNewWindow;
@@ -453,6 +473,11 @@ var
   lTextHeight: Integer;
   lX: Integer;
   lY: Integer;
+  lXPos: Integer;
+  lYPos: Integer;
+  lRight: Integer;
+  lChartPos: double;
+  lIndex: Integer;
 begin
   ACanvas.Font.Size := 32;
   ACanvas.Font.Style:= [fsBold];
@@ -462,6 +487,22 @@ begin
   lX := Round(((ARect.Right - ARect.Left) / 2) - (lTextWidth / 2));
   lY := Round(((ARect.Bottom - ARect.Top) / 2) - (lTextHeight / 2));
   ACanvas.TextOut(lX, lY, FSymbol.Name);
+
+  // open en daily
+  if (Symbol.SymbolType = stIntraday) and (ASender = CandleStickChart) then
+  begin
+    lIndex:= FSymbol.Daily.Data.Count - 1;
+    lChartPos:= FSymbol.Daily.Data[lIndex].Open;
+    lXPos := ASender.XGraphToImage(FFirstBarOfToday);
+    lYPos := ASender.YGraphToImage(lChartPos);
+    lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
+    ACanvas.Brush.Style:= bsSolid;
+    ACanvas.Brush.Color:= $059E9E;
+    ACanvas.Pen.Width:= 2;
+    ACanvas.Pen.Color:= $059E9E;
+    ACanvas.Pen.Style:= psSolid;
+    ACanvas.Line(lXPos, lYpos, lRight, lYPos);
+  end;
 end;
 
 destructor TChartFrame.destroy;
