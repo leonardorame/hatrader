@@ -275,8 +275,14 @@ begin
   begin
     lWin := (Sender as TNewWindow);
     lChartFrame := lWin.Controls[0] as TChartFrame;
-    lChartFrame.Symbol.Daily := nil;
-    lChartFrame.Symbol.Free;
+
+    // sólo se libera el símbolo si es intraday
+    // porque fué instanciado en actNewWindowExecute
+    if lChartFrame.Symbol.SymbolType = stIntraday then
+    begin
+      lChartFrame.Symbol.Daily := nil;
+      lChartFrame.Symbol.Free;
+    end;
     lChartFrame.Free;
   end;
 end;
@@ -336,6 +342,7 @@ var
   lTextWidth: Integer;
   lIndex: Integer;
   lChartPos: double;
+
 begin
   if FSymbol.Data.Count = 0 then
     exit;
@@ -431,6 +438,22 @@ begin
     ASender.Canvas.Pen.Color:= clGray;
     ASender.Canvas.Line(lXPos, lTop, lXPos, lBottom);
   end;
+
+  // open en daily
+  if (Symbol.SymbolType = stIntraday) and (ASender = CandleStickChart) then
+  begin
+    lIndex:= FSymbol.Daily.Data.Count - 1;
+    lChartPos:= FSymbol.Daily.Data[lIndex].Open;
+    lXPos := ASender.XGraphToImage(FFirstBarOfToday);
+    lYPos := ASender.YGraphToImage(lChartPos);
+    lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
+    ASender.Canvas.Brush.Style:= bsSolid;
+    ASender.Canvas.Brush.Color:= $059E9E;
+    ASender.Canvas.Pen.Width:= 2;
+    ASender.Canvas.Pen.Color:= $059E9E;
+    ASender.Canvas.Pen.Style:= psSolid;
+    ASender.Canvas.Line(lXPos, lYpos, lRight, lYPos);
+  end;
 end;
 
 procedure TChartFrame.actNewWindowExecute(Sender: TObject);
@@ -473,11 +496,6 @@ var
   lTextHeight: Integer;
   lX: Integer;
   lY: Integer;
-  lXPos: Integer;
-  lYPos: Integer;
-  lRight: Integer;
-  lChartPos: double;
-  lIndex: Integer;
 begin
   ACanvas.Font.Size := 32;
   ACanvas.Font.Style:= [fsBold];
@@ -487,22 +505,6 @@ begin
   lX := Round(((ARect.Right - ARect.Left) / 2) - (lTextWidth / 2));
   lY := Round(((ARect.Bottom - ARect.Top) / 2) - (lTextHeight / 2));
   ACanvas.TextOut(lX, lY, FSymbol.Name);
-
-  // open en daily
-  if (Symbol.SymbolType = stIntraday) and (ASender = CandleStickChart) then
-  begin
-    lIndex:= FSymbol.Daily.Data.Count - 1;
-    lChartPos:= FSymbol.Daily.Data[lIndex].Open;
-    lXPos := ASender.XGraphToImage(FFirstBarOfToday);
-    lYPos := ASender.YGraphToImage(lChartPos);
-    lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
-    ACanvas.Brush.Style:= bsSolid;
-    ACanvas.Brush.Color:= $059E9E;
-    ACanvas.Pen.Width:= 2;
-    ACanvas.Pen.Color:= $059E9E;
-    ACanvas.Pen.Style:= psSolid;
-    ACanvas.Line(lXPos, lYpos, lRight, lYPos);
-  end;
 end;
 
 destructor TChartFrame.destroy;
