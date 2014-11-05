@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils,
   Symbols,
-  fphttpclient;
+  //fphttpclient
+  httpsend;
 
 type
   TOnFeedBack = procedure (AFeedBack: string) of object;
@@ -22,7 +23,7 @@ type
     FOnGetData: TNotifyEvent;
     FFeedBackStr: string;
     FData: TStringList;
-    FHttpClient: TFPHTTPClient;
+    //FHttpClient: TFPHTTPClient;
     procedure OnData;
     procedure WriteFeedBack;
   public
@@ -42,7 +43,7 @@ type
     FOnGetData: TOnData;
     FFeedBackStr: string;
     FData: TStringList;
-    FHttpClient: TFPHTTPClient;
+    //FHttpClient: TFPHTTPClient;
     FUrl: string;
     procedure OnData;
     procedure WriteFeedBack;
@@ -78,17 +79,17 @@ begin
   inherited Create(True);
   gThreadList.Add(Self);
   Priority:= tpLower;
-  FreeOnTerminate := True;
   FUrl := AUrl;
-  FHttpClient := TFPHTTPClient.Create(nil);
+  //FHttpClient := TFPHTTPClient.Create(nil);
   FData := TStringList.Create;
+  FreeOnTerminate := True;
 end;
 
 destructor TGetAllDataThread.Destroy;
 begin
-  gThreadList.Remove(Self);
-  FHttpClient.Free;
+  //FHttpClient.Free;
   FData.Free;
+  gThreadList.Remove(Self);
   inherited Destroy;
 end;
 
@@ -98,8 +99,9 @@ begin
   Synchronize(@WriteFeedBack);
   try
     try
-      FHttpClient.Get(FUrl, FData);
-      if FHttpClient.ResponseStatusCode = 200 then
+      if HttpGetText(FUrl, FData) then
+      //FHttpClient.Get(FUrl, FData);
+      //if FHttpClient.ResponseStatusCode = 200 then
       begin
         FFeedBackStr := 'All symbols data loading done.';
         Synchronize(@WriteFeedBack);
@@ -107,7 +109,8 @@ begin
       end
       else
       begin
-        FFeedBackStr:= 'Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')';
+        //FFeedBackStr:= 'Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')';
+        FFeedBackStr:= 'Error loading all symbols data.';
         Synchronize(@WriteFeedBack);
         //raise Exception.Create('Error loading all symbols data (' + FHttpClient.ResponseStatusText + ')');
       end;
@@ -144,15 +147,15 @@ begin
   gThreadList.Add(Self);
   Priority:= tpLower;
   FreeOnTerminate := True;
-  FHttpClient := TFPHTTPClient.Create(nil);
+  //FHttpClient := TFPHTTPClient.Create(nil);
   FData := TStringList.Create;
 end;
 
 destructor TGetDataThread.Destroy;
 begin
-  gThreadList.Remove(Self);
   FData.Free;
-  FHttpClient.Free;
+  //FHttpClient.Free;
+  gThreadList.Remove(Self);
   inherited Destroy;
 end;
 
@@ -166,8 +169,10 @@ begin
   try
     try
       lUrl := FSymbol.FilePath;
-      FHttpClient.Get(lUrl, FData);
-      if FHttpClient.ResponseStatusCode = 200 then
+
+      //FHttpClient.Get(lUrl, FData);
+      //if FHttpClient.ResponseStatusCode = 200 then
+      if HttpGetText(lUrl, FData) then
       begin
         FFeedBackStr := FSymbol.Name + ' loading done.';
         Synchronize(@WriteFeedBack);
@@ -175,19 +180,20 @@ begin
       end
       else
       begin
-        FFeedBackStr := 'Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')';
+        //FFeedBackStr := 'Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')';
+        FFeedBackStr := 'Error loading ' + FSymbol.Name;
         Synchronize(@WriteFeedBack);
         //raise Exception.Create('Error loading ' + FSymbol.Name + ' (' + FHttpClient.ResponseStatusText + ')');
       end;
     except
       on E: Exception do
       begin
-        FFeedBackStr:= 'Exception in TGetDataThread.Execute';
+        FFeedBackStr:= E.Message; // 'Exception in TGetDataThread.Execute';
         Synchronize(@WriteFeedBack);
       end;
     end;
   finally
-    Terminate;
+    //Terminate;
   end;
 end;
 

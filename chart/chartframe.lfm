@@ -8,8 +8,8 @@ object ChartFrame: TChartFrame
   Color = clBlack
   ParentColor = False
   TabOrder = 0
-  DesignLeft = 458
-  DesignTop = 158
+  DesignLeft = 561
+  DesignTop = 187
   object HAChart: TChart
     Left = 0
     Height = 206

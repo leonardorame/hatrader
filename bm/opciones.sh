@@ -1,4 +1,4 @@
-curl -b cookies.txt \
+curl -vvv -b cookies.txt \
   --data '{"aEstadoTabla":[{"TablaNombre":"tbFuturos","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":10,"MensajeNro":0,"HashCode":0},{"TablaNombre":"tbOpciones","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0,"HashCode":0}]}' \
   'http://www.bolsar.com/VistasDL/PaginaFuturosOpciones.aspx/GetDataPack' \
   -H 'Host: www.bolsar.com' \

@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, fgl, ohlc, SysUtils, StrUtils,
-  fphttpclient,
+  //fphttpclient,
+  httpsend,
   volatility;
 
 type
@@ -194,15 +195,16 @@ var
   lLine: TStringList;
   I: Integer;
   lSymbol: T;
-  lHttpClient: TFPHTTPClient;
+  //lHttpClient: TFPHTTPClient;
 begin
-  lHttpClient := TFPHTTPClient.Create(nil);
+  //lHttpClient := TFPHTTPClient.Create(nil);
   lStr := TStringList.Create;
   lLine := TStringList.Create;
   lLine.Delimiter:= ',';
   try
     try
-      lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all', lStr);
+      //lHttpClient.Get('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all', lStr);
+      HttpGetText('http://www.ceciliastrada.com.ar/cgi-bin/intraday.bf/all', lStr);
       for I := 0 to lStr.Count - 1 do
       begin
         lLine.DelimitedText:= lStr[I];
@@ -221,12 +223,12 @@ begin
         Add(lSymbol);
       end;
     except
-      Writeln('Exception...');
+      raise;
     end;
   finally
     lLine.Free;
     lStr.Free;
-    lHttpClient.Free;
+    //lHttpClient.Free;
   end;
 end;
 

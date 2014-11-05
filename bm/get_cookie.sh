@@ -1,3 +1,5 @@
+#bWFydGlucmFtZQ%3D%3D%23bGVvbmFyZG8xMw%3D%3D
+
 curl -c cookies.txt \
   'http://www.bolsar.com/VistasDL/PaginaPrincipal.aspx' \
   -H 'Host: www.bolsar.com' \

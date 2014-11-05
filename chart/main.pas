@@ -142,6 +142,7 @@ var
   lSymbol: TSymbol;
   lThread: TGetAllDataThread;
 begin
+  Timer1.Enabled:= False;
   if FSymbols.Count = 0 then
   begin
     try
@@ -175,6 +176,7 @@ begin
     lThread.OnGetData:= @GetAllData;
     lThread.start;
   end;
+  Timer1.Enabled:= True;
 end;
 
 procedure THeikinAshiTrader.CreateCalculatedSyms;
