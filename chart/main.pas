@@ -38,6 +38,7 @@ type
     FCCL: TCCLSymbols;
     sgSymbols: TSymbolGrid;
     sgCCL: TCCLGrid;
+    procedure AddCCL(ASym, ALocal, AAdr: string; AFactor: Integer);
     procedure CreateCalculatedSyms;
     procedure UpdateCalculatedSyms;
     procedure GetAllData(AData: string);
@@ -179,105 +180,40 @@ begin
   Timer1.Enabled:= True;
 end;
 
-procedure THeikinAshiTrader.CreateCalculatedSyms;
+procedure THeikinAshiTrader.AddCCL(ASym, ALocal, AAdr: string; AFactor: Integer);
 var
   lSym: TCCLSymbol;
   lLocal: TSymbol;
   lUsa: TSymbol;
 
 begin
-  // APBR.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'APBR.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 2;
-  lLocal := FSymbols.Find('APBR');
-  lUsa := FSymbols.Find('PBR.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
+  if FCCL.Find(ASym) = nil then
+  begin
+    lSym := TCCLSymbol.Create;
+    lSym.Name:= ASym;
+    lSym.Symbol:= lSym.Name;
+    lSym.Factor:= AFactor;
+    lLocal := FSymbols.Find(ALocal);
+    lUsa := FSymbols.Find(AAdr);
+    lSym.Local := lLocal;
+    lSym.Usa := lUsa;
+    FCCL.Add(lSym);
+  end;
 
-  // BMA.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'BMA.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 10;
-  lLocal := FSymbols.Find('BMA');
-  lUsa := FSymbols.Find('BMA.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
+end;
 
-  // END.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'EDN.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 20;
-  lLocal := FSymbols.Find('EDN');
-  lUsa := FSymbols.Find('EDN.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // FRAN.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'FRAN.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 3;
-  lLocal := FSymbols.Find('FRAN');
-  lUsa := FSymbols.Find('BFR.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // GGAL.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'GGAL.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 10;
-  lLocal := FSymbols.Find('GGAL');
-  lUsa := FSymbols.Find('GGAL.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // TECO2.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'TECO2.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 5;
-  lLocal := FSymbols.Find('TECO2');
-  lUsa := FSymbols.Find('TEO.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // TS.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'TS.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 2;
-  lLocal := FSymbols.Find('TS');
-  lUsa := FSymbols.Find('TS.ADR');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // AA17.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'AA17.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 1;
-  lLocal := FSymbols.Find('AA17');
-  lUsa := FSymbols.Find('AA17D');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
-  // AY24.CCL
-  lSym := TCCLSymbol.Create;
-  lSym.Name:= 'AY24.CCL';
-  lSym.Symbol:= lSym.Name;
-  lSym.Factor:= 1;
-  lLocal := FSymbols.Find('AY24');
-  lUsa := FSymbols.Find('AY24D');
-  lSym.Local := lLocal;
-  lSym.Usa := lUsa;
-  FCCL.Add(lSym);
+procedure THeikinAshiTrader.CreateCalculatedSyms;
+begin
+  AddCCL('APBR.CCL', 'APBR', 'PBR.ADR', 2);
+  AddCCL('BMA.CCL', 'BMA', 'BMA.ADR', 10);
+  AddCCL('EDN.CCL', 'EDN', 'EDN.ADR', 20);
+  AddCCL('FRAN.CCL', 'FRAN', 'BFR.ADR', 3);
+  AddCCL('EDN.CCL', 'EDN', 'EDN.ADR', 20);
+  AddCCL('GGAL.CCL', 'GGAL', 'GGAL.ADR', 10);
+  AddCCL('TECO2.CCL', 'TECO2', 'TEO.ADR', 5);
+  AddCCL('TS.CCL', 'TS', 'TS.ADR', 2);
+  AddCCL('AA17.CCL', 'AA17', 'AA17D', 1);
+  AddCCL('AY24.CCL', 'AY24', 'AY24D', 1);
   UpdateCalculatedSyms;
 end;
 
