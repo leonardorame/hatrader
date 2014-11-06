@@ -5,23 +5,28 @@ casper.start('http://www.bolsar.com/', function() {
     this.echo(this.getTitle());
 });
 
-casper.then(function() {
-    firstUrl = this.getCurrentUrl()
-    this.echo(firstUrl);
-    this.echo(this.page.content);
-    this.waitForSelector('txtUsuario
-
-    casper.sendKeys('txtUsuario', 'martinrame');
-    casper.sendKeys('txtPassword', 'leonardo13');
-    casper.then(function() {
-        page.evaluate(function(){
+function just_wait() {
+    setTimeout(function() {
+        casper.echo("in just_wait...");
+        casper.page.evaluate(function(){
             var a = document.getElementById("btnOk");
             var e = document.createEvent('MouseEvents');
             e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
             a.dispatchEvent(e);
             waitforload = true;
+            casper.echo("here");
         });
+    }, 2000);
+}
+
+casper.then(function() {
+    firstUrl = this.getCurrentUrl()
+    this.echo(firstUrl);
+    this.evaluate(function(){
+        document.getElementById('txtUsuario').value = 'martinrame';
+        document.getElementById('txtPassword').value = 'leonardo13';
     });
+    just_wait();
 });
 
 casper.waitFor(function check() {
