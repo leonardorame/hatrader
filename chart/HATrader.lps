@@ -3,7 +3,7 @@
   <ProjectSession>
     <Version Value="9"/>
     <BuildModes Active="Linux x86_64"/>
-    <Units Count="49">
+    <Units Count="50">
       <Unit0>
         <Filename Value="HATrader.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -22,8 +22,8 @@
         <UnitName Value="chartframe"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="460"/>
-        <CursorPos X="28" Y="481"/>
+        <TopLine Value="517"/>
+        <CursorPos X="97" Y="528"/>
         <UsageCount Value="216"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -35,7 +35,7 @@
         <WindowIndex Value="1"/>
         <TopLine Value="14"/>
         <CursorPos X="34" Y="25"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="124"/>
       </Unit2>
       <Unit3>
         <Filename Value="main.pas"/>
@@ -47,7 +47,7 @@
         <WindowIndex Value="1"/>
         <TopLine Value="185"/>
         <CursorPos X="23" Y="190"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="124"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit3>
@@ -61,40 +61,39 @@
         <WindowIndex Value="1"/>
         <TopLine Value="6"/>
         <CursorPos Y="15"/>
-        <UsageCount Value="120"/>
+        <UsageCount Value="121"/>
       </Unit4>
       <Unit5>
         <Filename Value="volatility.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="volatility"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="1"/>
         <TopLine Value="13"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="120"/>
         <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="ohlc.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ohlc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="1"/>
         <TopLine Value="11"/>
         <CursorPos X="3" Y="15"/>
-        <UsageCount Value="119"/>
+        <UsageCount Value="120"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="symbols.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="symbols"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="126"/>
-        <CursorPos X="18" Y="136"/>
-        <UsageCount Value="75"/>
+        <TopLine Value="130"/>
+        <CursorPos X="25" Y="135"/>
+        <UsageCount Value="76"/>
         <Loaded Value="True"/>
       </Unit7>
       <Unit8>
@@ -103,20 +102,20 @@
         <UnitName Value="loader"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="147"/>
-        <CursorPos X="23" Y="152"/>
-        <UsageCount Value="74"/>
+        <TopLine Value="168"/>
+        <CursorPos Y="179"/>
+        <UsageCount Value="75"/>
         <Loaded Value="True"/>
       </Unit8>
       <Unit9>
         <Filename Value="cclgrid.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="cclgrid"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="1"/>
         <TopLine Value="26"/>
         <CursorPos X="10" Y="34"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit9>
       <Unit10>
@@ -146,11 +145,13 @@
       <Unit13>
         <Filename Value="../../lazarus/components/tachart/tacustomseries.pas"/>
         <UnitName Value="TACustomSeries"/>
-        <EditorIndex Value="-1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="1"/>
         <TopLine Value="759"/>
-        <CursorPos X="36" Y="767"/>
+        <CursorPos Y="771"/>
         <UsageCount Value="102"/>
+        <Loaded Value="True"/>
       </Unit13>
       <Unit14>
         <Filename Value="../../lazarus/components/tachart/tasources.pas"/>
@@ -218,7 +219,6 @@
       </Unit21>
       <Unit22>
         <Filename Value="../../lazarus/components/tachart/tagraph.pas"/>
-        <UnitName Value="TAGraph"/>
         <EditorIndex Value="-1"/>
         <WindowIndex Value="1"/>
         <TopLine Value="7"/>
@@ -436,126 +436,136 @@
         <CursorPos X="15" Y="1666"/>
         <UsageCount Value="10"/>
       </Unit48>
+      <Unit49>
+        <Filename Value="../../lazarus/lcl/include/winapi.inc"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="1"/>
+        <TopLine Value="649"/>
+        <CursorPos X="14" Y="654"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit49>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="chartframe.pas"/>
+        <Caret Line="122" TopLine="110"/>
       </Position1>
       <Position2>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="52" Column="15" TopLine="34"/>
+        <Caret Line="138" TopLine="127"/>
       </Position2>
       <Position3>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="118" Column="23" TopLine="100"/>
+        <Caret Line="140" TopLine="115"/>
       </Position3>
       <Position4>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="133" TopLine="115"/>
+        <Caret Line="470" Column="30" TopLine="459"/>
       </Position4>
       <Position5>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="135" TopLine="117"/>
+        <Caret Line="118" TopLine="113"/>
       </Position5>
       <Position6>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="470" Column="70" TopLine="452"/>
+        <Caret Line="119" TopLine="113"/>
       </Position6>
       <Position7>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="118" TopLine="107"/>
+        <Caret Line="120" TopLine="113"/>
       </Position7>
       <Position8>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="119" TopLine="110"/>
+        <Caret Line="122" TopLine="113"/>
       </Position8>
       <Position9>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="120" TopLine="110"/>
+        <Caret Line="138" TopLine="127"/>
       </Position9>
       <Position10>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="122" TopLine="110"/>
+        <Caret Line="140" TopLine="127"/>
       </Position10>
       <Position11>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="138" TopLine="127"/>
+        <Caret Line="120" TopLine="109"/>
       </Position11>
       <Position12>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="140" TopLine="115"/>
+        <Caret Line="132" TopLine="121"/>
       </Position12>
       <Position13>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="470" Column="30" TopLine="459"/>
+        <Caret Line="133" TopLine="121"/>
       </Position13>
       <Position14>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="118" TopLine="113"/>
+        <Caret Line="132" TopLine="121"/>
       </Position14>
       <Position15>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="119" TopLine="113"/>
+        <Caret Line="133" TopLine="121"/>
       </Position15>
       <Position16>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="120" TopLine="113"/>
+        <Caret Line="472" Column="41" TopLine="459"/>
       </Position16>
       <Position17>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="122" TopLine="113"/>
+        <Caret Line="473" Column="36" TopLine="456"/>
       </Position17>
       <Position18>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="138" TopLine="127"/>
+        <Caret Line="474" TopLine="456"/>
       </Position18>
       <Position19>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="140" TopLine="127"/>
+        <Caret Line="483" Column="29" TopLine="466"/>
       </Position19>
       <Position20>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="120" TopLine="109"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="227" Column="38" TopLine="213"/>
       </Position20>
       <Position21>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="132" TopLine="121"/>
+        <Caret Line="481" Column="28" TopLine="460"/>
       </Position21>
       <Position22>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="133" TopLine="121"/>
+        <Caret Line="134" Column="11" TopLine="121"/>
       </Position22>
       <Position23>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="132" TopLine="121"/>
+        <Filename Value="symbols.pas"/>
+        <Caret Line="148" Column="36" TopLine="131"/>
       </Position23>
       <Position24>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="133" TopLine="121"/>
+        <Filename Value="../../lazarus/lcl/include/winapi.inc"/>
+        <Caret Line="661" Column="38" TopLine="649"/>
       </Position24>
       <Position25>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="472" Column="41" TopLine="459"/>
+        <Caret Line="134" Column="11" TopLine="121"/>
       </Position25>
       <Position26>
-        <Filename Value="chartframe.pas"/>
-        <Caret Line="473" Column="36" TopLine="456"/>
+        <Filename Value="../../lazarus/lcl/include/winapi.inc"/>
+        <Caret Line="654" Column="14" TopLine="649"/>
       </Position26>
       <Position27>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="474" TopLine="456"/>
+        <Caret Line="143" Column="34" TopLine="130"/>
       </Position27>
       <Position28>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="483" Column="29" TopLine="466"/>
+        <Caret Line="489" Column="12" TopLine="483"/>
       </Position28>
       <Position29>
-        <Filename Value="symbols.pas"/>
-        <Caret Line="227" Column="38" TopLine="213"/>
+        <Filename Value="chartframe.pas"/>
+        <Caret Line="506" TopLine="490"/>
       </Position29>
       <Position30>
         <Filename Value="chartframe.pas"/>
-        <Caret Line="481" Column="28" TopLine="460"/>
+        <Caret Line="528" Column="97" TopLine="517"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>

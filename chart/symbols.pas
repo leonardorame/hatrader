@@ -132,7 +132,7 @@ begin
     for I := lCsv.Count - 1 downto 0 do
     begin
       lLine.CommaText:= lCSV[I];
-      if lLine.Count < 4 then
+      if lLine.Count < 6 then
         continue;
       lOHLC := TOHLCRecord.Create;
       lOHLC.open := StrToFloatDef(lLine[1], 0);

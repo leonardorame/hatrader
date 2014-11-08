@@ -50,6 +50,7 @@ type
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
     FLongArray: TIntArray;
+    FShortArray: TIntArray;
     procedure SetHint(AOHLCRecord: TOHLCRecord);
   public
     constructor Create(ASymbol: TSymbol; TheOwner: TComponent);
@@ -116,6 +117,7 @@ begin
 
   FMovingAvg.Clear;
   SetLength(FLongArray, 0);
+  SetLength(FShortArray, 0);
   lSmaDiff := 0;
   for I := 0 to FSymbol.Data.Count - 1 do
   begin
@@ -127,10 +129,22 @@ begin
         FSymbol.Data[I - 2].close +
         FSymbol.Data[I - 1].close +
         FSymbol.Data[I].close) / 5;
-      if (lSmaDiff < 0) and ((FSymbol.Data[I].close - lSMA5) > 0) then
+      if (lSmaDiff <= 0) and ((FSymbol.Data[I].close - lSMA5) > 0) then
       begin
-        SetLength(FLongArray, Length(FLongArray) + 1);
-        FLongArray[Length(FLongArray) - 1] := I;
+        if FSymbol.Data[I].Low <= FSymbol.Data[I].Close then
+        begin
+          SetLength(FLongArray, Length(FLongArray) + 1);
+          FLongArray[Length(FLongArray) - 1] := I;
+        end;
+      end
+      else
+      if (lSmaDiff >= 0) and ((FSymbol.Data[I].close - lSMA5) < 0) then
+      begin
+        if FSymbol.Data[I].High >= FSymbol.Data[I].Close then
+        begin
+          SetLength(FShortArray, Length(FShortArray) + 1);
+          FShortArray[Length(FShortArray) - 1] := I;
+        end;
       end;
       lSmaDiff:= FSymbol.Data[I].close - lSMA5;
     end
@@ -354,6 +368,7 @@ var
   lIndex: Integer;
   lChartPos: double;
   lLong: Integer;
+  lShort: Integer;
   I: Integer;
 
 begin
@@ -468,22 +483,50 @@ begin
     ASender.Canvas.Line(lXPos, lYpos, lRight, lYPos);
   end;
 
-  // longs
-  if (Length(FLongArray) > 0) then
+  if ASender = CandleStickChart then
   begin
-    for I := 0 to Length(FLongArray) - 1 do
+    // longs
+    if (Length(FLongArray) > 0) then
     begin
-      lLong := FLongArray[I];
-      lChartPos:= FSymbol.Data[lLong].Close;
-      lXPos := ASender.XGraphToImage(lLong);
-      lYPos := ASender.YGraphToImage(lChartPos);
-      lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
-      ASender.Canvas.Brush.Style:= bsSolid;
-      ASender.Canvas.Brush.Color:= clYellow;
-      ASender.Canvas.Pen.Width:= 2;
-      ASender.Canvas.Pen.Color:= clYellow;
-      ASender.Canvas.Pen.Style:= psSolid;
-      ASender.Canvas.FillRect(lXPos - 4, lYpos - 4, lXPos + 4, lYPos + 4);
+      for I := 0 to Length(FLongArray) - 1 do
+      begin
+        lLong := FLongArray[I];
+        lChartPos:= FSymbol.Data[lLong].Low;
+        lXPos := ASender.XGraphToImage(lLong);
+        lYPos := ASender.YGraphToImage(lChartPos) + 10;
+        lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
+        ASender.Canvas.Brush.Style:= bsSolid;
+        ASender.Canvas.Brush.Color:= clGreen;
+        ASender.Canvas.Pen.Width:= 2;
+        ASender.Canvas.Pen.Color:= clGreen;
+        ASender.Canvas.Pen.Style:= psSolid;
+        ASender.Canvas.FillRect(lXPos - 4, lYpos - 4, lXPos + 4, lYPos + 4);
+        ASender.Canvas.Brush.Style:= bsClear;
+        ASender.Canvas.Font.Color:= clGreen;
+        ASender.Canvas.TextOut(Round(lXPos - (ASender.Canvas.TextWidth('Long') / 2)), lYPos + 10, 'Long');
+      end;
+    end;
+
+    // shorts
+    if (Length(FShortArray) > 0) then
+    begin
+      for I := 0 to Length(FShortArray) - 1 do
+      begin
+        lShort := FShortArray[I];
+        lChartPos:= FSymbol.Data[lShort].High;
+        lXPos := ASender.XGraphToImage(lShort);
+        lYPos := ASender.YGraphToImage(lChartPos) - 10;
+        lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
+        ASender.Canvas.Brush.Style:= bsSolid;
+        ASender.Canvas.Brush.Color:= clRed;
+        ASender.Canvas.Pen.Width:= 2;
+        ASender.Canvas.Pen.Color:= clRed;
+        ASender.Canvas.Pen.Style:= psSolid;
+        ASender.Canvas.FillRect(lXPos - 4, lYpos - 4, lXPos + 4, lYPos + 4);
+        ASender.Canvas.Brush.Style:= bsClear;
+        ASender.Canvas.Font.Color:= clRed;
+        ASender.Canvas.TextOut(Round(lXPos - (ASender.Canvas.TextWidth('Short') / 2)), lYPos - 20, 'Short');
+      end;
     end;
   end;
 end;
