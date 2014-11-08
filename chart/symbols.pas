@@ -132,6 +132,8 @@ begin
     for I := lCsv.Count - 1 downto 0 do
     begin
       lLine.CommaText:= lCSV[I];
+      if lLine.Count < 4 then
+        continue;
       lOHLC := TOHLCRecord.Create;
       lOHLC.open := StrToFloatDef(lLine[1], 0);
       lOHLC.high := StrToFloatDef(lLine[2], 0);
@@ -253,17 +255,18 @@ begin
       lSymbol := nil;
       for lSymbol in Self do
       begin
-        if lSymbol.Symbol = lLine[1] then
-        begin
-          lSymbol.Symbol:= lLine[1];
-          lSymbol.Last.Date:= lLine[0];
-          lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
-          lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
-          lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
-          lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
-          lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
-          lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
-        end;
+        if lLine.Count = 8 then
+          if lSymbol.Symbol = lLine[1] then
+          begin
+            lSymbol.Symbol:= lLine[1];
+            lSymbol.Last.Date:= lLine[0];
+            lSymbol.Last.Open:= StrToFloatDef(lLine[2], 0);
+            lSymbol.Last.High:= StrToFloatDef(lLine[3], 0);
+            lSymbol.Last.Low:= StrToFloatDef(lLine[4], 0);
+            lSymbol.Last.Close:= StrToFloatDef(lLine[5], 0);
+            lSymbol.Last.Volume:= StrToIntDef(lLine[6], 0);
+            lSymbol.Last.Prev:= StrToFloatDef(lLine[7], 0);
+          end;
       end;
     end;
   finally

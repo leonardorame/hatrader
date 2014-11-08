@@ -15,6 +15,7 @@ uses
 type
 
   { TChartFrame }
+  TIntArray = array of integer;
 
   TChartFrame = class(TFrame)
     actNewWindow: TAction;
@@ -48,6 +49,7 @@ type
     FHAChartSeries: TCandleStickChartSeries;
     FMovingAvg: TLineSeries;
     FOHLCSeries: TOpenHighLowCloseSeries;
+    FLongArray: TIntArray;
     procedure SetHint(AOHLCRecord: TOHLCRecord);
   public
     constructor Create(ASymbol: TSymbol; TheOwner: TComponent);
@@ -80,6 +82,7 @@ var
   lHA: TOHLCRecord;
   lHA_1: TOHLCRecord;
   lSMA5: double;
+  lSmaDiff: double;
 
 begin
   if FHint = '' then
@@ -112,6 +115,8 @@ begin
   // ------ SMA 5 ----
 
   FMovingAvg.Clear;
+  SetLength(FLongArray, 0);
+  lSmaDiff := 0;
   for I := 0 to FSymbol.Data.Count - 1 do
   begin
     if I > 4 then
@@ -122,6 +127,12 @@ begin
         FSymbol.Data[I - 2].close +
         FSymbol.Data[I - 1].close +
         FSymbol.Data[I].close) / 5;
+      if (lSmaDiff < 0) and ((FSymbol.Data[I].close - lSMA5) > 0) then
+      begin
+        SetLength(FLongArray, Length(FLongArray) + 1);
+        FLongArray[Length(FLongArray) - 1] := I;
+      end;
+      lSmaDiff:= FSymbol.Data[I].close - lSMA5;
     end
     else
       lSMA5 := FSymbol.Data[I].close;
@@ -342,6 +353,8 @@ var
   lTextWidth: Integer;
   lIndex: Integer;
   lChartPos: double;
+  lLong: Integer;
+  I: Integer;
 
 begin
   if FSymbol.Data.Count = 0 then
@@ -453,6 +466,25 @@ begin
     ASender.Canvas.Pen.Color:= $059E9E;
     ASender.Canvas.Pen.Style:= psSolid;
     ASender.Canvas.Line(lXPos, lYpos, lRight, lYPos);
+  end;
+
+  // longs
+  if (Length(FLongArray) > 0) then
+  begin
+    for I := 0 to Length(FLongArray) - 1 do
+    begin
+      lLong := FLongArray[I];
+      lChartPos:= FSymbol.Data[lLong].Close;
+      lXPos := ASender.XGraphToImage(lLong);
+      lYPos := ASender.YGraphToImage(lChartPos);
+      lRight := ASender.XGraphToImage(ASender.CurrentExtent.b.x);
+      ASender.Canvas.Brush.Style:= bsSolid;
+      ASender.Canvas.Brush.Color:= clYellow;
+      ASender.Canvas.Pen.Width:= 2;
+      ASender.Canvas.Pen.Color:= clYellow;
+      ASender.Canvas.Pen.Style:= psSolid;
+      ASender.Canvas.FillRect(lXPos - 4, lYpos - 4, lXPos + 4, lYPos + 4);
+    end;
   end;
 end;
 
