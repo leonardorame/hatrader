@@ -120,6 +120,13 @@ var
   lStr: string;
 
 begin
+  // si el contenido de AData es un
+  // mensaje de error, comienza
+  // con <html><head><....
+  // en ese caso salimos sin procesar.
+  if Pos('<', AData) > 0 then
+    exit;
+
   for lOHLC in FOHLCArray do
     lOHLC.Free;
   FOHLCArray.Clear;
@@ -127,13 +134,9 @@ begin
   lLine := TStringList.Create;
   try
     lCSV.Text:= AData;
-    if lCSV.Count = 0 then
-      exit;
     for I := lCsv.Count - 1 downto 0 do
     begin
       lLine.CommaText:= lCSV[I];
-      if lLine.Count < 6 then
-        continue;
       lOHLC := TOHLCRecord.Create;
       lOHLC.open := StrToFloatDef(lLine[1], 0);
       lOHLC.high := StrToFloatDef(lLine[2], 0);
