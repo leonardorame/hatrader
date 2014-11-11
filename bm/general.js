@@ -4,7 +4,7 @@ var casper = require('casper').create({
         }
     });
 
-casper.start('http://www.bolsar.com/');
+casper.start();
 
 casper.then(function(){
     var fs = require('fs')
@@ -12,7 +12,7 @@ casper.then(function(){
     phantom.cookies = JSON.parse(data)
 });
 
-casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaPrincipal.aspx'); 
+//casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaPrincipal.aspx'); 
 casper.then(function(){
     var general = function(){
         casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaGeneral.aspx/GetDataPack',
@@ -31,7 +31,7 @@ casper.then(function(){
 
             });
         casper.then(function(){
-            return this.getPageContent();
+            casper.echo( this.getPageContent() );
         });
     }
     casper.then(function(){
