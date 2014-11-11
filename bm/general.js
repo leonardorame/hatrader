@@ -25,7 +25,7 @@ casper.then(function(){
                     aEstadoTabla:
                         [
                             {"TablaNombre":"tbPymes", "FiltroVto":"72", "FiltroEspecies":"", "FilasxPagina":-1, "MensajeNro":0,"HashCode":0},
-                            {"TablaNombre":"tbGeneral", "FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0, "HashCode":0}
+                            {"TablaNombre":"tbGeneral", "FiltroVto":"72","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0, "HashCode":0}
                         ]
                     }
 
