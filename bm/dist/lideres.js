@@ -14,8 +14,8 @@ casper.then(function(){
 
 //casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaPrincipal.aspx'); 
 casper.then(function(){
-    var opciones = function(){
-        casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaFuturosOpciones.aspx/GetDataPack',
+    var lideres = function(){
+        casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaLideres.aspx/GetDataPack',
             {
                 method: "POST",
                 headers: {
@@ -24,23 +24,20 @@ casper.then(function(){
                 data: {
                     aEstadoTabla:
                         [
-                            {"TablaNombre":"tbFuturos", "FiltroVto":"72", "FiltroEspecies":"", "FilasxPagina":-1, "MensajeNro":0,"HashCode":0},
-                            {"TablaNombre": "tbOpciones", "FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0, "HashCode":0}
+                            {"TablaNombre":"tbAcciones", "FiltroVto":"72", "FiltroEspecies":"", "FilasxPagina":-1, "MensajeNro":0,"HashCode":0},
+                            {"TablaNombre":"tbMontos","FiltroVto":"", "FiltroEspecies":"", "PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0,"HashCode":0},
+                            {"TablaNombre":"tbIndices", "FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0, "HashCode":0}
                         ]
                     }
 
             });
         casper.then(function(){
-            // actualizamos las cookies
-            var fs = require('fs')
-            var cookies = JSON.stringify(phantom.cookies)
-            fs.write("cookies.txt", cookies, 644)
-            // retornamos la salida
-            casper.echo(this.getPageContent());
+            casper.echo( this.getPageContent());
         });
-    };
+    }
+
     casper.then(function(){
-        opciones();
+        lideres();
     });
 });
 

@@ -31,6 +31,11 @@ casper.then(function(){
 
             });
         casper.then(function(){
+            // actualizamos las cookies
+            var fs = require('fs')
+            var cookies = JSON.stringify(phantom.cookies)
+            fs.write("cookies.txt", cookies, 644)
+            // retornamos la salida
             casper.echo( this.getPageContent() );
         });
     }
