@@ -13,6 +13,8 @@ casper.then(function() {
     this.evaluate(function(){
         document.getElementById('txtUsuario').value = 'martinrame';
         document.getElementById('txtPassword').value = 'leonardo13';
+        //document.getElementById('txtUsuario').value = 'csarachu';
+        //document.getElementById('txtPassword').value = 'bE4bkzn6';
         var a = document.getElementById("btnOk");
         var e = document.createEvent('MouseEvents');
         e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);

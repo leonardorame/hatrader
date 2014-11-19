@@ -13,26 +13,27 @@ casper.then(function(){
 });
 
 casper.then(function(){
-    var infoofertas = function(){
-        casper.thenOpen('http://www.bolsar.com/Vistas/Cotizaciones/PanelOfertas.aspx/GetInfoOfertas',
+    var lideres = function(){
+        casper.thenOpen('http://www.bolsar.com/VistasTR/PaginaLideres.aspx/GetFechaYMercado',
             {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json; charset=utf-8',
                 },
-                data: {
-                    "obEstadoTabla":
-                        {"TablaNombre":"PanelOfertas","FiltroVto":"","FiltroEspecies":"","PagActualNro":"1","FilasxPagina":-1,"MensajeNro":0,"HashCode":0},
-                         "aFiltro":["ALUC7.00FE_0", "ERAC7.12DI_0", "ERAC7.37DI_0", "ERAC7.87DI_0", "ERAC8.12DI_0", "ERAC8.37DI_0"]
-                }
+                data: {"bDemora":"False"}
             });
         casper.then(function(){
+            // actualizamos las cookies
+            var fs = require('fs')
+            var cookies = JSON.stringify(phantom.cookies)
+            fs.write("cookies.txt", cookies, 644)
+            // retornamos la salida
             casper.echo( this.getPageContent());
         });
     }
 
     casper.then(function(){
-        infoofertas();
+        lideres();
     });
 });
 
