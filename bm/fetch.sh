@@ -15,6 +15,11 @@ cookies() {
       ../datafiller/datafiller --fechaymercado;
       echo "After reading FechaYMercado."
     fi
+    if [ "$res" = "Servidor inactivo." ]; then
+      echo "Servidor inactivo, esperando 30 segundos..."
+      sleep 30
+      ../datafiller/datafiller --fechaymercado;
+    fi
 }
 
 while true; do 
