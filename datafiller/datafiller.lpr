@@ -311,6 +311,7 @@ var
   lParser: TJSONParser;
   lStr: TFileStream;
   d,m,y: word;
+  lFechaUltimaRueda: TDate;
 
 begin
   lStr := TFileStream.Create('fechaymercado.json', fmOpenRead);
@@ -325,14 +326,20 @@ begin
       m := StrToInt(Copy(lJson.Strings['Fecha'], 4, 2));
       y := StrToInt(Copy(lJson.Strings['Fecha'], 7, 4));
       FDate := EncodeDate(y,m,d);
-      if FDate <> Today then
+      m := StrToInt(Copy(lJson.Strings['FechaUltimaRueda'], 1, 2));
+      d := StrToInt(Copy(lJson.Strings['FechaUltimaRueda'], 4, 2));
+      y := StrToInt(Copy(lJson.Strings['FechaUltimaRueda'], 7, 4));
+      lFechaUltimaRueda := EncodeDate(y,m,d);
+      if FDate <> lFechaUltimaRueda then
         raise Exception.Create('Please read fechaymercado again.');
     except
       on E: Exception do
       begin
         // este error es porque falta leer cookies
         if Pos('Invalid character at ', E.Message) > 0 then
-          raise Exception.Create('Please read cookies and try again.');
+          raise Exception.Create('Please read cookies and try again.')
+        else
+          raise;
       end;
     end;
   finally
