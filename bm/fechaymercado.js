@@ -29,6 +29,10 @@ casper.then(function(){
             fs.write("cookies.txt", cookies, 644)
             // retornamos la salida
             casper.echo( this.getPageContent());
+            // almacenamos la fechaymercado
+            var fs = require('fs');
+            var fechaymercado = this.getPageContent();
+            fs.write("fechaymercado.json", fechaymercado, 644);
         });
     }
 
