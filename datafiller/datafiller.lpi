@@ -27,7 +27,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="--lideres"/>
+        <CommandLineParams Value="--fechaymercado"/>
         <WorkingDirectory Value="/home/martin/devel/mercados/bm"/>
       </local>
     </RunParams>

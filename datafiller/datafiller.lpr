@@ -79,6 +79,9 @@ begin
     lOut.Position := 0;
     lOut.SaveToStream(FDataStream);
     FDataStream.Position:= 0;
+    if Pos('Unable to open file ''cookies.txt''', FDataStream.DataString) > 0 then
+      raise Exception.Create('Please read cookies and try again.')
+    else
     if Pos('There was an error processing the request.', FDataStream.DataString) > 0 then
       raise Exception.Create('Please read cookies and try again.');
   finally
