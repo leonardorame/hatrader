@@ -12,7 +12,8 @@ cookies() {
     fi
     if [ "$res" = "Please read fechaymercado again." ]; then
       echo "Reading FechaYMercado..."
-      ../datafiller/datafiller --fechaymercado;
+      res="$(../datafiller/datafiller --fechaymercado)"
+      cookies "${res}"
       echo "After reading FechaYMercado."
     fi
     if [ "$res" = "Servidor inactivo." ]; then
