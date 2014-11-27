@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <General>
+      <Flags>
+        <Runnable Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <Title Value="trading"/>
+      <UseAppBundle Value="False"/>
+      <ResourceType Value="res"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <StringTable ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1" Active="Default">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="SQLDBLaz"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="BrookRT"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="5">
+      <Unit0>
+        <Filename Value="trading.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="trading"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="dm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="BrookDataModule1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="dm"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="40"/>
+        <CursorPos Y="53"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="brokers.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Brokers"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="37" Y="12"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="v1.acciones.fecha"/>
+        <TopLine Value="29"/>
+        <CursorPos Y="8"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="v1.opciones.fecha.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="v1.opciones.fecha"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="27"/>
+        <CursorPos X="27" Y="47"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit4>
+    </Units>
+    <JumpHistory Count="15" HistoryIndex="14">
+      <Position1>
+        <Filename Value="dm.pas"/>
+        <Caret Line="12" Column="59"/>
+      </Position1>
+      <Position2>
+        <Filename Value="dm.pas"/>
+        <Caret Line="16" Column="59"/>
+      </Position2>
+      <Position3>
+        <Filename Value="dm.pas"/>
+        <Caret Line="20" Column="55"/>
+      </Position3>
+      <Position4>
+        <Filename Value="dm.pas"/>
+        <Caret Line="49" Column="41" TopLine="28"/>
+      </Position4>
+      <Position5>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="37" Column="23" TopLine="24"/>
+      </Position5>
+      <Position6>
+        <Filename Value="dm.pas"/>
+        <Caret Line="54" Column="17" TopLine="41"/>
+      </Position6>
+      <Position7>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="46" Column="24" TopLine="24"/>
+      </Position7>
+      <Position8>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="45" Column="11" TopLine="31"/>
+      </Position8>
+      <Position9>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="8" Column="11"/>
+      </Position9>
+      <Position10>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="46" Column="11" TopLine="32"/>
+      </Position10>
+      <Position11>
+        <Filename Value="dm.pas"/>
+        <Caret Line="33" TopLine="23"/>
+      </Position11>
+      <Position12>
+        <Filename Value="dm.pas"/>
+        <Caret Line="12" Column="29" TopLine="6"/>
+      </Position12>
+      <Position13>
+        <Filename Value="v1.acciones.fecha.pas"/>
+        <Caret Line="42" TopLine="23"/>
+      </Position13>
+      <Position14>
+        <Filename Value="v1.opciones.fecha.pas"/>
+        <Caret Line="29" Column="10" TopLine="11"/>
+      </Position14>
+      <Position15>
+        <Filename Value="v1.opciones.fecha.pas"/>
+        <Caret Line="30" Column="26" TopLine="19"/>
+      </Position15>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <Target>
+      <Filename Value="trading.bf" ApplyConventions="False"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+    </SearchPaths>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+    </Linking>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

@@ -1,0 +1,26 @@
+object BrookDataModule1: TBrookDataModule1
+  OnCreate = DataModuleCreate
+  OldCreateOrder = False
+  Height = 184
+  HorizontalOffset = 928
+  VerticalOffset = 351
+  Width = 382
+  object PQConnection1: TPQConnection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'trading'
+    KeepConnection = False
+    Password = 'postgres'
+    Transaction = SQLTransaction1
+    UserName = 'postgres'
+    HostName = '127.0.0.1'
+    left = 48
+    top = 24
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = False
+    Database = PQConnection1
+    left = 176
+    top = 32
+  end
+end
