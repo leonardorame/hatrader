@@ -297,6 +297,10 @@ begin
           if E is EPQDatabaseError then
           begin
             Writeln('Simbolo:' + lJson.Strings['Simbolo'] + ' - Sql State: ' + EPQDatabaseError(E).SQLSTATE);
+            Writeln(Format('Bid: %.2f, Ask: %.2f, Last: %.2f',
+              [lJson.Floats['PrecioCompra'],
+              lJson.Floats['PrecioVenta'],
+              lJson.Floats['PrecioUltimo']]));
           end;
           FTransaction.Rollback;
         end;
@@ -465,7 +469,6 @@ var
   Application: TDataFiller;
 begin
   Application:=TDataFiller.Create(nil);
-  Application.Title:='datafiller';
   Application.Run;
   Application.Free;
 end.
