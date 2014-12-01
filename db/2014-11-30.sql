@@ -4,6 +4,7 @@
   primary key(fecha)
   );
 
+
 CREATE OR REPLACE FUNCTION blackscholes(callputflag character, s numeric, x numeric, t numeric, r numeric, v numeric)
   RETURNS numeric AS
 $BODY$
@@ -49,7 +50,7 @@ declare
   _data opcion_type%ROWTYPE;
   _badlar numeric;
 begin
-  _badlar = (select valor from badlar order by fecha desc limit 1);
+  _badlar = (select valor/100 from badlar order by fecha desc limit 1);
   for _data in (
     select 
       op.idsimbolo, 
