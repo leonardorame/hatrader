@@ -28,6 +28,7 @@ type
     procedure FillEspeciesOpciones;
     procedure FillAcciones;
     procedure FillOpciones;
+    procedure FillBadlar;
     procedure CheckFechaYMercado;
     procedure Process(AScript: string; ACallBack: TProcEvent);
   protected
@@ -297,11 +298,56 @@ begin
           if E is EPQDatabaseError then
           begin
             Writeln('Simbolo:' + lJson.Strings['Simbolo'] + ' - Sql State: ' + EPQDatabaseError(E).SQLSTATE);
-            Writeln(Format('Bid: %.2f, Ask: %.2f, Last: %.2f',
-              [lJson.Floats['PrecioCompra'],
-              lJson.Floats['PrecioVenta'],
-              lJson.Floats['PrecioUltimo']]));
           end;
+          FTransaction.Rollback;
+        end;
+      end;
+    end;
+  finally
+    lQuery.Free;
+    lParser.Free;
+  end;
+end;
+
+procedure TDataFiller.FillBadlar;
+var
+  lStr: string;
+  lParser: TJSONParser;
+  lArray: TJSONArray;
+  lJson: TJSONObject;
+  I: Integer;
+  lFecha: string;
+  lValor: double;
+  d,m,y: word;
+  lQuery: TSQLQuery;
+begin
+  // Eliminamos el HTML
+  lStr := Copy(FDataStream.DataString, Pos('[', FDataStream.DataString), Length(FDataStream.DataString));
+  lStr := Copy(lStr, 0, Pos('</body', lStr) - 1);
+  lParser := TJSONParser.Create(lStr);
+  lQuery := TSQLQuery.Create(nil);
+  try
+    lArray := TJSONArray(lParser.Parse);
+    for I := 0 to lArray.Count - 1 do
+    begin
+      lJson := TJsonObject(lArray[I]);
+      lFecha := TJsonObject(lJson.Items[0]).AsString;
+      y := StrToInt(Copy(lFecha, 0, 4));
+      m := StrToInt(Copy(lFecha, 6,2));
+      d := StrToInt(Copy(lFecha, 9, 2));
+      lValor := TJsonObject(lJson.Items[1]).AsFloat;
+      lQuery.DataBase := FPQConnection;
+      lQuery.SQL.Text:='insert into badlar(fecha, valor) values(:fecha, :valor)';
+      lQuery.ParamByName('fecha').AsDate:=EncodeDate(y,m,d);
+      lQuery.ParamByName('valor').AsFloat:=lValor;
+      try
+        FTransaction.StartTransaction;
+        lQuery.ExecSQL;
+        FTransaction.Commit;
+      except
+        on E: Exception do
+        begin
+          Writeln(E.Message);
           FTransaction.Rollback;
         end;
       end;
@@ -433,6 +479,14 @@ begin
     Exit;
   end;
 
+  if HasOption('badlar') then
+  begin
+    Process('badlar.js', @FillBadlar);
+    Terminate;
+    Exit;
+  end;
+
+
   // stop program loop
   Terminate;
 end;
@@ -469,6 +523,7 @@ var
   Application: TDataFiller;
 begin
   Application:=TDataFiller.Create(nil);
+  Application.Title:='datafiller';
   Application.Run;
   Application.Free;
 end.
