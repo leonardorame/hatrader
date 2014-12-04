@@ -2,14 +2,14 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="9"/>
-    <BuildModes Active="win32"/>
+    <BuildModes Active="Default"/>
     <Units Count="4">
       <Unit0>
         <Filename Value="datafiller.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <TopLine Value="453"/>
+        <TopLine Value="447"/>
         <CursorPos X="38" Y="447"/>
         <UsageCount Value="96"/>
         <Loaded Value="True"/>

@@ -440,6 +440,13 @@ begin
     Exit;
   end;
 
+  if HasOption('badlar') then
+  begin
+    Process('badlar.js', @FillBadlar);
+    Terminate;
+    Exit;
+  end;
+
   if HasOption('fechaymercado') then
   begin
     Process('fechaymercado.js', nil);
@@ -475,13 +482,6 @@ begin
   if HasOption('opciones') then
   begin
     Process('opciones.js', @FillOpciones);
-    Terminate;
-    Exit;
-  end;
-
-  if HasOption('badlar') then
-  begin
-    Process('badlar.js', @FillBadlar);
     Terminate;
     Exit;
   end;
