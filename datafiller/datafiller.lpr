@@ -72,7 +72,12 @@ begin
         lReadCount := lProcess.StdErr.Read(lBuf, SizeOf(lBuf));
         if lReadCount > 0 then
         begin
-          // do something with Stderr data
+          with TFileStream.Create('datafiller.log', fmCreate or fmOpenWrite) do
+          begin
+            Write(lBuf, lReadCount);
+            Free;
+          end;
+          Break;
         end;
       end;
     end;
@@ -103,7 +108,6 @@ begin
   lQuery := TSQLQuery.Create(nil);
   try
     lQuery.DataBase := FPQConnection;
-    lJson := TJsonObject(lParser.Parse);
     lArray := lJson.Arrays['d'];
     for I := 0 to lArray.Count - 1 do
     begin
@@ -147,6 +151,8 @@ begin
     for I := 0 to lArray.Count - 1 do
     begin
       lJson := TJsonObject(lArray[I]);
+      if lJson.Nulls['SimboloSubyacente'] then
+        continue;
       lSimbolo := lJson.Strings['Simbolo'];
       lQuery.SQL.Text:='select fill_especies_opciones(:simbolo, :nombre, :subyacente)';
       lQuery.ParamByName('simbolo').AsString:=lJson.Strings['Simbolo'];
@@ -523,7 +529,6 @@ var
   Application: TDataFiller;
 begin
   Application:=TDataFiller.Create(nil);
-  Application.Title:='datafiller';
   Application.Run;
   Application.Free;
 end.
